@@ -6,6 +6,7 @@ interface SectionCardProps {
   description?: string;
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function SectionCard({ title, description, children, className }: SectionCardProps) {
