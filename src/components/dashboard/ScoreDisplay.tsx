@@ -3,58 +3,50 @@ import { useEffect, useState } from "react";
 interface ScoreDisplayProps {
   score: number;
   maxScore?: number;
-  label?: string;
-  verdict?: string;
+  size?: number;
 }
 
-export function ScoreDisplay({ score, maxScore = 10, label = "ValiScore", verdict }: ScoreDisplayProps) {
-  const [displayed, setDisplayed] = useState(0);
-  const pct = (score / maxScore) * 100;
-  const circumference = 2 * Math.PI * 54;
-  const offset = circumference - (pct / 100) * circumference;
+export function ScoreDisplay({ score, maxScore = 10, size = 140 }: ScoreDisplayProps) {
+  const [displayScore, setDisplayScore] = useState(0);
+  const radius = (size - 12) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const fillPercent = displayScore / maxScore;
+  const strokeDashoffset = circumference * (1 - fillPercent);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDisplayed(score), 200);
-    return () => clearTimeout(timer);
+    let frame: number;
+    const duration = 1200;
+    const start = performance.now();
+
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayScore(parseFloat((eased * score).toFixed(1)));
+      if (progress < 1) frame = requestAnimationFrame(animate);
+    };
+
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
   }, [score]);
 
-  const verdictColor = verdict === "Build"
-    ? "text-success bg-success/10"
-    : verdict === "Improve"
-    ? "text-warning bg-warning/10"
-    : "text-destructive bg-destructive/10";
+  const color = score >= 7 ? "hsl(var(--success))" : score >= 5 ? "hsl(var(--warning))" : "hsl(var(--destructive))";
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative h-36 w-36">
-        <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
-          <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--secondary))" strokeWidth="8" />
-          <circle
-            cx="60" cy="60" r="54" fill="none"
-            stroke="url(#scoreGradient)" strokeWidth="8"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            className="transition-all duration-1000 ease-out"
-          />
-          <defs>
-            <linearGradient id="scoreGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="hsl(263, 70%, 58%)" />
-              <stop offset="100%" stopColor="hsl(217, 91%, 60%)" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-3xl font-extrabold tracking-tight animate-count-up">{displayed}</span>
-          <span className="text-xs text-muted-foreground">/ {maxScore}</span>
-        </div>
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="hsl(var(--border))" strokeWidth={5} />
+        <circle
+          cx={size / 2} cy={size / 2} r={radius} fill="none"
+          stroke={color} strokeWidth={5} strokeLinecap="round"
+          strokeDasharray={circumference} strokeDashoffset={strokeDashoffset}
+          className="transition-all duration-1000 ease-out"
+        />
+      </svg>
+      <div className="absolute flex flex-col items-center">
+        <span className="text-3xl font-bold tabular-nums tracking-tight" style={{ color }}>{displayScore}</span>
+        <span className="text-[11px] text-muted-foreground mt-0.5">/ {maxScore}</span>
       </div>
-      <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{label}</span>
-      {verdict && (
-        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${verdictColor}`}>
-          {verdict}
-        </span>
-      )}
     </div>
   );
 }

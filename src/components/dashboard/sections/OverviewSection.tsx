@@ -1,58 +1,66 @@
 import { mockAnalysisResult } from "@/data/mockData";
-import { SectionCard } from "@/components/dashboard/SectionCard";
-import { ScoreDisplay } from "@/components/dashboard/ScoreDisplay";
-import { Lightbulb } from "lucide-react";
+import { SectionCard } from "../SectionCard";
+import { ScoreDisplay } from "../ScoreDisplay";
 
 export function OverviewSection() {
-  const { idea_analysis, validation } = mockAnalysisResult;
+  const { idea_analysis, validation, final_verdict } = mockAnalysisResult;
+
+  const verdictColor =
+    idea_analysis.verdict === "Build" ? "text-[hsl(var(--success))] bg-[hsl(var(--success))]/10 border-[hsl(var(--success))]/20"
+    : idea_analysis.verdict === "Improve" ? "text-[hsl(var(--warning))] bg-[hsl(var(--warning))]/10 border-[hsl(var(--warning))]/20"
+    : "text-[hsl(var(--destructive))] bg-[hsl(var(--destructive))]/10 border-[hsl(var(--destructive))]/20";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 max-w-4xl">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Executive summary of your startup analysis</p>
+        <h2 className="text-xl font-bold tracking-tight">Overview</h2>
+        <p className="text-[13px] text-muted-foreground mt-1">Executive summary of your startup analysis</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[1fr,auto]">
+      <div className="grid gap-4 md:grid-cols-[1fr_auto]">
         <SectionCard title="Idea Summary">
-          <p className="text-sm leading-relaxed text-muted-foreground">{idea_analysis.summary}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {idea_analysis.quickInsights.map((insight, i) => (
-              <span key={i} className="inline-flex items-center gap-1.5 rounded-lg bg-primary/5 px-3 py-1.5 text-xs text-muted-foreground">
-                <Lightbulb className="h-3 w-3 text-primary" />
-                {insight}
+          <p className="text-[13px] leading-relaxed text-muted-foreground">{idea_analysis.summary}</p>
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {idea_analysis.quickInsights.map((q) => (
+              <span key={q} className="inline-block rounded-md bg-accent px-2.5 py-1 text-[11px] text-muted-foreground">
+                {q}
               </span>
             ))}
           </div>
         </SectionCard>
 
-        <SectionCard className="flex items-center justify-center min-w-[200px]">
-          <ScoreDisplay score={idea_analysis.score} verdict={idea_analysis.verdict} />
+        <SectionCard className="flex flex-col items-center justify-center min-w-[200px]">
+          <ScoreDisplay score={idea_analysis.score} />
+          <span className={`mt-3 inline-block rounded-md border px-3 py-1 text-[12px] font-semibold ${verdictColor}`}>
+            {idea_analysis.verdict}
+          </span>
         </SectionCard>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-3">
-        <SectionCard title="Market Demand" className="animate-fade-in" style={{ animationDelay: "100ms" } as React.CSSProperties}>
-          <div className="mt-2 h-2 w-full rounded-full bg-secondary overflow-hidden">
-            <div className="h-full rounded-full gradient-primary transition-all duration-1000" style={{ width: `${validation.marketDemand}%` }} />
-          </div>
-          <span className="mt-2 block text-right text-sm font-semibold">{validation.marketDemand}%</span>
-        </SectionCard>
-
-        <SectionCard title="Feasibility" className="animate-fade-in" style={{ animationDelay: "200ms" } as React.CSSProperties}>
-          <div className="mt-2 h-2 w-full rounded-full bg-secondary overflow-hidden">
-            <div className="h-full rounded-full bg-info transition-all duration-1000" style={{ width: `${validation.feasibility}%` }} />
-          </div>
-          <span className="mt-2 block text-right text-sm font-semibold">{validation.feasibility}%</span>
-        </SectionCard>
-
-        <SectionCard title="Innovation" className="animate-fade-in" style={{ animationDelay: "300ms" } as React.CSSProperties}>
-          <div className="mt-2 h-2 w-full rounded-full bg-secondary overflow-hidden">
-            <div className="h-full rounded-full bg-success transition-all duration-1000" style={{ width: `${validation.innovationScore}%` }} />
-          </div>
-          <span className="mt-2 block text-right text-sm font-semibold">{validation.innovationScore}%</span>
-        </SectionCard>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {[
+          { label: "Market Demand", value: validation.marketDemand },
+          { label: "Feasibility", value: validation.feasibility },
+          { label: "Innovation", value: validation.innovationScore },
+        ].map((m) => (
+          <SectionCard key={m.label}>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[12px] text-muted-foreground">{m.label}</span>
+              <span className="text-[13px] font-semibold tabular-nums">{m.value}%</span>
+            </div>
+            <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+              <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: `${m.value}%` }} />
+            </div>
+          </SectionCard>
+        ))}
       </div>
+
+      <SectionCard title="Final Verdict">
+        <p className="text-[13px] leading-relaxed text-muted-foreground">{final_verdict.summary}</p>
+        <div className="mt-3 flex items-center gap-3 text-[12px] text-muted-foreground">
+          <span>Confidence: <strong className="text-foreground">{final_verdict.confidence}%</strong></span>
+        </div>
+      </SectionCard>
     </div>
   );
 }
