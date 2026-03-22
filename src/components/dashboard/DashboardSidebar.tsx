@@ -1,56 +1,55 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard, ShieldCheck, TrendingUp, Swords,
-  Layers, Palette, DollarSign, Rocket, Zap,
+  LayoutDashboard, ShieldCheck, BarChart3, Swords, Layers, Palette, DollarSign, Rocket
 } from "lucide-react";
-import { NavLink } from "@/components/NavLink";
 import {
-  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu,
+  SidebarMenuItem, SidebarMenuButton, SidebarHeader
 } from "@/components/ui/sidebar";
 
-const sections = [
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "validation", label: "Validation", icon: ShieldCheck },
-  { id: "market", label: "Market", icon: TrendingUp },
-  { id: "competitors", label: "Competitors", icon: Swords },
-  { id: "product", label: "Product", icon: Layers },
-  { id: "branding", label: "Branding", icon: Palette },
-  { id: "monetization", label: "Monetization", icon: DollarSign },
-  { id: "go-to-market", label: "Go-To-Market", icon: Rocket },
+const items = [
+  { title: "Overview", icon: LayoutDashboard, path: "overview" },
+  { title: "Validation", icon: ShieldCheck, path: "validation" },
+  { title: "Market", icon: BarChart3, path: "market" },
+  { title: "Competitors", icon: Swords, path: "competitors" },
+  { title: "Product", icon: Layers, path: "product" },
+  { title: "Branding", icon: Palette, path: "branding" },
+  { title: "Monetization", icon: DollarSign, path: "monetization" },
+  { title: "Go-To-Market", icon: Rocket, path: "go-to-market" },
 ];
 
 export function DashboardSidebar() {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-white/[0.06]">
-      <SidebarContent>
-        <div className="flex h-16 items-center gap-2 px-4 border-b border-white/[0.06]">
-          <div className="gradient-primary flex h-8 w-8 items-center justify-center rounded-lg shrink-0">
-            <Zap className="h-4 w-4 text-white" />
+    <Sidebar>
+      <SidebarHeader className="px-4 py-3 border-b border-border/40">
+        <button onClick={() => navigate("/")} className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary">
+            <span className="text-[10px] font-black text-white leading-none">V</span>
           </div>
-          {!collapsed && <span className="text-sm font-bold tracking-tight">ValiSearch</span>}
-        </div>
-
+          <span className="text-[13px] font-semibold">ValiSearch</span>
+        </button>
+      </SidebarHeader>
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {sections.map((s) => (
-                <SidebarMenuItem key={s.id}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={`/dashboard/${s.id}`}
-                      end
-                      className="hover:bg-muted/50"
-                      activeClassName="bg-primary/10 text-primary font-medium"
+              {items.map((item) => {
+                const isActive = location.pathname.includes(item.path);
+                return (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton
+                      onClick={() => navigate(`/dashboard/${item.path}`)}
+                      className={isActive ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
                     >
-                      <s.icon className="mr-2 h-4 w-4 shrink-0" />
-                      {!collapsed && <span>{s.label}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                      <item.icon className="h-4 w-4" />
+                      <span className="text-[13px]">{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -58,5 +57,3 @@ export function DashboardSidebar() {
     </Sidebar>
   );
 }
-
-export { sections };

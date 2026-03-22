@@ -1,60 +1,48 @@
 import { mockAnalysisResult } from "@/data/mockData";
-import { SectionCard } from "@/components/dashboard/SectionCard";
-import { Check, DollarSign } from "lucide-react";
+import { SectionCard } from "../SectionCard";
 
 export function MonetizationSection() {
   const { monetization } = mockAnalysisResult;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 max-w-4xl">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Monetization</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Pricing strategy and revenue streams</p>
+        <h2 className="text-xl font-bold tracking-tight">Monetization</h2>
+        <p className="text-[13px] text-muted-foreground mt-1">Pricing strategy and revenue streams</p>
       </div>
 
       <SectionCard>
-        <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Pricing Model</span>
-        <p className="mt-1 text-lg font-semibold">{monetization.pricingModel}</p>
+        <div className="text-[12px] text-muted-foreground mb-1">Pricing Model</div>
+        <div className="text-[15px] font-semibold">{monetization.pricingModel}</div>
       </SectionCard>
 
-      <div className="grid gap-5 sm:grid-cols-3">
-        {monetization.tiers.map((tier, i) => {
-          const isPopular = tier.name === "Growth";
-          return (
-            <SectionCard
-              key={tier.name}
-              className={`relative ${isPopular ? "border-primary/30 shadow-lg shadow-primary/10" : ""}`}
-              style={{ animationDelay: `${i * 100}ms` } as React.CSSProperties}
-            >
-              {isPopular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full gradient-primary px-3 py-0.5 text-xs font-semibold text-white">
-                  Recommended
-                </span>
-              )}
-              <h4 className="text-sm font-semibold">{tier.name}</h4>
-              <p className="mt-1 text-2xl font-extrabold">{tier.price}</p>
-              <div className="mt-4 space-y-2">
-                {tier.features.map((f) => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-success shrink-0" />
-                    {f}
-                  </div>
-                ))}
-              </div>
-            </SectionCard>
-          );
-        })}
+      <div className="grid gap-4 sm:grid-cols-3">
+        {monetization.tiers.map((t, i) => (
+          <SectionCard key={t.name} className={i === 1 ? "border-primary/30 ring-1 ring-primary/10" : ""}>
+            {i === 1 && <span className="text-[10px] font-medium text-primary uppercase tracking-wider">Popular</span>}
+            <h4 className="text-[14px] font-semibold mt-1">{t.name}</h4>
+            <div className="text-xl font-bold mt-1">{t.price}</div>
+            <ul className="mt-3 space-y-1.5">
+              {t.features.map((f) => (
+                <li key={f} className="text-[12px] text-muted-foreground flex items-start gap-1.5">
+                  <span className="mt-1.5 h-1 w-1 rounded-full bg-primary shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
+        ))}
       </div>
 
       <SectionCard title="Revenue Streams">
-        <div className="space-y-2">
-          {monetization.revenueStreams.map((r, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-xl bg-white/[0.02] px-4 py-3">
-              <DollarSign className="h-4 w-4 shrink-0 text-success" />
-              <span className="text-sm text-muted-foreground">{r}</span>
-            </div>
+        <ul className="space-y-2">
+          {monetization.revenueStreams.map((r) => (
+            <li key={r} className="flex items-start gap-2 text-[13px] text-muted-foreground">
+              <span className="mt-1.5 h-1 w-1 rounded-full bg-[hsl(var(--success))] shrink-0" />
+              {r}
+            </li>
           ))}
-        </div>
+        </ul>
       </SectionCard>
     </div>
   );
