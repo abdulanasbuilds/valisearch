@@ -1,126 +1,96 @@
 import { useEffect, useRef } from "react";
-import { Target, Swords, Layers, DollarSign, TrendingUp, Palette, ChevronRight } from "lucide-react";
 
-const features = [
+const FEATURES = [
   {
-    icon: Target,
+    n: "01",
     title: "Validation Score",
-    description: "Instant viability assessment with market demand, feasibility, and risk breakdown — scored out of 100.",
-    accent: "from-violet-500/20 to-purple-500/10",
-    iconColor: "text-violet-400",
-    iconBg: "bg-violet-500/15 border-violet-500/30",
+    body: "A 0–100 composite score across market demand, feasibility, competition, and timing. Backed by data points, not gut feel.",
   },
   {
-    icon: Swords,
-    title: "Competitor Intelligence",
-    description: "Who's building this, their weaknesses, market gaps you can exploit, and how to differentiate.",
-    accent: "from-blue-500/20 to-cyan-500/10",
-    iconColor: "text-blue-400",
-    iconBg: "bg-blue-500/15 border-blue-500/30",
+    n: "02",
+    title: "Competitor Map",
+    body: "Who's already building this, their market position, pricing, weaknesses — and the exact gap you can exploit.",
   },
   {
-    icon: Layers,
-    title: "Product Roadmap",
-    description: "Prioritized MVP features, differentiators, and a premium feature path for Series A.",
-    accent: "from-pink-500/20 to-rose-500/10",
-    iconColor: "text-pink-400",
-    iconBg: "bg-pink-500/15 border-pink-500/30",
-  },
-  {
-    icon: DollarSign,
-    title: "Monetization Plan",
-    description: "Pricing models, revenue streams, and realistic financial projections for your market.",
-    accent: "from-green-500/20 to-emerald-500/10",
-    iconColor: "text-emerald-400",
-    iconBg: "bg-emerald-500/15 border-emerald-500/30",
-  },
-  {
-    icon: TrendingUp,
+    n: "03",
     title: "Market Sizing",
-    description: "TAM, SAM, SOM with growth outlook, trend signals, and macro indicators.",
-    accent: "from-orange-500/20 to-amber-500/10",
-    iconColor: "text-amber-400",
-    iconBg: "bg-amber-500/15 border-amber-500/30",
+    body: "TAM, SAM, SOM with cited growth projections and macro trend signals. The numbers investors actually ask about.",
   },
   {
-    icon: Palette,
-    title: "Brand & Naming",
-    description: "Name ideas, taglines, brand positioning, and voice guidelines tailored to your audience.",
-    accent: "from-cyan-500/20 to-teal-500/10",
-    iconColor: "text-cyan-400",
-    iconBg: "bg-cyan-500/15 border-cyan-500/30",
+    n: "04",
+    title: "Monetization Plan",
+    body: "Pricing model recommendations, revenue stream options, and realistic Year 1–3 projections for your specific segment.",
+  },
+  {
+    n: "05",
+    title: "Product Roadmap",
+    body: "Prioritized MVP features, differentiating bets, and a premium feature ladder — mapped to customer segments.",
+  },
+  {
+    n: "06",
+    title: "Brand & Go-to-Market",
+    body: "Naming directions, positioning statement, ideal customer profile, and the first three acquisition channels to test.",
   },
 ];
 
 export function FeaturesPreview() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const cards = section.querySelectorAll<HTMLElement>(".reveal");
+    const els = ref.current?.querySelectorAll<HTMLElement>(".reveal") ?? [];
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.1 }
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) (e.target as HTMLElement).classList.add("visible");
+      }),
+      { threshold: 0.08 }
     );
-
-    cards.forEach((c) => observer.observe(c));
+    els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section id="features" ref={sectionRef} className="py-28 sm:py-36 border-t border-white/[0.06]">
-      {/* Section orbs */}
-      <div className="orb orb-purple absolute left-0 w-[600px] h-[600px] opacity-20 -translate-x-1/2" />
-
-      <div className="relative max-w-7xl mx-auto px-6">
+    <section id="features" ref={ref} className="border-t border-white/[0.05] py-28 md:py-36">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
         {/* Header */}
-        <div className="max-w-2xl mx-auto text-center mb-20 reveal">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 text-[12px] text-violet-400 font-medium mb-5">
-            Full startup blueprint
+        <div className="grid md:grid-cols-2 gap-8 mb-20">
+          <div className="reveal">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-8 bg-white/15" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/25">
+                Eight-section report
+              </span>
+            </div>
+            <h2 className="text-[clamp(2rem,4.5vw,3.6rem)] font-black text-white leading-[1.06] tracking-[-0.03em]">
+              Everything a founder<br />
+              needs to{" "}
+              <span className="font-serif-display font-normal text-white/45">decide.</span>
+            </h2>
           </div>
-          <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-black tracking-[-0.03em] text-white leading-[1.08]">
-            Everything investors
-            <br />
-            <span className="gradient-text">want to see</span>
-          </h2>
-          <p className="mt-5 text-[16px] leading-[1.75] text-white/45 max-w-lg mx-auto">
-            Eight dimensions that matter — from market size to brand voice. In seconds, not weeks.
-          </p>
+          <div className="reveal reveal-delay-1 md:pt-16">
+            <p className="text-[15px] leading-[1.85] text-white/35">
+              Most validation tools give you a vibe check. ValiSearch gives you the 
+              complete picture — the same eight dimensions that investors and experienced 
+              founders evaluate before committing to an idea.
+            </p>
+          </div>
         </div>
 
         {/* Feature grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.04] border border-white/[0.04] rounded-2xl overflow-hidden">
+          {FEATURES.map((f, i) => (
             <div
-              key={f.title}
-              className={`grad-border p-6 group cursor-default reveal reveal-delay-${(i % 3) + 1}`}
+              key={f.n}
+              className={`reveal reveal-delay-${(i % 3) + 1} bg-[#0A0A0A] p-7 group hover:bg-white/[0.025] transition-colors duration-300`}
             >
-              {/* Gradient accent top */}
-              <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${f.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
-
-              <div className="relative z-10">
-                <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl border ${f.iconBg} mb-4 transition-transform duration-300 group-hover:scale-110`}>
-                  <f.icon className={`h-5 w-5 ${f.iconColor}`} />
-                </div>
-
-                <h3 className="text-[15px] font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-[13px] leading-[1.7] text-white/40 group-hover:text-white/55 transition-colors duration-300">
-                  {f.description}
-                </p>
-
-                <div className="mt-4 flex items-center gap-1 text-[12px] text-white/20 group-hover:text-white/40 transition-colors duration-300">
-                  <span>Learn more</span>
-                  <ChevronRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono font-semibold text-white/20 group-hover:text-indigo-400/50 transition-colors duration-200">
+                  {f.n}
+                </span>
               </div>
+              <h3 className="text-[15px] font-semibold text-white/75 mb-3 group-hover:text-white/90 transition-colors duration-200">
+                {f.title}
+              </h3>
+              <p className="text-[13px] leading-[1.75] text-white/30">{f.body}</p>
             </div>
           ))}
         </div>

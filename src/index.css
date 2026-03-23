@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,44 +7,44 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.5%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
 
-    --card: 240 8% 5%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 240 8% 5%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 263 70% 58%;
+    --primary: 248 84% 67%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 6% 10%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 0 0% 9%;
+    --secondary-foreground: 0 0% 80%;
 
-    --muted: 240 6% 10%;
-    --muted-foreground: 240 5% 55%;
+    --muted: 0 0% 9%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 240 6% 12%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 0 0% 11%;
+    --accent-foreground: 0 0% 96%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 12%;
-    --input: 240 6% 12%;
-    --ring: 263 70% 58%;
+    --border: 0 0% 11%;
+    --input: 0 0% 11%;
+    --ring: 248 84% 67%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --sidebar-background: 240 10% 3.5%;
-    --sidebar-foreground: 0 0% 75%;
-    --sidebar-primary: 263 70% 58%;
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 70%;
+    --sidebar-primary: 248 84% 67%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 6% 10%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 6% 12%;
-    --sidebar-ring: 263 70% 58%;
+    --sidebar-accent: 0 0% 9%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 11%;
+    --sidebar-ring: 248 84% 67%;
 
     --success: 152 60% 42%;
     --success-foreground: 0 0% 100%;
@@ -64,7 +65,7 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: hsl(240, 10%, 3.5%);
+    background-color: #0A0A0A;
   }
 
   html {
@@ -72,217 +73,93 @@
   }
 }
 
-/* ─── Gradient text ─────────────────────────────────────────────────────── */
-.gradient-text {
-  background: linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ─── Card surface (for internal pages) ───────────────────────────────────── */
+.card-surface {
+  @apply bg-card border border-border/60 shadow-sm;
 }
-
-.gradient-text-warm {
-  background: linear-gradient(135deg, #f472b6 0%, #a78bfa 50%, #60a5fa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.card-surface-hover {
+  @apply card-surface transition-all duration-200 ease-out;
 }
-
-/* ─── Background orbs ───────────────────────────────────────────────────── */
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-}
-
-.orb-purple {
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
-}
-
-.orb-blue {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
-}
-
-.orb-pink {
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
-}
-
-.orb-cyan {
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.2) 0%, transparent 70%);
-}
-
-/* ─── Dot grid ──────────────────────────────────────────────────────────── */
-.dot-grid {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-/* ─── Glass card ────────────────────────────────────────────────────────── */
-.glass-card {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-/* ─── Gradient border card ──────────────────────────────────────────────── */
-.grad-border {
-  position: relative;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: all 0.3s ease;
-}
-
-.grad-border::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(59, 130, 246, 0.2), rgba(236, 72, 153, 0.2));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.grad-border:hover::before {
-  opacity: 1;
-}
-
-.grad-border:hover {
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-2px);
-}
-
-/* ─── Glow button ───────────────────────────────────────────────────────── */
-.glow-btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.glow-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.glow-btn:hover::after {
-  opacity: 1;
-}
-
-/* ─── Marquee ───────────────────────────────────────────────────────────── */
-.marquee-track {
-  display: flex;
-  gap: 3rem;
-  animation: marquee 28s linear infinite;
-  white-space: nowrap;
-}
-
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.card-surface-hover:hover {
+  @apply border-border bg-accent shadow-md;
 }
 
 /* ─── Scroll reveal ─────────────────────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(20px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-5 { transition-delay: 0.40s; }
+.reveal-delay-6 { transition-delay: 0.48s; }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-.reveal-delay-5 { transition-delay: 0.5s; }
-.reveal-delay-6 { transition-delay: 0.6s; }
-
-/* ─── Hero beam / shimmer ───────────────────────────────────────────────── */
-.beam {
+/* ─── Noise texture overlay ─────────────────────────────────────────────── */
+.noise::after {
+  content: '';
   position: absolute;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent 0%, rgba(139, 92, 246, 0.9) 40%, rgba(59, 130, 246, 0.7) 70%, transparent 100%);
-  animation: beam-fall 6s ease-in-out infinite;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
 }
 
-@keyframes beam-fall {
-  0%, 100% { opacity: 0; transform: translateY(-20%); }
-  20%, 80%  { opacity: 1; }
-  50%       { opacity: 0.8; transform: translateY(5%); }
+/* ─── Grid line background ──────────────────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
-/* ─── Float animation ───────────────────────────────────────────────────── */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+/* ─── Marquee ───────────────────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  animation: marquee 32s linear infinite;
+  white-space: nowrap;
 }
-
-.animate-float {
-  animation: float 5s ease-in-out infinite;
-}
-
-/* ─── Pulse glow ────────────────────────────────────────────────────────── */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-  50%       { box-shadow: 0 0 50px rgba(139, 92, 246, 0.6), 0 0 80px rgba(59, 130, 246, 0.3); }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* ─── Spin slow ─────────────────────────────────────────────────────────── */
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 20s linear infinite;
-}
-
-/* ─── Card surface ──────────────────────────────────────────────────────── */
-.card-surface {
-  @apply bg-card border border-border/60 shadow-sm;
-}
-
-.card-surface-hover {
-  @apply card-surface transition-all duration-200 ease-out;
-}
-
-.card-surface-hover:hover {
-  @apply border-border bg-accent shadow-md;
-}
-
-/* ─── Counter digits animation ──────────────────────────────────────────── */
-@keyframes count-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.animate-count {
-  animation: count-up 0.6s ease forwards;
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ─── Hide Lovable badge ────────────────────────────────────────────────── */
 #lovable-badge {
   display: none !important;
+}
+
+/* ─── Serif display ─────────────────────────────────────────────────────── */
+.font-serif-display {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+}
+
+/* ─── Link hover underline ──────────────────────────────────────────────── */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
