@@ -17,6 +17,10 @@ import { TechStackSection } from "@/components/dashboard/sections/TechStackSecti
 import { UserFlowSection } from "@/components/dashboard/sections/UserFlowSection";
 import { BuildModeSection } from "@/components/dashboard/sections/BuildModeSection";
 import { IdeaEvolutionSection } from "@/components/dashboard/sections/IdeaEvolutionSection";
+import { FlowEditorSection } from "@/components/dashboard/sections/FlowEditorSection";
+import { MarketFeasibilitySection } from "@/components/dashboard/sections/MarketFeasibilitySection";
+import { RevenueIntelligenceSection } from "@/components/dashboard/sections/RevenueIntelligenceSection";
+import { IdeBridgeSection } from "@/components/dashboard/sections/IdeBridgeSection";
 import { ApiSettings } from "@/components/dashboard/ApiSettings";
 import { downloadReport, downloadReportJson, downloadReportMarkdown } from "@/utils/exportPdf";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
@@ -125,21 +129,25 @@ export default function Dashboard() {
 
           <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
             <Routes>
-              <Route index element={<Navigate to="overview" replace />} />
-              <Route path="overview"     element={<OverviewSection />} />
-              <Route path="validation"   element={<ValidationSection />} />
-              <Route path="market"       element={<MarketSection />} />
-              <Route path="competitors"  element={<CompetitorsSection />} />
-              <Route path="product"      element={<ProductSection />} />
-              <Route path="branding"     element={<BrandingSection />} />
-              <Route path="monetization" element={<MonetizationSection />} />
-              <Route path="go-to-market" element={<GoToMarketSection />} />
-              <Route path="evolution"    element={<IdeaEvolutionSection />} />
-              <Route path="flow"         element={<UserFlowSection />} />
-              <Route path="kanban"       element={<KanbanSection />} />
-              <Route path="tech-stack"   element={<TechStackSection />} />
-              <Route path="build-mode"   element={<BuildModeSection />} />
-              <Route path="settings"     element={<ApiSettings />} />
+              <Route index                    element={<Navigate to="overview" replace />} />
+              <Route path="overview"          element={<OverviewSection />} />
+              <Route path="validation"        element={<ValidationSection />} />
+              <Route path="market-feasibility" element={<MarketFeasibilitySection />} />
+              <Route path="market"            element={<MarketSection />} />
+              <Route path="competitors"       element={<CompetitorsSection />} />
+              <Route path="product"           element={<ProductSection />} />
+              <Route path="branding"          element={<BrandingSection />} />
+              <Route path="revenue"           element={<RevenueIntelligenceSection />} />
+              <Route path="monetization"      element={<MonetizationSection />} />
+              <Route path="go-to-market"      element={<GoToMarketSection />} />
+              <Route path="evolution"         element={<IdeaEvolutionSection />} />
+              <Route path="flow-editor"       element={<FlowEditorSection />} />
+              <Route path="flow"              element={<UserFlowSection />} />
+              <Route path="kanban"            element={<KanbanSection />} />
+              <Route path="tech-stack"        element={<TechStackSection />} />
+              <Route path="build-mode"        element={<BuildModeSection />} />
+              <Route path="ide-bridge"        element={<IdeBridgeSection />} />
+              <Route path="settings"          element={<ApiSettings />} />
             </Routes>
           </main>
         </div>

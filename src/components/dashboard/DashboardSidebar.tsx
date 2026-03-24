@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, ShieldCheck, BarChart3, Swords, Layers, Palette,
-  DollarSign, Rocket, GitBranch, Cpu, Map, Terminal, Lightbulb, Settings
+  DollarSign, Rocket, GitBranch, Cpu, Map, Terminal, Lightbulb, Settings,
+  TrendingUp, Activity, Code2, Pencil,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu,
@@ -11,22 +12,26 @@ import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { hasAnyApiKey } from "@/services/api";
 
 const MAIN_SECTIONS = [
-  { title: "Overview",       icon: LayoutDashboard, path: "overview" },
-  { title: "Validation",     icon: ShieldCheck,     path: "validation" },
-  { title: "Market",         icon: BarChart3,        path: "market" },
-  { title: "Competitors",    icon: Swords,           path: "competitors" },
-  { title: "Product",        icon: Layers,           path: "product" },
-  { title: "Branding",       icon: Palette,          path: "branding" },
-  { title: "Monetization",   icon: DollarSign,       path: "monetization" },
-  { title: "Go-To-Market",   icon: Rocket,           path: "go-to-market" },
+  { title: "Overview",            icon: LayoutDashboard, path: "overview" },
+  { title: "Validation",          icon: ShieldCheck,     path: "validation" },
+  { title: "Market Feasibility",  icon: Activity,        path: "market-feasibility" },
+  { title: "Market Research",     icon: BarChart3,        path: "market" },
+  { title: "Competitors",         icon: Swords,           path: "competitors" },
+  { title: "Product",             icon: Layers,           path: "product" },
+  { title: "Branding",            icon: Palette,          path: "branding" },
+  { title: "Revenue Intelligence",icon: TrendingUp,       path: "revenue" },
+  { title: "Monetization",        icon: DollarSign,       path: "monetization" },
+  { title: "Go-To-Market",        icon: Rocket,           path: "go-to-market" },
 ];
 
-const ADVANCED_SECTIONS = [
-  { title: "Idea Evolution",  icon: Lightbulb,       path: "evolution" },
-  { title: "User Flow",       icon: Map,             path: "flow" },
-  { title: "Kanban Board",    icon: GitBranch,       path: "kanban" },
-  { title: "Tech Stack",      icon: Cpu,             path: "tech-stack" },
-  { title: "Build Mode",      icon: Terminal,        path: "build-mode" },
+const BUILD_SECTIONS = [
+  { title: "Idea Evolution",  icon: Lightbulb,  path: "evolution" },
+  { title: "Flow Editor",     icon: Pencil,     path: "flow-editor" },
+  { title: "User Flow",       icon: Map,        path: "flow" },
+  { title: "Sprint Planner",  icon: GitBranch,  path: "kanban" },
+  { title: "Tech Stack",      icon: Cpu,        path: "tech-stack" },
+  { title: "Build Mode",      icon: Terminal,   path: "build-mode" },
+  { title: "IDE Bridge",      icon: Code2,      path: "ide-bridge" },
 ];
 
 export function DashboardSidebar() {
@@ -54,6 +59,7 @@ export function DashboardSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
+        {/* Analysis group */}
         <SidebarGroup>
           <div className="px-3 py-2">
             <span className="text-[9.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/40">
@@ -77,6 +83,7 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Build group */}
         <SidebarGroup>
           <div className="px-3 py-2 mt-2">
             <span className="text-[9.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/40">
@@ -85,7 +92,7 @@ export function DashboardSidebar() {
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
-              {ADVANCED_SECTIONS.map((item) => (
+              {BUILD_SECTIONS.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     onClick={() => navigate(`/dashboard/${item.path}`)}

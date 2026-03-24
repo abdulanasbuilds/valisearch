@@ -1,7 +1,8 @@
 /**
- * Frontend API service — handles AI calls directly from the browser.
+ * Frontend API service — AI calls direct from browser.
  * Provider chain: OpenRouter → Groq → Gemini → mock fallback
- * API keys read from: localStorage (user-set) → VITE_ env vars
+ * Keys: localStorage (user-set) → VITE_ env vars
+ * Caching: localStorage per-idea hash (avoids duplicate API calls)
  */
 
 import type { ValiSearchAnalysis } from "@/types/analysis";
@@ -11,6 +12,7 @@ import { SYSTEM_ANALYSIS, buildAnalyzeUserPrompt } from "@/lib/ai/prompts";
 
 const MAX_TOKENS = 8192;
 const TEMP = 0.35;
+const CACHE_TTL_MS = 1000 * 60 * 60 * 6; // 6 hours
 
 /* ── Key resolution ─────────────────────────────────────── */
 export function getOpenRouterKey(): string | null {
@@ -32,19 +34,43 @@ export function clearApiKeys() {
   ["openrouter", "groq", "gemini"].forEach((p) => localStorage.removeItem(`vs_${p}_key`));
 }
 
+/* ── Result caching ─────────────────────────────────────── */
+function cacheKey(idea: string): string {
+  return `vs_cache__${idea.trim().toLowerCase().replace(/\W+/g, "_").slice(0, 60)}`;
+}
+function getCached(idea: string): ValiSearchAnalysis | null {
+  try {
+    const raw = localStorage.getItem(cacheKey(idea));
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL_MS) {
+      localStorage.removeItem(cacheKey(idea));
+      return null;
+    }
+    return data;
+  } catch { return null; }
+}
+function setCache(idea: string, data: ValiSearchAnalysis) {
+  try {
+    localStorage.setItem(cacheKey(idea), JSON.stringify({ data, ts: Date.now() }));
+  } catch { /* full */ }
+}
+export function clearCacheForIdea(idea: string) {
+  localStorage.removeItem(cacheKey(idea));
+}
+export function clearAllCache() {
+  Object.keys(localStorage).filter((k) => k.startsWith("vs_cache__")).forEach((k) => localStorage.removeItem(k));
+}
+
 /* ── Credits ────────────────────────────────────────────── */
 const FREE_CREDITS = 3;
 export function getCredits(): number {
   const stored = localStorage.getItem("vs_credits");
-  if (stored === null) {
-    localStorage.setItem("vs_credits", String(FREE_CREDITS));
-    return FREE_CREDITS;
-  }
+  if (stored === null) { localStorage.setItem("vs_credits", String(FREE_CREDITS)); return FREE_CREDITS; }
   return parseInt(stored, 10);
 }
 export function deductCredit() {
-  const current = getCredits();
-  localStorage.setItem("vs_credits", String(Math.max(0, current - 1)));
+  localStorage.setItem("vs_credits", String(Math.max(0, getCredits() - 1)));
 }
 export function hasCredits(): boolean {
   return hasAnyApiKey() || getCredits() > 0;
@@ -62,9 +88,7 @@ async function callOpenRouter(idea: string, apiKey: string): Promise<ValiSearchA
       "X-Title": "ValiSearch",
     },
     body: JSON.stringify({
-      model,
-      max_tokens: MAX_TOKENS,
-      temperature: TEMP,
+      model, max_tokens: MAX_TOKENS, temperature: TEMP,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: SYSTEM_ANALYSIS },
@@ -83,14 +107,9 @@ async function callGroq(idea: string, apiKey: string): Promise<ValiSearchAnalysi
   const model = import.meta.env.VITE_GROQ_MODEL || "llama-3.1-8b-instant";
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      model,
-      max_tokens: MAX_TOKENS,
-      temperature: TEMP,
+      model, max_tokens: MAX_TOKENS, temperature: TEMP,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: SYSTEM_ANALYSIS },
@@ -107,14 +126,13 @@ async function callGroq(idea: string, apiKey: string): Promise<ValiSearchAnalysi
 
 async function callGemini(idea: string, apiKey: string): Promise<ValiSearchAnalysis | null> {
   const model = import.meta.env.VITE_GEMINI_MODEL || "gemini-1.5-flash";
-  const prompt = `${SYSTEM_ANALYSIS}\n\n${buildAnalyzeUserPrompt(idea)}`;
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ parts: [{ text: `${SYSTEM_ANALYSIS}\n\n${buildAnalyzeUserPrompt(idea)}` }] }],
         generationConfig: { maxOutputTokens: MAX_TOKENS, temperature: TEMP, responseMimeType: "application/json" },
       }),
     }
@@ -126,43 +144,29 @@ async function callGemini(idea: string, apiKey: string): Promise<ValiSearchAnaly
   return parseModelJson<ValiSearchAnalysis>(raw);
 }
 
-/* ── Provider chain ─────────────────────────────────────── */
 async function runProviderChain(idea: string): Promise<{ result: ValiSearchAnalysis; source: "ai" }> {
   const errors: string[] = [];
+  const providers: Array<{ name: string; fn: () => Promise<ValiSearchAnalysis | null> }> = [];
 
   const orKey = getOpenRouterKey();
-  if (orKey) {
-    try {
-      const result = await callOpenRouter(idea, orKey);
-      if (result) return { result, source: "ai" };
-    } catch (e) {
-      errors.push(`OpenRouter: ${e instanceof Error ? e.message : String(e)}`);
-      console.warn("[valisearch:ai] OpenRouter failed →", e);
-    }
-  }
+  if (orKey) providers.push({ name: "OpenRouter", fn: () => callOpenRouter(idea, orKey) });
 
   const groqKey = getGroqKey();
-  if (groqKey) {
-    try {
-      const result = await callGroq(idea, groqKey);
-      if (result) return { result, source: "ai" };
-    } catch (e) {
-      errors.push(`Groq: ${e instanceof Error ? e.message : String(e)}`);
-      console.warn("[valisearch:ai] Groq failed →", e);
-    }
-  }
+  if (groqKey) providers.push({ name: "Groq", fn: () => callGroq(idea, groqKey) });
 
   const geminiKey = getGeminiKey();
-  if (geminiKey) {
+  if (geminiKey) providers.push({ name: "Gemini", fn: () => callGemini(idea, geminiKey) });
+
+  for (const { name, fn } of providers) {
     try {
-      const result = await callGemini(idea, geminiKey);
+      const result = await fn();
       if (result) return { result, source: "ai" };
     } catch (e) {
-      errors.push(`Gemini: ${e instanceof Error ? e.message : String(e)}`);
-      console.warn("[valisearch:ai] Gemini failed →", e);
+      const msg = e instanceof Error ? e.message : String(e);
+      errors.push(`${name}: ${msg}`);
+      console.warn(`[valisearch:ai] ${name} failed →`, msg);
     }
   }
-
   throw new Error(`All AI providers failed:\n${errors.join("\n")}`);
 }
 
@@ -174,17 +178,26 @@ export async function analyzeIdea(idea: string): Promise<{
   const trimmed = idea.trim();
   if (!trimmed) throw new Error("Please describe your startup idea.");
 
+  // Cache hit → skip API call entirely
+  const cached = getCached(trimmed);
+  if (cached) {
+    console.info("[valisearch] Cache hit — skipping API call");
+    return { result: cached, source: "ai" };
+  }
+
   if (hasAnyApiKey()) {
-    return runProviderChain(trimmed);
+    const { result, source } = await runProviderChain(trimmed);
+    setCache(trimmed, result);
+    return { result, source };
   }
 
   if (getCredits() > 0) {
     deductCredit();
     try {
-      return await runProviderChain(trimmed);
-    } catch {
-      // All AI providers failed — use mock
-    }
+      const { result, source } = await runProviderChain(trimmed);
+      setCache(trimmed, result);
+      return { result, source };
+    } catch { /* fall through to mock */ }
   }
 
   await new Promise((resolve) => setTimeout(resolve, 2200));
