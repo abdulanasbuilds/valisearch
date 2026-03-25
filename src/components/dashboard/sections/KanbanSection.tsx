@@ -56,7 +56,7 @@ function TaskCard({
           {task.priority}
         </span>
         <span className="text-[10.5px] font-medium px-2 py-0.5 rounded-md bg-white/[0.05] text-white/35">
-          {task.effort ?? task.estimated_effort ?? "—"}
+          {task.estimated_effort ?? "—"}
         </span>
       </div>
 
