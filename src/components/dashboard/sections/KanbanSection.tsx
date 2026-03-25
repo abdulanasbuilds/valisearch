@@ -204,7 +204,6 @@ export function KanbanSection() {
       title: "New task",
       description: "Click the drag handle to move, trash to delete",
       priority: "medium",
-      effort: "1–2 days",
       estimated_effort: "1–2 days",
     };
     setBoard((prev) => {
