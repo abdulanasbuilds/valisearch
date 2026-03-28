@@ -9,7 +9,7 @@ import {
   SidebarMenuItem, SidebarMenuButton, SidebarHeader, SidebarFooter
 } from "@/components/ui/sidebar";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
-import { hasAnyApiKey } from "@/services/api";
+import logoImg from "@/assets/logo.png";
 
 const MAIN_SECTIONS = [
   { title: "Overview",            icon: LayoutDashboard, path: "overview" },
