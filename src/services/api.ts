@@ -62,18 +62,15 @@ export function clearAllCache() {
   Object.keys(localStorage).filter((k) => k.startsWith("vs_cache__")).forEach((k) => localStorage.removeItem(k));
 }
 
-/* ── Credits ────────────────────────────────────────────── */
-const FREE_CREDITS = 3;
+/* ── Credits (unlimited — no restrictions) ──────────────── */
 export function getCredits(): number {
-  const stored = localStorage.getItem("vs_credits");
-  if (stored === null) { localStorage.setItem("vs_credits", String(FREE_CREDITS)); return FREE_CREDITS; }
-  return parseInt(stored, 10);
+  return 999;
 }
 export function deductCredit() {
-  localStorage.setItem("vs_credits", String(Math.max(0, getCredits() - 1)));
+  // No-op — unlimited usage
 }
 export function hasCredits(): boolean {
-  return hasAnyApiKey() || getCredits() > 0;
+  return true;
 }
 
 /* ── AI provider calls ──────────────────────────────────── */
