@@ -106,32 +106,6 @@ export function DashboardSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="px-4 py-3 border-t border-border/40">
-        {!hasKey && (
-          <div className="mb-3 rounded-lg border border-white/[0.07] bg-white/[0.03] p-3">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-semibold text-white/50">Free credits</span>
-              <span className="text-[11px] font-mono font-bold text-white/70">{credits}/3</span>
-            </div>
-            <div className="h-1 w-full rounded-full bg-white/[0.07] overflow-hidden">
-              <div
-                className="h-full rounded-full bg-white/40 transition-all"
-                style={{ width: `${(credits / 3) * 100}%` }}
-              />
-            </div>
-            <button
-              onClick={() => navigate("/dashboard/settings")}
-              className="mt-2 w-full text-[10.5px] text-indigo-400 hover:text-indigo-300 transition-colors text-center"
-            >
-              Add API key →
-            </button>
-          </div>
-        )}
-        {hasKey && (
-          <div className="mb-3 rounded-lg border border-green-500/20 bg-green-500/5 px-3 py-2">
-            <div className="text-[11px] font-medium text-green-400">✓ API key connected</div>
-            <div className="text-[10.5px] text-muted-foreground/50">Unlimited analyses</div>
-          </div>
-        )}
         <SidebarMenuButton
           onClick={() => navigate("/dashboard/settings")}
           className="text-muted-foreground hover:text-foreground w-full"

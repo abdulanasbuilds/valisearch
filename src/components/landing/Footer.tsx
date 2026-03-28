@@ -16,9 +16,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4 w-fit">
-              <div className="flex items-center justify-center w-7 h-7 rounded-[6px] bg-white">
-                <span className="text-[11px] font-black text-black leading-none tracking-[-0.04em]">VS</span>
-              </div>
+              <img src={logoImg} alt="ValiSearch" className="h-6 w-auto" />
               <span className="text-[14px] font-semibold text-white/70 tracking-[-0.02em]">ValiSearch</span>
             </Link>
             <p className="text-[12.5px] leading-[1.7] text-white/25 max-w-[180px]">

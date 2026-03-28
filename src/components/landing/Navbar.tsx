@@ -50,15 +50,12 @@ export function Navbar() {
 
         {/* Right */}
         <div className="hidden md:flex items-center gap-1">
-          <button className="nav-pill relative px-3.5 py-2 text-[13.5px] font-medium text-white/38 hover:text-white/72 transition-colors duration-200 rounded-[6px]">
-            Log in
-          </button>
           <button
             data-testid="button-get-started-nav"
             onClick={() => navigate("/")}
             className="ml-1 flex items-center gap-1.5 px-4 py-[7px] text-[13.5px] font-semibold text-black bg-white rounded-[8px] hover:bg-white/90 transition-all duration-150 active:scale-[0.97]"
           >
-            Get started
+            Try it free
           </button>
         </div>
 

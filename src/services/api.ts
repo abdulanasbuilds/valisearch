@@ -195,21 +195,18 @@ export async function analyzeIdea(idea: string): Promise<{
     return { result: cached, source: "ai" };
   }
 
+  // Try AI providers first, fall back to mock
   if (hasAnyApiKey()) {
-    const { result, source } = await runProviderChain(trimmed);
-    setCache(trimmed, result);
-    return { result, source };
-  }
-
-  if (getCredits() > 0) {
     try {
       const { result, source } = await runProviderChain(trimmed);
-      deductCredit(); // only deduct when AI call actually succeeded
       setCache(trimmed, result);
       return { result, source };
-    } catch { /* fall through to mock — do not deduct credit */ }
+    } catch (e) {
+      console.warn("[valisearch] AI providers failed, using mock data:", e);
+    }
   }
 
+  // Mock fallback — always available
   await new Promise((resolve) => setTimeout(resolve, 2200));
   return { result: getMockAnalysis(trimmed), source: "mock" };
 }
