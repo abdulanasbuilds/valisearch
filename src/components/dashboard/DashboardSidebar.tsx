@@ -45,9 +45,7 @@ export function DashboardSidebar() {
     <Sidebar>
       <SidebarHeader className="px-4 py-3 border-b border-border/40">
         <button onClick={() => navigate("/")} className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-[5px] bg-white">
-            <span className="text-[10px] font-black text-black leading-none tracking-tight">VS</span>
-          </div>
+          <img src={logoImg} alt="ValiSearch" className="h-6 w-auto" />
           <span className="text-[13px] font-semibold">ValiSearch</span>
         </button>
         {idea && (
