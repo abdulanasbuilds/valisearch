@@ -90,7 +90,7 @@ export function Navbar() {
                 onClick={() => { navigate("/"); setMobileOpen(false); }}
                 className="w-full py-2.5 rounded-lg text-[14px] font-semibold text-black bg-white hover:bg-white/90 transition-all"
               >
-                Get started
+                Try it free
               </button>
             </div>
           </div>
