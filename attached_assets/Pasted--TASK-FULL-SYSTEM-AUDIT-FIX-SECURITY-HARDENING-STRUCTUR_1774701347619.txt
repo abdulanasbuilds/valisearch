@@ -1,0 +1,259 @@
+# 🚀 TASK: FULL SYSTEM AUDIT, FIX, SECURITY HARDENING & STRUCTURE (VALISEARCH)
+
+You are working on a SaaS application called ValiSearch.
+
+Your job is to:
+
+* ensure the entire app runs correctly (frontend + backend)
+* fix all bugs and broken logic
+* properly structure all files and folders
+* secure all sensitive data (API keys, env files)
+* prepare the app for real-world usage
+* DO NOT use any platform-specific features (no Replit-only dependencies)
+
+---
+
+# 🧠 1. PROJECT STRUCTURE (MANDATORY)
+
+Restructure project into clean architecture:
+
+/app (or /src)
+/components
+/pages or /routes
+/styles
+/hooks
+/utils
+
+/backend
+/controllers
+/services
+/routes
+/middlewares
+/utils
+
+/lib
+ai.ts
+api-clients.ts
+
+/config
+env.ts
+
+/types
+
+/public
+
+---
+
+# ⚙️ 2. FRONTEND VALIDATION
+
+Ensure:
+
+* all pages load correctly
+* no broken UI components
+* responsive design works
+* loading states handled properly
+* API calls correctly connected
+
+Fix:
+
+* broken imports
+* missing components
+* UI glitches
+
+---
+
+# 🔌 3. BACKEND VALIDATION (CRITICAL)
+
+Ensure backend is fully functional:
+
+* all API routes work
+* correct request/response handling
+* proper error handling (try/catch everywhere)
+* validate inputs before processing
+
+Test:
+
+* idea analysis endpoint
+* competitor endpoint
+* AI integration endpoint
+
+---
+
+# 🤖 4. AI INTEGRATION (MULTI-MODEL SYSTEM)
+
+Implement robust AI handler:
+
+Priority order:
+
+1. OpenRouter (primary)
+2. Groq (fallback)
+3. Gemini (secondary fallback)
+
+Requirements:
+
+* always return structured JSON
+* handle API failure gracefully
+* log fallback switching
+* limit token usage
+
+---
+
+# 🔐 5. ENVIRONMENT VARIABLES (SECURITY)
+
+Create `.env.local`:
+
+# AI APIs
+
+OPENROUTER_API_KEY=
+GROQ_API_KEY=
+GEMINI_API_KEY=
+OPENAI_API_KEY=
+CLAUDE_API_KEY=
+
+# Search APIs
+
+BRAVE_API_KEY=
+SERPAPI_API_KEY=
+
+# Business Data
+
+CLEARBIT_API_KEY=
+CRUNCHBASE_API_KEY=
+
+# Branding / Domain
+
+LOGO_DEV_API_KEY=
+NAMECHEAP_API_KEY=
+GODADDY_API_KEY=
+
+# Database
+
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+
+# Payments
+
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_KEY=
+
+# App
+
+NEXT_PUBLIC_APP_URL=
+
+---
+
+# 🛑 6. ENV SECURITY RULES
+
+* NEVER expose API keys in frontend
+* ONLY access env variables in backend
+* validate env variables on app start
+* throw error if missing critical keys
+
+---
+
+# 📁 7. CREATE .gitignore (MANDATORY)
+
+Ensure:
+
+.env
+.env.local
+node_modules
+dist
+build
+.cache
+coverage
+
+---
+
+# 🛡️ 8. SECURITY HARDENING
+
+Implement:
+
+* input validation (sanitize user input)
+* rate limiting (prevent abuse)
+* CORS configuration
+* basic request authentication (if needed)
+* prevent API overuse
+
+---
+
+# 🗄️ 9. DATABASE INTEGRATION
+
+Using Supabase:
+
+Create tables:
+
+* users
+* ideas
+* analysis
+* credits
+
+Ensure:
+
+* data is stored securely
+* no direct client-side writes for sensitive data
+
+---
+
+# 💰 10. CREDIT SYSTEM
+
+Implement:
+
+* user credit balance
+* deduct credits per analysis
+* block usage when credits = 0
+
+---
+
+# ⚡ 11. PERFORMANCE OPTIMIZATION
+
+* cache AI results
+* prevent duplicate API calls
+* optimize API response size
+* lazy load heavy components
+
+---
+
+# 📤 12. EXPORT FEATURE
+
+Allow users to export:
+
+* JSON results
+* PDF report (basic implementation)
+
+---
+
+# 🧪 13. TESTING
+
+Ensure:
+
+* app runs with:
+  npm install
+  npm run dev
+
+* no runtime errors
+
+* all endpoints tested manually
+
+---
+
+# 🚫 14. RESTRICTIONS
+
+* DO NOT use Replit-specific features
+* DO NOT hardcode API keys
+* DO NOT break modular structure
+
+---
+
+# 🎯 FINAL GOAL
+
+Deliver a:
+
+* fully functional app
+* secure backend
+* scalable architecture
+* production-ready structure
+
+---
+
+END TASK

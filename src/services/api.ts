@@ -170,13 +170,26 @@ async function runProviderChain(idea: string): Promise<{ result: ValiSearchAnaly
   throw new Error(`All AI providers failed:\n${errors.join("\n")}`);
 }
 
+/* ── Input validation ───────────────────────────────────── */
+const MAX_IDEA_LENGTH = 500;
+const MIN_IDEA_LENGTH = 10;
+
+function validateIdea(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) throw new Error("Please describe your startup idea.");
+  if (trimmed.length < MIN_IDEA_LENGTH)
+    throw new Error(`Your idea is too short — please add at least ${MIN_IDEA_LENGTH} characters.`);
+  if (trimmed.length > MAX_IDEA_LENGTH)
+    throw new Error(`Your idea exceeds the ${MAX_IDEA_LENGTH}-character limit. Please shorten it.`);
+  return trimmed;
+}
+
 /* ── Main export ─────────────────────────────────────────── */
 export async function analyzeIdea(idea: string): Promise<{
   result: ValiSearchAnalysis;
   source: "ai" | "mock";
 }> {
-  const trimmed = idea.trim();
-  if (!trimmed) throw new Error("Please describe your startup idea.");
+  const trimmed = validateIdea(idea);
 
   // Cache hit → skip API call entirely
   const cached = getCached(trimmed);
@@ -192,12 +205,12 @@ export async function analyzeIdea(idea: string): Promise<{
   }
 
   if (getCredits() > 0) {
-    deductCredit();
     try {
       const { result, source } = await runProviderChain(trimmed);
+      deductCredit(); // only deduct when AI call actually succeeded
       setCache(trimmed, result);
       return { result, source };
-    } catch { /* fall through to mock */ }
+    } catch { /* fall through to mock — do not deduct credit */ }
   }
 
   await new Promise((resolve) => setTimeout(resolve, 2200));

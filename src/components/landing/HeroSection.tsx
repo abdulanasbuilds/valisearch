@@ -58,6 +58,8 @@ export function HeroSection() {
     return () => observer.disconnect();
   }, []);
 
+  const MAX_IDEA_LEN = 500;
+
   const handleSubmit = () => {
     const val = idea.trim();
     if (!val) return;
@@ -130,12 +132,13 @@ export function HeroSection() {
                   id="idea-input"
                   data-testid="input-idea"
                   value={idea}
-                  onChange={(e) => setIdea(e.target.value)}
+                  onChange={(e) => setIdea(e.target.value.slice(0, MAX_IDEA_LEN))}
                   onFocus={() => setFocused(true)}
                   onBlur={() => setFocused(false)}
                   placeholder="Describe your startup idea…"
                   className="w-full resize-none bg-transparent px-5 py-4 pr-14 text-[15px] leading-relaxed text-white/90 placeholder:text-white/18 focus:outline-none min-h-[70px] max-h-[140px]"
                   rows={2}
+                  maxLength={MAX_IDEA_LEN}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -157,6 +160,11 @@ export function HeroSection() {
                   Press{" "}
                   <kbd className="font-mono bg-white/[0.07] border border-white/[0.08] px-1.5 py-0.5 rounded text-[10px]">↵</kbd>{" "}
                   to validate
+                  {idea.length >= MAX_IDEA_LEN * 0.85 && (
+                    <span className={`ml-2 ${idea.length >= MAX_IDEA_LEN ? "text-red-400/70" : "text-white/30"}`}>
+                      {idea.length}/{MAX_IDEA_LEN}
+                    </span>
+                  )}
                 </span>
                 <button
                   data-testid="button-get-started-hero"

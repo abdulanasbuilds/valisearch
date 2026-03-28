@@ -22,27 +22,31 @@ A premium SaaS app that transforms startup ideas into comprehensive 15-section a
 - `src/services/api.ts` — AI provider chain (OpenRouter → Groq → Gemini), credits system, key management
 - `src/lib/ai/` — Provider functions, JSON parser, prompts
 - `src/types/analysis.ts` — Shared TypeScript types for full analysis schema
-- `src/utils/exportPdf.ts` — Text, JSON, and Markdown export utilities
+- `src/utils/exportPdf.ts` — Text, JSON, Markdown, and PDF export utilities
 
 ## Dashboard Sections
 
-### Analysis (8 sections)
+### Analysis (10 sections)
 1. **Overview** — Score display, 6 pillar bars, quick navigation
 2. **Validation** — Market demand, feasibility, risks
-3. **Market** — TAM/SAM/SOM, trends, growth outlook
-4. **Competitors** — Competitor cards with strengths/weaknesses
-5. **Product** — MVP/diff/premium features, architecture
-6. **Branding** — Name suggestions, taglines, positioning
-7. **Monetization** — Pricing tiers, revenue streams
-8. **Go-To-Market** — Channels, launch plan, growth strategies
+3. **Market Feasibility** — Demand gauge, trend radar, 12-month demand/risk chart
+4. **Market Research** — TAM/SAM/SOM, trends, growth outlook
+5. **Competitors** — Competitor cards with strengths/weaknesses
+6. **Product** — MVP/diff/premium features, architecture
+7. **Branding** — Name suggestions, taglines, positioning
+8. **Revenue Intelligence** — MRR projections, pricing tiers, revenue mix pie, competitor pricing
+9. **Monetization** — Pricing model and strategy
+10. **Go-To-Market** — Channels, launch plan, growth strategies
 
-### Build (5 sections)
-9. **Idea Evolution** — AI-refined idea, key changes, positioning
-10. **User Flow** — Visual journey diagram, page structure
-11. **Kanban Board** — Interactive sprint planning with move-between-columns
-12. **Tech Stack** — MVP vs Scalable stack side-by-side with tech badges
-13. **Build Mode** — Folder structure, AI builder prompts (Lovable, Cursor, v0)
-14. **API Settings** — Connect OpenRouter/Groq/Gemini keys (stored in localStorage)
+### Build (7 sections)
+11. **Idea Evolution** — AI-refined idea, key changes, positioning
+12. **Flow Editor** — Interactive drag-and-drop flow diagram with live requirement derivation
+13. **User Flow** — Visual journey diagram, page structure
+14. **Sprint Planner** — Interactive Kanban with backlog/in-progress/done columns
+15. **Tech Stack** — MVP vs Scalable stack side-by-side with tech badges
+16. **Build Mode** — Folder structure, AI builder prompts (Lovable, Cursor, v0)
+17. **IDE Bridge** — Export .cursorrules, tasks.json, settings.json, Lovable/Bolt prompts
+18. **API Settings** — Connect OpenRouter/Groq/Gemini keys (stored in localStorage)
 
 ## AI Integration
 
@@ -73,6 +77,16 @@ Users can also enter API keys directly in the dashboard under API Settings — s
 - **Text (.txt)** — Full human-readable report
 - **JSON (.json)** — Complete structured data
 - **Markdown (.md)** — Formatted document
+- **PDF** — Full HTML report opened in new tab, print to PDF via browser dialog
+
+## Input Validation & Security
+
+- Idea input: 10–500 character limit enforced both in the UI (textarea) and in the service layer
+- Character counter appears at 85% of limit and turns red at the limit
+- Credits are only deducted when an AI provider call actually succeeds (not on fallback to mock)
+- API keys stored in localStorage are never sent anywhere except to the respective AI provider
+- `.gitignore` covers `.env`, `.env.local`, `node_modules`, `dist`, and all `*.local` files
+- All env vars use `VITE_` prefix — documented in `.env.example`
 
 ## Design System
 
