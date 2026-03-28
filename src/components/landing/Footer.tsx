@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoImg from "@/assets/logo.png";
 
 const LINKS = {
   Product: ["Features", "How it works", "Changelog", "Roadmap"],
