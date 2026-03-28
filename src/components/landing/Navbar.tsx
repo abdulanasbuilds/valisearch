@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 const NAV_LINKS = [
   { label: "Features",    href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Pricing",     href: "#pricing" },
 ];
 
 export function Navbar() {
@@ -31,9 +31,7 @@ export function Navbar() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 shrink-0" data-testid="link-logo">
-          <div className="flex items-center justify-center w-[28px] h-[28px] rounded-[7px] bg-white shadow-sm">
-            <span className="text-[10.5px] font-black text-black leading-none tracking-[-0.05em]">VS</span>
-          </div>
+          <img src={logoImg} alt="ValiSearch" className="h-7 w-auto" />
           <span className="text-[14.5px] font-semibold text-white/85 tracking-[-0.025em]">ValiSearch</span>
         </Link>
 
@@ -52,15 +50,12 @@ export function Navbar() {
 
         {/* Right */}
         <div className="hidden md:flex items-center gap-1">
-          <button className="nav-pill relative px-3.5 py-2 text-[13.5px] font-medium text-white/38 hover:text-white/72 transition-colors duration-200 rounded-[6px]">
-            Log in
-          </button>
           <button
             data-testid="button-get-started-nav"
             onClick={() => navigate("/")}
             className="ml-1 flex items-center gap-1.5 px-4 py-[7px] text-[13.5px] font-semibold text-black bg-white rounded-[8px] hover:bg-white/90 transition-all duration-150 active:scale-[0.97]"
           >
-            Get started
+            Try it free
           </button>
         </div>
 
@@ -95,7 +90,7 @@ export function Navbar() {
                 onClick={() => { navigate("/"); setMobileOpen(false); }}
                 className="w-full py-2.5 rounded-lg text-[14px] font-semibold text-black bg-white hover:bg-white/90 transition-all"
               >
-                Get started
+                Try it free
               </button>
             </div>
           </div>

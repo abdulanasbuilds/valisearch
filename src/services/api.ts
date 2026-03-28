@@ -62,18 +62,15 @@ export function clearAllCache() {
   Object.keys(localStorage).filter((k) => k.startsWith("vs_cache__")).forEach((k) => localStorage.removeItem(k));
 }
 
-/* ── Credits ────────────────────────────────────────────── */
-const FREE_CREDITS = 3;
+/* ── Credits (unlimited — no restrictions) ──────────────── */
 export function getCredits(): number {
-  const stored = localStorage.getItem("vs_credits");
-  if (stored === null) { localStorage.setItem("vs_credits", String(FREE_CREDITS)); return FREE_CREDITS; }
-  return parseInt(stored, 10);
+  return 999;
 }
 export function deductCredit() {
-  localStorage.setItem("vs_credits", String(Math.max(0, getCredits() - 1)));
+  // No-op — unlimited usage
 }
 export function hasCredits(): boolean {
-  return hasAnyApiKey() || getCredits() > 0;
+  return true;
 }
 
 /* ── AI provider calls ──────────────────────────────────── */
@@ -198,21 +195,18 @@ export async function analyzeIdea(idea: string): Promise<{
     return { result: cached, source: "ai" };
   }
 
+  // Try AI providers first, fall back to mock
   if (hasAnyApiKey()) {
-    const { result, source } = await runProviderChain(trimmed);
-    setCache(trimmed, result);
-    return { result, source };
-  }
-
-  if (getCredits() > 0) {
     try {
       const { result, source } = await runProviderChain(trimmed);
-      deductCredit(); // only deduct when AI call actually succeeded
       setCache(trimmed, result);
       return { result, source };
-    } catch { /* fall through to mock — do not deduct credit */ }
+    } catch (e) {
+      console.warn("[valisearch] AI providers failed, using mock data:", e);
+    }
   }
 
+  // Mock fallback — always available
   await new Promise((resolve) => setTimeout(resolve, 2200));
   return { result: getMockAnalysis(trimmed), source: "mock" };
 }
