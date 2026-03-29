@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { ValiSearchAnalysis } from "@/types/analysis";
-import { analyzeIdea, getCredits, hasAnyApiKey } from "@/services/api";
+import { analyzeIdea } from "@/services/api";
+import { useCreditStore } from "@/store/useCreditStore";
 
 type AnalysisState = {
   idea: string;
