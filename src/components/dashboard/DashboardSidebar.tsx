@@ -40,6 +40,7 @@ export function DashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { idea } = useAnalysisStore();
+  const { credits, maxCredits, isAdmin } = useCreditStore();
 
   const isActive = (path: string) => location.pathname.includes(path);
 
