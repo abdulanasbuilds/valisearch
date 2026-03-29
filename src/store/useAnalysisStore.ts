@@ -35,7 +35,7 @@ export const useAnalysisStore = create<AnalysisState>((set) => ({
   setAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
   setActiveSection: (activeSection) => set({ activeSection }),
   clearError: () => set({ error: null }),
-  refreshCredits: () => set({ credits: getCredits() }),
+  refreshCredits: () => set({ credits: useCreditStore.getState().credits }),
 
   runAnalysis: async (idea: string) => {
     set({ idea, isAnalyzing: true, error: null, analysis: null, dataSource: null });
