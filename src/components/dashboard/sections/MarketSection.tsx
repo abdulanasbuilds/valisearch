@@ -1,3 +1,5 @@
+"use client";
+
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { SectionCard } from "../SectionCard";
 

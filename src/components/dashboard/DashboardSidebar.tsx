@@ -130,7 +130,7 @@ export function DashboardSidebar() {
         {/* Admin-only settings link */}
         {isAdmin && (
           <SidebarMenuButton
-            onClick={() => navigate("/dashboard/settings")}
+            onClick={() => router.push("/dashboard/settings")}
             className="text-muted-foreground hover:text-foreground w-full"
           >
             <Settings className="h-4 w-4" />

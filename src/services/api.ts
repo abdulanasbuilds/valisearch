@@ -16,13 +16,13 @@ const CACHE_TTL_MS = 1000 * 60 * 60 * 6; // 6 hours
 
 /* ── Key resolution (env vars only — no localStorage) ──── */
 export function getOpenRouterKey(): string | null {
-  return import.meta.env.VITE_OPENROUTER_API_KEY || null;
+  return process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || null;
 }
 export function getGroqKey(): string | null {
-  return import.meta.env.VITE_GROQ_API_KEY || null;
+  return process.env.NEXT_PUBLIC_GROQ_API_KEY || null;
 }
 export function getGeminiKey(): string | null {
-  return import.meta.env.VITE_GEMINI_API_KEY || null;
+  return process.env.NEXT_PUBLIC_GEMINI_API_KEY || null;
 }
 export function hasAnyApiKey(): boolean {
   return !!(getOpenRouterKey() || getGroqKey() || getGeminiKey());
@@ -72,7 +72,7 @@ export function hasCredits(): boolean {
 
 /* ── AI provider calls ──────────────────────────────────── */
 async function callOpenRouter(idea: string, apiKey: string): Promise<ValiSearchAnalysis | null> {
-  const model = import.meta.env.VITE_OPENROUTER_MODEL || "google/gemma-2-9b-it:free";
+  const model = process.env.NEXT_PUBLIC_OPENROUTER_MODEL || "google/gemma-2-9b-it:free";
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -98,7 +98,7 @@ async function callOpenRouter(idea: string, apiKey: string): Promise<ValiSearchA
 }
 
 async function callGroq(idea: string, apiKey: string): Promise<ValiSearchAnalysis | null> {
-  const model = import.meta.env.VITE_GROQ_MODEL || "llama-3.1-8b-instant";
+  const model = process.env.NEXT_PUBLIC_GROQ_MODEL || "llama-3.1-8b-instant";
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -119,7 +119,7 @@ async function callGroq(idea: string, apiKey: string): Promise<ValiSearchAnalysi
 }
 
 async function callGemini(idea: string, apiKey: string): Promise<ValiSearchAnalysis | null> {
-  const model = import.meta.env.VITE_GEMINI_MODEL || "gemini-1.5-flash";
+  const model = process.env.NEXT_PUBLIC_GEMINI_MODEL || "gemini-1.5-flash";
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`,
     {

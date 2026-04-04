@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { SectionCard } from "./SectionCard";
 import { saveApiKey, clearApiKeys, getOpenRouterKey, getGroqKey, getGeminiKey, hasAnyApiKey } from "@/services/api";

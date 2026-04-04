@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { Copy, Download, Check, ChevronDown, ChevronUp } from "lucide-react";

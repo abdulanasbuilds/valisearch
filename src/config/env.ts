@@ -1,36 +1,36 @@
 /**
  * Environment variable configuration and types.
  *
- * Client-side variables (VITE_ prefix) are available in the browser.
- * Server-side variables are only available in edge functions.
+ * Client-side variables (NEXT_PUBLIC_ prefix) are available in the browser.
+ * Server-side variables are only available in API routes and server components.
  *
  * To add API keys:
- * 1. Add the key to your Lovable Cloud secrets (Settings → Secrets)
- * 2. Reference it in edge functions via Deno.env.get("KEY_NAME")
- * 3. For client-side keys, add with VITE_ prefix
+ * 1. Add the key to your Vercel project settings (Settings → Environment Variables)
+ * 2. Reference it in server code via process.env.KEY_NAME
+ * 3. For client-side keys, add with NEXT_PUBLIC_ prefix
  */
 
 // ─── Client-side environment variables ───────────────────────────────────────
 
 export const ENV = {
-  /** Base URL for the Supabase project (used as API base) */
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_SUPABASE_URL || "",
+  /** Base URL for the API */
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
 
   /** Supabase publishable key for auth */
-  SUPABASE_PUBLISHABLE_KEY: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "",
+  SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
 
   /** Public Stripe key for client-side checkout */
-  STRIPE_PUBLIC_KEY: import.meta.env.VITE_STRIPE_PUBLIC_KEY || "",
+  STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "",
 
   /** App URL */
-  APP_URL: import.meta.env.VITE_APP_URL || window.location.origin,
+  APP_URL: process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : ""),
 } as const;
 
-// ─── Server-side env var names (for edge function reference) ─────────────────
+// ─── Server-side env var names (for reference) ─────────────────────────────────
 
 /**
  * These are NOT available in the browser. They are documented here
- * as a reference for which secrets to add in Lovable Cloud.
+ * as a reference for which secrets to add in Vercel.
  */
 export const SERVER_ENV_KEYS = {
   // AI Providers (free-tier first)
