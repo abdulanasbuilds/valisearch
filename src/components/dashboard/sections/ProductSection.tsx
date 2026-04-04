@@ -2,12 +2,12 @@ import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { SectionCard } from "../SectionCard";
 import { Check, Diamond, Lock, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export function ProductSection() {
   const analysis = useAnalysisStore((s) => s.analysis);
-  const navigate = useNavigate();
+  const router = useRouter();
   if (!analysis) return null;
 
   const { product_strategy } = analysis;
@@ -15,7 +15,7 @@ export function ProductSection() {
   const generateSprints = () => {
     // Navigate to Kanban — the KanbanSection already auto-populates from analysis.kanban
     toast.success("Sprint tasks generated from MVP features!");
-    navigate("/dashboard/kanban");
+    router.push("/dashboard/kanban");
   };
 
   return (

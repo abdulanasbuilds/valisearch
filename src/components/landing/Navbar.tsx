@@ -1,17 +1,20 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import logoImg from "@/assets/logo.png";
 
 const NAV_LINKS = [
-  { label: "Features",    href: "#features" },
+  { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
 ];
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 16);
@@ -28,11 +31,22 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex h-[58px] max-w-6xl items-center justify-between px-5 md:px-8">
-
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 shrink-0" data-testid="link-logo">
-          <img src={logoImg} alt="ValiSearch" className="h-7 w-auto" />
-          <span className="text-[14.5px] font-semibold text-white/85 tracking-[-0.025em]">ValiSearch</span>
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 shrink-0"
+          data-testid="link-logo"
+        >
+          <Image
+            src="/assets/logo.png"
+            alt="ValiSearch"
+            width={28}
+            height={28}
+            className="h-7 w-auto"
+          />
+          <span className="text-[14.5px] font-semibold text-white/85 tracking-[-0.025em]">
+            ValiSearch
+          </span>
         </Link>
 
         {/* Center nav */}
@@ -52,7 +66,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-1">
           <button
             data-testid="button-get-started-nav"
-            onClick={() => navigate("/")}
+            onClick={() => router.push("/")}
             className="ml-1 flex items-center gap-1.5 px-4 py-[7px] text-[13.5px] font-semibold text-black bg-white rounded-[8px] hover:bg-white/90 transition-all duration-150 active:scale-[0.97]"
           >
             Try it free
@@ -64,7 +78,11 @@ export function Navbar() {
           className="md:hidden p-1.5 text-white/35 hover:text-white/65 transition-colors"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
-          {mobileOpen ? <X className="h-[18px] w-[18px]" /> : <Menu className="h-[18px] w-[18px]" />}
+          {mobileOpen ? (
+            <X className="h-[18px] w-[18px]" />
+          ) : (
+            <Menu className="h-[18px] w-[18px]" />
+          )}
         </button>
       </div>
 
@@ -72,7 +90,9 @@ export function Navbar() {
       {mobileOpen && (
         <div
           className="border-t border-white/[0.055] bg-[#0A0A0A]/95 backdrop-blur-2xl md:hidden"
-          style={{ animation: "fadeDown 0.2s cubic-bezier(0.16,1,0.3,1) both" }}
+          style={{
+            animation: "fadeDown 0.2s cubic-bezier(0.16,1,0.3,1) both",
+          }}
         >
           <div className="flex flex-col p-3 gap-0.5 max-w-6xl mx-auto px-5">
             {NAV_LINKS.map((link) => (
@@ -87,7 +107,10 @@ export function Navbar() {
             ))}
             <div className="pt-2 mt-1 border-t border-white/[0.055]">
               <button
-                onClick={() => { navigate("/"); setMobileOpen(false); }}
+                onClick={() => {
+                  router.push("/");
+                  setMobileOpen(false);
+                }}
                 className="w-full py-2.5 rounded-lg text-[14px] font-semibold text-black bg-white hover:bg-white/90 transition-all"
               >
                 Try it free
@@ -97,10 +120,16 @@ export function Navbar() {
         </div>
       )}
 
-      <style>{`
+      <style jsx>{`
         @keyframes fadeDown {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </header>

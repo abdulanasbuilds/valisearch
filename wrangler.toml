@@ -1,0 +1,14 @@
+# ValiSearch Cloudflare Pages Configuration
+name = "valisearch"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# Environment variables (set in Cloudflare dashboard)
+# [vars]
+# NEXT_PUBLIC_APP_URL = ""
+
+# KV Namespace bindings (if needed in the future)
+# [[kv_namespaces]]
+# binding = "KV"
+# id = ""

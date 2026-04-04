@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import logoImg from "@/assets/logo.png";
+import Link from "next/link";
+import Image from "next/image";
 
 const LINKS = {
   Product: ["Features", "How it works", "Changelog", "Roadmap"],
@@ -15,9 +15,17 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 py-14">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4 w-fit">
-              <img src={logoImg} alt="ValiSearch" className="h-6 w-auto" />
-              <span className="text-[14px] font-semibold text-white/70 tracking-[-0.02em]">ValiSearch</span>
+            <Link href="/" className="flex items-center gap-2 mb-4 w-fit">
+              <Image
+                src="/assets/logo.png"
+                alt="ValiSearch"
+                width={24}
+                height={24}
+                className="h-6 w-auto"
+              />
+              <span className="text-[14px] font-semibold text-white/70 tracking-[-0.02em]">
+                ValiSearch
+              </span>
             </Link>
             <p className="text-[12.5px] leading-[1.7] text-white/25 max-w-[180px]">
               AI-powered startup validation for founders who move fast.
@@ -54,7 +62,15 @@ export function Footer() {
             </p>
             <span className="hidden sm:inline text-white/10">·</span>
             <p className="text-[11.5px] text-white/20 font-medium">
-              Built by <a href="https://x.com/abdulanasbuilds" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white/60 transition-colors">Abdul Anas</a>
+              Built by{" "}
+              <a
+                href="https://x.com/abdulanasbuilds"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/40 hover:text-white/60 transition-colors"
+              >
+                Abdul Anas
+              </a>
             </p>
           </div>
           <div className="flex items-center gap-5">

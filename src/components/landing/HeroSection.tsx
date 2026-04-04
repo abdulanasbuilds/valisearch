@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { ArrowRight, CornerDownLeft } from "lucide-react";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 
@@ -20,7 +22,7 @@ export function HeroSection() {
   const [idea, setIdea] = useState("");
   const [focused, setFocused] = useState(false);
   const [scoreVisible, setScoreVisible] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { setIdea: storeSetIdea, runAnalysis } = useAnalysisStore();
   const scoreRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +67,7 @@ export function HeroSection() {
     if (!val) return;
     storeSetIdea(val);
     runAnalysis(val);
-    navigate("/analyze");
+    router.push("/analyze");
   };
 
   return (

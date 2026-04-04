@@ -1,4 +1,7 @@
-import { useNavigate, useLocation } from "react-router-dom";
+"use client";
+
+import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard, ShieldCheck, BarChart3, Swords, Layers, Palette,
   DollarSign, Rocket, GitBranch, Cpu, Map, Terminal, Lightbulb, Settings,
@@ -11,7 +14,7 @@ import {
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { useCreditStore } from "@/store/useCreditStore";
 import { Progress } from "@/components/ui/progress";
-import logoImg from "@/assets/logo.png";
+
 
 const MAIN_SECTIONS = [
   { title: "Overview",            icon: LayoutDashboard, path: "overview" },
@@ -38,18 +41,18 @@ const BUILD_SECTIONS = [
 ];
 
 export function DashboardSidebar() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const { idea } = useAnalysisStore();
   const { credits, maxCredits, isAdmin } = useCreditStore();
 
-  const isActive = (path: string) => location.pathname.includes(path);
+  const isActive = (path: string) => pathname?.includes(path) ?? false;
 
   return (
     <Sidebar>
       <SidebarHeader className="px-4 py-3 border-b border-border/40">
-        <button onClick={() => navigate("/")} className="flex items-center gap-2">
-          <img src={logoImg} alt="ValiSearch" className="h-6 w-auto" />
+        <button onClick={() => router.push("/")} className="flex items-center gap-2">
+          <Image src="/assets/logo.png" alt="ValiSearch" width={24} height={24} className="h-6 w-auto" />
           <span className="text-[13px] font-semibold">ValiSearch</span>
         </button>
         {idea && (
@@ -72,7 +75,7 @@ export function DashboardSidebar() {
               {MAIN_SECTIONS.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
-                    onClick={() => navigate(`/dashboard/${item.path}`)}
+                    onClick={() => router.push(`/dashboard/${item.path}`)}
                     className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
                   >
                     <item.icon className="h-4 w-4" />
@@ -96,7 +99,7 @@ export function DashboardSidebar() {
               {BUILD_SECTIONS.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
-                    onClick={() => navigate(`/dashboard/${item.path}`)}
+                    onClick={() => router.push(`/dashboard/${item.path}`)}
                     className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
                   >
                     <item.icon className="h-4 w-4" />

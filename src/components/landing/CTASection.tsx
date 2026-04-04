@@ -1,17 +1,22 @@
+"use client";
+
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 export function CTASection() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const els = ref.current?.querySelectorAll<HTMLElement>(".reveal, .text-reveal") ?? [];
+    const els =
+      ref.current?.querySelectorAll<HTMLElement>(".reveal, .text-reveal") ?? [];
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) (e.target as HTMLElement).classList.add("visible");
-      }),
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting)
+            (e.target as HTMLElement).classList.add("visible");
+        }),
       { threshold: 0.1 }
     );
     els.forEach((el) => observer.observe(el));
@@ -19,12 +24,17 @@ export function CTASection() {
   }, []);
 
   return (
-    <section id="pricing" ref={ref} className="border-t border-white/[0.05] py-28 md:py-44 relative overflow-hidden">
+    <section
+      id="pricing"
+      ref={ref}
+      className="border-t border-white/[0.05] py-28 md:py-44 relative overflow-hidden"
+    >
       {/* Background: extremely subtle gradient wash at the bottom center */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 55% 50% at 30% 80%, rgba(99,102,241,0.045) 0%, transparent 70%)",
+          background:
+            "radial-gradient(ellipse 55% 50% at 30% 80%, rgba(99,102,241,0.045) 0%, transparent 70%)",
         }}
       />
 
@@ -43,20 +53,23 @@ export function CTASection() {
             </span>
             <span className="text-reveal-wrap">
               <span className="text-reveal text-reveal-delay-1">
-                <span className="font-serif-display font-normal text-white/42">Start knowing.</span>
+                <span className="font-serif-display font-normal text-white/42">
+                  Start knowing.
+                </span>
               </span>
             </span>
           </h2>
 
           <p className="reveal reveal-delay-2 text-[16px] leading-[1.85] text-white/34 max-w-[440px] mb-11">
-            Join 12,000 founders who validate ideas before spending months building the wrong thing.
+            Join 12,000 founders who validate ideas before spending months
+            building the wrong thing.
           </p>
 
           <div className="reveal reveal-delay-3 flex flex-col sm:flex-row items-start gap-4">
             <button
               data-testid="button-cta-try"
               onClick={() => {
-                navigate("/");
+                router.push("/");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="group flex items-center gap-2.5 px-6 py-3 rounded-lg bg-white text-black text-[14px] font-semibold hover:bg-white/90 transition-all duration-150 active:scale-[0.97] shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
@@ -73,7 +86,9 @@ export function CTASection() {
               {["No signup", "~30s results", "100% free"].map((t) => (
                 <div key={t} className="flex items-center gap-1.5">
                   <div className="w-1 h-1 rounded-full bg-white/20" />
-                  <span className="text-[12.5px] font-medium text-white/28">{t}</span>
+                  <span className="text-[12.5px] font-medium text-white/28">
+                    {t}
+                  </span>
                 </div>
               ))}
             </div>

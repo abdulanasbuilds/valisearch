@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { SectionCard } from "../SectionCard";
 import { ScoreDisplay } from "../ScoreDisplay";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import type { PillarKey } from "@/types/analysis";
 
@@ -58,7 +58,7 @@ const QUICK_LINKS = [
 
 export function OverviewSection() {
   const analysis = useAnalysisStore((s) => s.analysis);
-  const navigate = useNavigate();
+  const router = useRouter();
   if (!analysis) return null;
 
   const { idea_analysis, final_verdict, scoring } = analysis;
@@ -124,7 +124,7 @@ export function OverviewSection() {
           {QUICK_LINKS.map(({ label, path }) => (
             <button
               key={path}
-              onClick={() => navigate(`/dashboard/${path}`)}
+              onClick={() => router.push(`/dashboard/${path}`)}
               className="group flex items-center justify-between px-3.5 py-2.5 rounded-lg border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.12] transition-all text-left"
             >
               <span className="text-[12.5px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">
