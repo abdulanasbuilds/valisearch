@@ -65,27 +65,36 @@ export function Navbar() {
             </button>
           ) : (
             <>
-              {isSupabaseConfigured() && (
-                <Link
-                  to="/login"
-                  className="h-8 flex items-center px-3 text-[12.5px] font-medium text-white/40 hover:text-white/70 transition-colors duration-200"
+              {isSupabaseConfigured() ? (
+                <>
+                  <Link
+                    to="/login"
+                    className="h-8 flex items-center px-3 text-[12.5px] font-medium text-white/40 hover:text-white/70 transition-colors duration-200"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="h-8 px-4 text-[12.5px] font-semibold text-background bg-foreground rounded-md hover:bg-foreground/90 transition-all duration-200 active:scale-[0.97]"
+                  >
+                    Get started
+                  </Link>
+                </>
+              ) : (
+                <button
+                  data-testid="button-get-started-nav"
+                  onClick={() => {
+                    const el = document.getElementById("idea-input");
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth", block: "center" });
+                      setTimeout(() => el.focus(), 500);
+                    }
+                  }}
+                  className="h-8 px-4 text-[12.5px] font-semibold text-background bg-foreground rounded-md hover:bg-foreground/90 transition-all duration-200 active:scale-[0.97]"
                 >
-                  Log in
-                </Link>
+                  Get started
+                </button>
               )}
-              <button
-                data-testid="button-get-started-nav"
-                onClick={() => {
-                  const el = document.getElementById("idea-input");
-                  if (el) {
-                    el.scrollIntoView({ behavior: "smooth", block: "center" });
-                    setTimeout(() => el.focus(), 500);
-                  }
-                }}
-                className="h-8 px-4 text-[12.5px] font-semibold text-background bg-foreground rounded-md hover:bg-foreground/90 transition-all duration-200 active:scale-[0.97]"
-              >
-                Get started
-              </button>
             </>
           )}
         </div>
@@ -123,28 +132,38 @@ export function Navbar() {
                 </button>
               ) : (
                 <>
-                  {isSupabaseConfigured() && (
-                    <Link
-                      to="/login"
-                      onClick={() => setMobileOpen(false)}
-                      className="block w-full py-2.5 rounded-lg text-center text-[14px] font-medium text-white/45 hover:text-white/70 transition-colors"
+                  {isSupabaseConfigured() ? (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={() => setMobileOpen(false)}
+                        className="block w-full py-2.5 rounded-lg text-center text-[14px] font-medium text-white/45 hover:text-white/70 transition-colors"
+                      >
+                        Log in
+                      </Link>
+                      <Link
+                        to="/register"
+                        onClick={() => setMobileOpen(false)}
+                        className="block w-full py-2.5 rounded-lg text-center text-[14px] font-semibold text-background bg-foreground hover:bg-foreground/90 transition-all"
+                      >
+                        Get started
+                      </Link>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setMobileOpen(false);
+                        const el = document.getElementById("idea-input");
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth", block: "center" });
+                          setTimeout(() => el.focus(), 500);
+                        }
+                      }}
+                      className="w-full py-2.5 rounded-lg text-[14px] font-semibold text-background bg-foreground hover:bg-foreground/90 transition-all"
                     >
-                      Log in
-                    </Link>
+                      Get started
+                    </button>
                   )}
-                  <button
-                    onClick={() => {
-                      setMobileOpen(false);
-                      const el = document.getElementById("idea-input");
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth", block: "center" });
-                        setTimeout(() => el.focus(), 500);
-                      }
-                    }}
-                    className="w-full py-2.5 rounded-lg text-[14px] font-semibold text-background bg-foreground hover:bg-foreground/90 transition-all"
-                  >
-                    Get started
-                  </button>
                 </>
               )}
             </div>

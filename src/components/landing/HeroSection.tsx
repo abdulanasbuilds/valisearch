@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowRight, CornerDownLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, CornerDownLeft, Sparkles } from "lucide-react";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { sanitizeIdea } from "@/lib/sanitize";
+import { isSupabaseConfigured } from "@/config/env";
 
 const REPORT = {
   idea: "AI-powered onboarding tool for B2B SaaS",
@@ -180,6 +181,27 @@ export function HeroSection() {
               </button>
             </div>
           </div>
+
+          {/* Sign Up CTA - When Supabase is configured */}
+          {isSupabaseConfigured() && (
+            <div
+              className={`mt-8 flex flex-col sm:flex-row items-center gap-4 transition-all duration-700 delay-[400ms] ${
+                loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+              }`}
+            >
+              <Link
+                to="/register"
+                className="group flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all duration-200 active:scale-[0.97]"
+              >
+                <Sparkles className="h-4 w-4" />
+                Create free account
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Link>
+              <p className="text-[12px] text-white/30">
+                Get 15 free validations · No credit card required
+              </p>
+            </div>
+          )}
 
           {/* Stats strip */}
           <div
