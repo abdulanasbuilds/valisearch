@@ -34,9 +34,9 @@ export function Navbar() {
           </Link>
           <Link 
             to="/register" 
-            className="bg-[#6C47FF] hover:bg-[#7C5AFF] text-white text-[13.5px] font-semibold px-5 py-2.25 rounded-md transition-colors"
+            className="bg-[#6C47FF] hover:bg-[#7C5AFF] text-white text-[13.5px] font-bold px-6 py-2.5 rounded-xl transition-all shadow-[0_10px_20px_-5px_rgba(108,71,255,0.3)]"
           >
-            Start free
+            Start Free
           </Link>
         </div>
       </div>
