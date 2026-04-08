@@ -1,25 +1,28 @@
 export function StatsBar() {
   const stats = [
-    { value: "10,000+", label: "Ideas validated" },
-    { value: "30 sec", label: "Average analysis time" },
-    { value: "18", label: "Intelligence dimensions" },
+    { value: "10,000+", label: "IDEAS_VALIDATED" },
+    { value: "30 SEC", label: "ANALYSIS_RUNTIME" },
+    { value: "18", label: "INTEL_DIMENSIONS" },
   ];
 
   return (
-    <div className="w-full bg-white/[0.02] border-y border-white/[0.06] py-12">
-      <div className="section-container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0">
+    <div className="w-full bg-[#0A0A0A] border-y border-white/[0.04] py-16 relative overflow-hidden">
+      {/* Background Texture */}
+      <div className="absolute inset-0 bg-grid-white bg-[size:30px_30px] opacity-[0.03] pointer-events-none" />
+      
+      <div className="section-container relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-0">
           {stats.map((stat, i) => (
             <div 
               key={i} 
-              className={`flex flex-col gap-2 items-center md:items-start ${
-                i !== 0 ? 'md:border-l md:border-white/[0.06] md:pl-16' : ''
+              className={`flex flex-col gap-4 items-center md:items-start ${
+                i !== 0 ? 'md:border-l md:border-white/[0.08] md:pl-20' : ''
               }`}
             >
-              <div className="text-[48px] font-black leading-none text-[#F0F0F0]">
+              <div className="text-[52px] font-black leading-none text-white tracking-tighter tabular-nums">
                 {stat.value}
               </div>
-              <div className="text-[14px] text-[#888888] font-medium tracking-wide">
+              <div className="text-[11px] text-white/30 font-black tracking-[0.3em] font-mono">
                 {stat.label}
               </div>
             </div>
