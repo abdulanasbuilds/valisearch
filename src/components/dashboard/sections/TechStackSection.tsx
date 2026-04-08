@@ -1,24 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import mermaid from "mermaid";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { SectionCard } from "../SectionCard";
 import type { StackBlock } from "@/types/analysis";
-
-// Initialize mermaid with dark theme
-mermaid.initialize({
-  startOnLoad: false,
-  theme: "dark",
-  themeVariables: {
-    primaryColor: "#1e1b4b",
-    primaryTextColor: "#c7d2fe",
-    primaryBorderColor: "#4338ca",
-    lineColor: "#6366f1",
-    secondaryColor: "#0f172a",
-    tertiaryColor: "#111",
-    fontFamily: "Inter, sans-serif",
-    fontSize: "13px",
-  },
-});
 
 const COST_COLOR: Record<string, string> = {
   low: "bg-green-500/10 text-green-400 border-green-500/20",
@@ -69,10 +52,11 @@ function StackCard({ title, badge, stack }: { title: string; badge: string; stac
   );
 }
 
-/* ── Mermaid Architecture Diagram ── */
+/* ── Mermaid Architecture Diagram (dynamic import) ── */
 function ArchitectureDiagram({ stack }: { stack: { mvp: StackBlock; scalable: StackBlock } }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const cleanLabel = (s: string) => s.split(/[,+·]/)[0].trim().replace(/[^a-zA-Z0-9 .]/g, "");
 
@@ -101,14 +85,42 @@ function ArchitectureDiagram({ stack }: { stack: { mvp: StackBlock; scalable: St
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const id = `mermaid-${Date.now()}`;
-    containerRef.current.innerHTML = "";
-    mermaid
-      .render(id, diagram)
-      .then(({ svg }) => {
-        if (containerRef.current) containerRef.current.innerHTML = svg;
-      })
-      .catch(() => setError(true));
+    let cancelled = false;
+
+    import("mermaid").then((m) => {
+      if (cancelled) return;
+      m.default.initialize({
+        startOnLoad: false,
+        theme: "dark",
+        themeVariables: {
+          primaryColor: "#1e1b4b",
+          primaryTextColor: "#c7d2fe",
+          primaryBorderColor: "#4338ca",
+          lineColor: "#6366f1",
+          secondaryColor: "#0f172a",
+          tertiaryColor: "#111",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "13px",
+        },
+      });
+
+      const id = `mermaid-${Date.now()}`;
+      m.default
+        .render(id, diagram)
+        .then(({ svg }) => {
+          if (!cancelled && containerRef.current) {
+            containerRef.current.innerHTML = svg;
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) setError(true);
+        });
+    }).catch(() => {
+      if (!cancelled) setError(true);
+    });
+
+    return () => { cancelled = true; };
   }, [diagram]);
 
   if (error) {
@@ -124,6 +136,11 @@ function ArchitectureDiagram({ stack }: { stack: { mvp: StackBlock; scalable: St
       <p className="text-[12px] text-muted-foreground/60 mb-4">
         Auto-generated from AI-recommended tech stack
       </p>
+      {loading && (
+        <div className="flex items-center justify-center py-8">
+          <div className="h-6 w-6 rounded-full border-2 border-white/10 border-t-primary animate-spin" />
+        </div>
+      )}
       <div
         ref={containerRef}
         className="w-full overflow-x-auto rounded-lg bg-[rgba(255,255,255,0.02)] border border-white/[0.06] p-4 [&_svg]:mx-auto [&_svg]:max-w-full"
@@ -161,7 +178,7 @@ export function TechStackSection() {
         <StackCard title="Scalable Stack" badge="Scale ready" stack={tech_stack.scalable} />
       </div>
 
-      {/* Mermaid architecture diagram */}
+      {/* Mermaid architecture diagram (lazy loaded) */}
       <ArchitectureDiagram stack={tech_stack} />
 
       <SectionCard title="Architecture Notes">
