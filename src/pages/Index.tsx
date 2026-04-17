@@ -3,6 +3,7 @@ import { Navbar, AnnouncementBar } from "@/components/landing/Navbar";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { StatsBar } from "@/components/landing/StatsBar";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { DemoVideo } from "@/components/landing/DemoVideo";
 import { Features } from "@/components/landing/Features";
 import { Integrations, TrustPrivacy } from "@/components/landing/TrustPrivacy";
 import { ProductPreview, FinalCTA, Footer } from "@/components/landing/ProductPreview";
@@ -19,7 +20,7 @@ const Index = () => {
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    document.querySelectorAll('.fade-up, .reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -37,7 +38,10 @@ const Index = () => {
         <StatsBar />
         <HowItWorks />
 
-        {/* 4. Deep Features */}
+        {/* 4. Demo Video */}
+        <DemoVideo />
+
+        {/* 5. Deep Features */}
         <Features />
 
         {/* 5. Ecosystem & Proof */}

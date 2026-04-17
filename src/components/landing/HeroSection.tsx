@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Sparkles, ArrowRight, PlayCircle } from "lucide-react";
+import { ArrowRight, PlayCircle } from "lucide-react";
+import { DashboardMockup } from "./DashboardMockup";
+import { SmartScreenshot } from "./SmartScreenshot";
 
 export function HeroSection() {
   return (
@@ -63,36 +65,23 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right Column: Premium Mockup Image integration */}
+          {/* Right Column: Smart Screenshot / Dashboard Mockup */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, x: 40 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
+            className="relative hidden lg:block"
           >
-            {/* The actual image artifact would be placed here, for now I'll use a stylized container with the name as reference */}
-            <div className="relative z-10 premium-card p-1.5 mockup-shadow group overflow-hidden">
-               <div className="relative aspect-[4/3] rounded-[14px] overflow-hidden bg-[#111]">
-                  <img 
-                    src="/dashboard_premium_mockup.png" 
-                    alt="ValiSearch Dashboard"
-                    className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-1000"
-                  />
-                  {/* Floating UI Elements Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-60" />
-                  
-                  <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-                     <div className="flex items-center gap-3">
-                        <Sparkles className="w-3 h-3 text-[#6C47FF]" />
-                        <span className="text-[10px] text-white font-black uppercase tracking-tight">Active Analysis</span>
-                     </div>
-                  </div>
-               </div>
-            </div>
+            {/* Depth glows */}
+            <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-[#6C47FF]/10 blur-[120px] rounded-full opacity-50 animate-pulse pointer-events-none" />
+            <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-[#6C47FF]/05 blur-[100px] rounded-full opacity-30 pointer-events-none" />
 
-            {/* Cinematic depth elements */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#6C47FF]/20 blur-[80px] rounded-full opacity-50" />
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#6C47FF]/10 blur-[80px] rounded-full opacity-30" />
+            <SmartScreenshot
+              src="/screenshots/dashboard-overview.png"
+              alt="ValiSearch dashboard overview showing idea score, market data, and validation metrics"
+              className="w-full rounded-xl border border-white/10 shadow-2xl shadow-black/60 relative z-10"
+              fallback={<DashboardMockup />}
+            />
           </motion.div>
         </div>
       </div>
