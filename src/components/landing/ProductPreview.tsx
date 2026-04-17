@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight, ArrowUpRight, Github, Twitter, Linkedin, ExternalLink, Play } from "lucide-react";
+import { ChevronRight, ArrowUpRight, Github, Twitter, Linkedin, ExternalLink, Play, Sparkles } from "lucide-react";
 
 export function ProductPreview() {
   return (

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Brain, Globe, Layout, ChevronRight } from "lucide-react";
 
-function FeatureBlock({ label, headline, body, visual, reverse = false, icon: Icon }: any) {
+function FeatureBlock({ label, headline, body, visual, reverse = false, icon: Icon }: { label: string, headline: string, body: React.ReactNode, visual: React.ReactNode, reverse?: boolean, icon: React.ElementType }) {
   return (
     <div className="py-40 relative overflow-hidden group">
       {/* Dynamic Background Glow */}

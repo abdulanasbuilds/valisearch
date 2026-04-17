@@ -1,0 +1,23 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Run once every 24 hours at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Keep-Alive Edge Function
+        run: |
+          # Ensure you add SUPABASE_KEEP_ALIVE_URL as a Repository Secret in GitHub Settings.
+          # Example URL: https://[PROJECT_ID].supabase.co/functions/v1/keep-alive
+          if [ -z "${{ secrets.SUPABASE_KEEP_ALIVE_URL }}" ]; then
+            echo "Warning: SUPABASE_KEEP_ALIVE_URL secret is not set!"
+            exit 1
+          fi
+          
+          curl -X POST "${{ secrets.SUPABASE_KEEP_ALIVE_URL }}" \
+            -H "Content-Type: application/json"

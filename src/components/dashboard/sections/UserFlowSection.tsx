@@ -91,7 +91,10 @@ function buildGraph(journeySteps: string[], coreFlows: string[]) {
 export function UserFlowSection() {
   const analysis = useAnalysisStore((s) => s.analysis);
   if (!analysis) return null;
+  return <UserFlowSectionInner analysis={analysis} />;
+}
 
+function UserFlowSectionInner({ analysis }: { analysis: any }) {
   const { user_flow, product_strategy } = analysis;
 
   const initial = useMemo(
@@ -184,7 +187,7 @@ export function UserFlowSection() {
         </SectionCard>
         <SectionCard title="Core Flows">
           <div className="space-y-2">
-            {user_flow.page_structure.core_flows.map((flow, i) => (
+            {user_flow.page_structure.core_flows.map((flow: string, i: number) => (
               <div key={i} className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-400/60 shrink-0" />
                 <span className="text-[13px] text-muted-foreground">{flow}</span>
@@ -197,7 +200,7 @@ export function UserFlowSection() {
       {/* Step-by-step flow */}
       <SectionCard title="Step-by-Step Flow">
         <div className="space-y-3">
-          {product_strategy.user_flow_steps.map((step, i) => (
+          {product_strategy.user_flow_steps.map((step: string, i: number) => (
             <div key={i} className="flex items-start gap-4">
               <div className="shrink-0 flex items-center justify-center w-7 h-7 rounded-full border border-white/[0.08] bg-white/[0.04] text-[11px] font-bold text-white/40">
                 {i + 1}
