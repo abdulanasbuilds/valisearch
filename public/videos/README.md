@@ -14,5 +14,4 @@ Add your Loom demo video URL here.
 5. Paste just the URL in that file
    Example: https://www.loom.com/share/abc123
 
-The landing page video section will 
-automatically use this URL.
+The landing page video section will automatically use this URL.

@@ -1,7 +1,6 @@
 # ValiSearch Screenshots
 
-Add real PNG screenshots here to replace the 
-HTML mockups on the landing page.
+Add real PNG screenshots here to replace the HTML mockups on the landing page.
 
 Required files:
 - dashboard-overview.png   (full dashboard overview)
@@ -21,5 +20,4 @@ How to take them:
 6. Save as the filename above
 7. Place in this folder
 
-The landing page will automatically use these 
-real images once they exist here.
+The landing page will automatically use these real images once they exist here.

@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { Check, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function Pricing() {
+  const navigate = useNavigate();
   const plans = [
     {
       name: "Starter",
@@ -93,7 +95,9 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <button className={`w-full py-5 rounded-2xl text-[16px] font-black transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 group/btn shadow-xl ${
+              <button 
+                onClick={() => navigate("/register")}
+                className={`w-full py-5 rounded-2xl text-[16px] font-black transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 group/btn shadow-xl ${
                 plan.featured 
                 ? 'bg-[#6C47FF] hover:bg-[#7C5AFF] text-white' 
                 : 'bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] text-white'

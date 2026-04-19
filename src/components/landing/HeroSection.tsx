@@ -67,9 +67,9 @@ export function HeroSection() {
               <div className="h-[1px] w-12 bg-white/10" />
             </div>
             
-            <h1 className="display-headline mb-6 text-4xl sm:text-5xl lg:text-6xl">
+            <h1 className="display-headline mb-6 text-[40px] leading-[1.1] sm:text-5xl lg:text-6xl tracking-tight font-black">
               Validate your <br />
-              <span className="text-serif-italic">startup idea</span> <br />
+              <span className="text-serif-italic italic font-normal text-primary">startup idea</span> <br />
               before you build.
             </h1>
 
@@ -151,7 +151,7 @@ export function HeroSection() {
             <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-[#6C47FF]/10 blur-[120px] rounded-full opacity-50 animate-pulse pointer-events-none" />
             <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-[#6C47FF]/05 blur-[100px] rounded-full opacity-30 pointer-events-none" />
 
-            <div className="relative z-10 scale-[0.85] origin-top-left w-[115%] hidden md:block">
+            <div className="relative z-10 scale-[0.85] origin-top-left w-[115%]">
               <SmartScreenshot
                 src="/screenshots/dashboard-overview.png"
                 alt="ValiSearch dashboard overview"

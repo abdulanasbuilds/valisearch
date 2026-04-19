@@ -34,14 +34,16 @@ const BUILD_SECTIONS = [
   { title: "Tech Stack",      icon: Cpu,        path: "tech-stack" },
   { title: "Build Mode",      icon: Terminal,   path: "build-mode" },
   { title: "IDE Bridge",      icon: Code2,      path: "ide-bridge" },
-  { title: "Launch Center",   icon: Zap,        path: "launch-center" },
 ];
 
 export function DashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { idea } = useAnalysisStore();
+  const { idea, setActiveSection } = useAnalysisStore();
   const { credits, maxCredits, isAdmin } = useCreditStore();
+  const { user } = useUserStore();
+  const plan = user?.user_metadata?.plan || 'free';
+
 
   const isActive = (path: string) => location.pathname.includes(path);
 
@@ -53,9 +55,20 @@ export function DashboardSidebar() {
           <span className="text-[13px] font-semibold">ValiSearch</span>
         </button>
         {idea && (
-          <p className="mt-2 text-[11px] text-muted-foreground/60 leading-snug line-clamp-2">
-            "{idea.slice(0, 60)}{idea.length > 60 ? "…" : ""}"
-          </p>
+          <div className="mt-2 flex flex-col gap-2">
+            <p className="text-[11px] text-muted-foreground/60 leading-snug line-clamp-2 italic">
+              "{idea.slice(0, 60)}{idea.length > 60 ? "…" : ""}"
+            </p>
+            <div className="flex">
+              <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${
+                plan === 'premium' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/20' :
+                plan === 'pro' ? 'bg-primary/20 text-primary border border-primary/20' :
+                'bg-white/5 text-white/40 border border-white/5'
+              }`}>
+                {plan} Plan
+              </span>
+            </div>
+          </div>
         )}
       </SidebarHeader>
 
@@ -72,7 +85,10 @@ export function DashboardSidebar() {
               {MAIN_SECTIONS.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
-                    onClick={() => navigate(`/dashboard/${item.path}`)}
+                    onClick={() => {
+                      setActiveSection(item.path);
+                      navigate(`/dashboard/${item.path}`);
+                    }}
                     className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
                   >
                     <item.icon className="h-4 w-4" />
@@ -96,7 +112,10 @@ export function DashboardSidebar() {
               {BUILD_SECTIONS.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
-                    onClick={() => navigate(`/dashboard/${item.path}`)}
+                    onClick={() => {
+                      setActiveSection(item.path);
+                      navigate(`/dashboard/${item.path}`);
+                    }}
                     className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
                   >
                     <item.icon className="h-4 w-4" />

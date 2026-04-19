@@ -1,108 +1,155 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Loader2, ExternalLink } from "lucide-react";
-import { getSupabase } from "@/lib/supabase";
-import { isStripeConfigured } from "@/config/env";
+import { Sparkles, Loader2, ExternalLink, Check } from "lucide-react";
 import { useState } from "react";
+import { LS_STORE_URL, LS_PRO_VARIANT_ID, LS_PREMIUM_VARIANT_ID } from "@/lib/constants";
+import { useUserStore } from "@/store/useUserStore";
 
 interface UpgradeModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-import { LS_STORE_URL, LS_PRO_VARIANT_ID } from "@/lib/constants";
-import { useUserStore } from "@/store/useUserStore";
-
 export function UpgradeModal({ open, onClose }: UpgradeModalProps) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUserStore();
 
-  const handleCheckout = async () => {
-    setLoading(true);
+  const handleCheckout = async (variantId: string) => {
+    setLoading(variantId);
     setError(null);
 
     try {
-      if (!LS_STORE_URL || !LS_PRO_VARIANT_ID || LS_PRO_VARIANT_ID === 'REPLACE_WITH_YOUR_PRO_ID') {
+      if (!LS_STORE_URL || !variantId || variantId.includes('REPLACE_WITH_YOUR')) {
         setError("Payment system is not yet configured with real Variant IDs.");
-        setLoading(false);
+        setLoading(null);
         return;
       }
       
-      let checkoutUrl = `${LS_STORE_URL}/checkout/buy/${LS_PRO_VARIANT_ID}?embed=1`;
+      let checkoutUrl = `${LS_STORE_URL}/checkout/buy/${variantId}`;
       
       if (user) {
-        checkoutUrl += `&checkout[email]=${encodeURIComponent(user.email)}`;
+        checkoutUrl += `?checkout[email]=${encodeURIComponent(user.email)}`;
         checkoutUrl += `&checkout[custom][user_id]=${user.id}`;
       }
       
       window.open(checkoutUrl, '_blank');
-      onClose(); // Close modal immediately after popping open the new tab
+      onClose();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to start checkout");
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   };
 
+  const plans = [
+    {
+      name: "Free",
+      price: "$0",
+      credits: "15 credits",
+      features: ["Standard AI analysis", "Market overview", "Basic competitor data"],
+      button: "Current Plan",
+      disabled: true,
+      variantId: "free"
+    },
+    {
+      name: "Pro",
+      price: "$29",
+      credits: "200 credits",
+      features: ["Advanced AI analysis", "Full competitor depth", "PDF/JSON Exports", "Priority support"],
+      button: "Upgrade to Pro",
+      variantId: LS_PRO_VARIANT_ID,
+      popular: true
+    },
+    {
+      name: "Premium",
+      price: "$79",
+      credits: "Unlimited",
+      features: ["Unlimited analysis", "IDE Bridge access", "Team collaboration", "White-label reports"],
+      button: "Go Premium",
+      variantId: LS_PREMIUM_VARIANT_ID
+    }
+  ];
+
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-background/80 backdrop-blur-xl border border-border/40 shadow-2xl max-w-md">
-        <DialogHeader className="text-center space-y-3">
-          <div className="mx-auto w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Sparkles className="h-7 w-7 text-primary" />
+      <DialogContent className="bg-[#0D0D0D]/95 backdrop-blur-xl border border-white/10 shadow-2xl max-w-4xl p-0 overflow-hidden">
+        <div className="p-8 pb-0 text-center">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
+            <Sparkles className="h-6 w-6 text-primary" />
           </div>
-          <DialogTitle className="text-xl font-bold tracking-tight">
-            Upgrade to Pro
+          <DialogTitle className="text-3xl font-bold text-white tracking-tight">
+            Level up your startup intelligence
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-sm leading-relaxed">
-            You've used all your free AI credits. Upgrade to Pro to unlock unlimited analyses, deeper competitor insights, and priority AI processing.
+          <DialogDescription className="text-white/50 text-base mt-2">
+            Choose the plan that fits your execution speed.
           </DialogDescription>
-        </DialogHeader>
+        </div>
 
-        <div className="space-y-3 mt-4">
-          <div className="rounded-xl border border-border/40 bg-muted/30 p-4 space-y-2">
-            {[
-              "50 additional AI-powered analyses",
-              "Priority model access (GPT-4, Claude)",
-              "Advanced competitor & market reports",
-              "PDF & JSON export",
-            ].map((f) => (
-              <div key={f} className="flex items-center gap-2 text-sm text-foreground/80">
-                <span className="text-primary">✓</span>
-                {f}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-8">
+          {plans.map((plan) => (
+            <div 
+              key={plan.name}
+              className={`relative rounded-2xl p-6 flex flex-col border transition-all duration-300 ${
+                plan.popular 
+                  ? 'bg-primary/5 border-primary/30 ring-1 ring-primary/20 scale-[1.02] z-10' 
+                  : 'bg-white/[0.02] border-white/10'
+              }`}
+            >
+              {plan.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  Most Popular
+                </div>
+              )}
+              
+              <div className="mb-6">
+                <h3 className="text-white font-bold text-lg mb-1">{plan.name}</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white">{plan.price}</span>
+                  <span className="text-white/40 text-sm">/mo</span>
+                </div>
+                <div className="mt-2 text-primary font-semibold text-sm">{plan.credits}</div>
               </div>
-            ))}
-          </div>
 
-          {error && (
-            <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-400">
-              {error}
+              <div className="space-y-3 mb-8 flex-1">
+                {plan.features.map((f) => (
+                  <div key={f} className="flex items-start gap-2.5 text-sm text-white/60">
+                    <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span>{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              <Button
+                className={`w-full py-6 font-bold ${
+                  plan.popular ? 'bg-primary hover:bg-primary/90' : 'bg-white/10 hover:bg-white/15'
+                }`}
+                variant={plan.popular ? "default" : "secondary"}
+                onClick={() => plan.variantId !== 'free' && handleCheckout(plan.variantId)}
+                disabled={plan.disabled || (loading !== null)}
+              >
+                {loading === plan.variantId ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : null}
+                {plan.button}
+              </Button>
             </div>
-          )}
+          ))}
+        </div>
 
-          <Button
-            className="w-full"
-            size="lg"
-            onClick={handleCheckout}
-            disabled={loading}
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : (
-              <ExternalLink className="h-4 w-4 mr-2" />
-            )}
-            {loading ? "Redirecting…" : "Upgrade — $29/mo"}
-          </Button>
+        {error && (
+          <div className="mx-8 mb-8 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
+            {error}
+          </div>
+        )}
 
-          <button
-            onClick={onClose}
-            className="block w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Maybe later
-          </button>
+        <div className="bg-white/[0.03] border-t border-white/5 p-4 text-center">
+          <p className="text-[11px] text-white/30 uppercase tracking-[0.2em]">
+            Secure checkout powered by Lemon Squeezy
+          </p>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
+

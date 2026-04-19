@@ -7,7 +7,9 @@ interface SmartScreenshotProps {
   className?: string
 }
 
-export function SmartScreenshot({ src, alt, fallback, className }: SmartScreenshotProps) {
+export function SmartScreenshot({ 
+  src, alt, fallback, className 
+}: SmartScreenshotProps) {
   const [imgError, setImgError] = useState(false)
 
   if (imgError) {
