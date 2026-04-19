@@ -1,16 +1,20 @@
 import { motion } from "framer-motion";
 import { Brain, Globe, Layout, ChevronRight } from "lucide-react";
+import { SmartScreenshot } from "./SmartScreenshot";
+import { DashboardMockup } from "./DashboardMockup";
+import { CompetitorMockup } from "./CompetitorMockup";
+import { KanbanMockup } from "./KanbanMockup";
 
 function FeatureBlock({ label, headline, body, visual, reverse = false, icon: Icon }: { label: string, headline: string, body: React.ReactNode, visual: React.ReactNode, reverse?: boolean, icon: React.ElementType }) {
   return (
-    <div className="py-40 relative overflow-hidden group">
+    <div className="py-24 md:py-40 relative overflow-hidden group reveal">
       {/* Dynamic Background Glow */}
-      <div className={`absolute top-1/2 -translate-y-1/2 ${reverse ? 'left-[-10%]' : 'right-[-10%]'} w-[600px] h-[600px] bg-[#6C47FF]/[0.03] blur-[120px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
+      <div className={`absolute top-1/2 -translate-y-1/2 ${reverse ? 'left-[-10%]' : 'right-[-10%]'} w-[600px] h-[600px] bg-[#6C47FF]/[0.03] blur-[120px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000 hidden md:block`} />
       
       {/* Precision Divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[1px] bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full md:w-[1200px] h-[1px] bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
       
-      <div className={`section-container grid lg:grid-cols-[1fr_1.1fr] gap-24 items-center ${reverse ? 'lg:flex-row-reverse' : ''}`}>
+      <div className={`section-container grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-24 items-center ${reverse ? 'lg:flex-row-reverse' : ''}`}>
         <motion.div 
           initial={{ opacity: 0, x: reverse ? 40 : -40 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -18,15 +22,15 @@ function FeatureBlock({ label, headline, body, visual, reverse = false, icon: Ic
           transition={{ duration: 0.8 }}
           className={reverse ? 'lg:order-2' : ''}
         >
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-4 mb-6 md:mb-8">
             <div className="w-12 h-12 rounded-2xl bg-[#6C47FF]/10 flex items-center justify-center border border-[#6C47FF]/20">
                <Icon className="w-6 h-6 text-[#6C47FF]" />
             </div>
             <span className="label-allcaps">{label}</span>
           </div>
           
-          <h2 className="text-[44px] lg:text-[54px] font-bold text-white mb-8 leading-[1.1] tracking-tight">{headline}</h2>
-          <p className="text-[18px] text-[#888888] leading-relaxed max-w-[500px] mb-10 font-medium">
+          <h2 className="text-3xl md:text-[44px] lg:text-[54px] font-bold text-white mb-6 md:mb-8 leading-[1.1] tracking-tight">{headline}</h2>
+          <p className="text-[16px] md:text-[18px] text-[#888888] leading-relaxed max-w-[500px] mb-8 md:mb-10 font-medium">
             {body}
           </p>
           
@@ -41,11 +45,11 @@ function FeatureBlock({ label, headline, body, visual, reverse = false, icon: Ic
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className={`relative ${reverse ? 'lg:order-1' : ''}`}
+          className={`relative hidden md:block ${reverse ? 'lg:order-1' : ''}`}
         >
            {/* High-End Visual Container */}
            <div className="premium-card p-1 mockup-shadow relative z-10 group/visual">
-              <div className="rounded-[14px] bg-[#0A0A0A] overflow-hidden border border-white/[0.05] p-10 flex items-center justify-center min-h-[440px]">
+              <div className="rounded-[14px] bg-[#0A0A0A] overflow-hidden border border-white/[0.05] p-6 lg:p-10 flex items-center justify-center min-h-[440px]">
                 {visual}
               </div>
               
@@ -71,10 +75,17 @@ export function Features() {
         headline="AI that thinks like a serial founder"
         body="ValiSearch scores your idea across 18 specialized dimensions. Get a 0-100 confidence score backed by raw market data and specific execution logic."
         visual={
-          <img 
-            src="/screenshots/validation-feature.png" 
+          <SmartScreenshot 
+            src="/screenshots/score-display.png" 
             alt="AI Validation Engine showing confidence scores" 
             className="w-full h-auto rounded-lg shadow-2xl"
+            fallback={
+              <div className="overflow-hidden w-full h-[360px] flex items-center justify-center relative rounded-xl">
+                <div className="absolute scale-[1.3] -right-[15%]">
+                  <DashboardMockup />
+                </div>
+              </div>
+            }
           />
         }
       />
@@ -86,10 +97,11 @@ export function Features() {
         headline="Global datasets. Real-time relevance."
         body="Access live TAM/SAM/SOM estimates derived from current market signals. No more guesswork or outdated whitepapers."
         visual={
-          <img 
-            src="/screenshots/competitor-feature.png" 
+          <SmartScreenshot 
+            src="/screenshots/dashboard-competitors.png" 
             alt="Market Intelligence showing TAM/SAM/SOM analyses" 
             className="w-full h-auto rounded-lg shadow-2xl"
+            fallback={<CompetitorMockup />}
           />
         }
       />
@@ -100,10 +112,11 @@ export function Features() {
         headline="Move from strategy to sprint in seconds"
         body="Every analysis generates a full functional backlog. Export your product roadmap directly to Linear, Jira, or Notion with one click."
         visual={
-          <img 
-            src="/screenshots/kanban-feature.png" 
+          <SmartScreenshot 
+            src="/screenshots/dashboard-kanban.png" 
             alt="Execution Engine with Linear export and roadmap" 
             className="w-full h-auto rounded-lg shadow-2xl"
+            fallback={<KanbanMockup />}
           />
         }
       />

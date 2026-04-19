@@ -1,56 +1,60 @@
 export function KanbanMockup() {
+  const columns = [
+    {
+      title: "Backlog",
+      tasks: [
+        { title: "Design Landing Page", priority: "high", type: "design" },
+        { title: "Setup Database Schema", priority: "high", type: "backend" },
+      ]
+    },
+    {
+      title: "In Progress",
+      tasks: [
+        { title: "Implement Auth Flow", priority: "high", type: "fullstack" },
+        { title: "Create API Endpoints", priority: "medium", type: "backend" },
+      ]
+    },
+    {
+      title: "Done",
+      tasks: [
+        { title: "Project Setup", priority: "medium", type: "config" },
+        { title: "Define Tech Stack", priority: "low", type: "planning" },
+      ]
+    }
+  ];
+
   return (
-    <div className="w-full bg-[#0D0D0D] border border-white/10 rounded-xl p-4 shadow-2xl flex gap-4 overflow-hidden">
-      {/* Column: Backlog */}
-      <div className="flex-1 flex flex-col gap-3">
-        <div className="flex items-center gap-2 px-1">
-          <div className="w-2 h-2 rounded-full bg-white/20" />
-          <span className="text-[11px] font-bold text-white/60 uppercase tracking-wider">Backlog</span>
-        </div>
-        <div className="bg-[#161616] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[10px] font-semibold text-[#6C47FF] bg-[#6C47FF]/10 px-2 py-0.5 rounded w-fit mb-2">Setup</div>
-          <div className="text-[12px] font-medium text-white/90 mb-1">Initialize Supabase project</div>
-          <div className="text-[10px] text-white/40">Includes auth and basic tables.</div>
-        </div>
-        <div className="bg-[#161616] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[10px] font-semibold text-[#FF5F57] bg-[#FF5F57]/10 px-2 py-0.5 rounded w-fit mb-2">High Priority</div>
-          <div className="text-[12px] font-medium text-white/90 mb-1">Stripe integration</div>
-          <div className="text-[10px] text-white/40">Set up webhooks and checkout.</div>
-        </div>
+    <div className="w-full h-full min-h-[300px] bg-[#0A0A0A] rounded-xl border border-white/10 p-4 sm:p-5 overflow-hidden">
+      <div className="text-[12px] text-white/40 uppercase tracking-widest font-medium mb-4">
+        Sprint Board
       </div>
-
-      {/* Column: In Progress */}
-      <div className="flex-1 flex flex-col gap-3">
-        <div className="flex items-center gap-2 px-1">
-          <div className="w-2 h-2 rounded-full bg-[#6C47FF]" />
-          <span className="text-[11px] font-bold text-white/60 uppercase tracking-wider">In Progress</span>
-        </div>
-        <div className="bg-[#161616] border border-[#6C47FF]/30 rounded-lg p-3 relative overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#6C47FF]" />
-          <div className="text-[10px] font-semibold text-[#28C840] bg-[#28C840]/10 px-2 py-0.5 rounded w-fit mb-2">Feature</div>
-          <div className="text-[12px] font-medium text-white/90 mb-1">Build UI components</div>
-          <div className="text-[10px] text-white/40">Implement Tailwind and shadcn.</div>
-        </div>
-      </div>
-
-      {/* Column: Done */}
-      <div className="flex-1 flex flex-col gap-3">
-        <div className="flex items-center gap-2 px-1">
-          <div className="w-2 h-2 rounded-full bg-[#28C840]" />
-          <span className="text-[11px] font-bold text-white/60 uppercase tracking-wider">Done</span>
-        </div>
-        <div className="bg-[#161616] border border-white/[0.04] rounded-lg p-3 opacity-60">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="text-[10px] font-semibold text-white/40 bg-white/5 px-2 py-0.5 rounded w-fit">Planning</div>
-            <div className="w-4 h-4 rounded-full bg-[#28C840]/20 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3 stroke-[#28C840] stroke-2">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
+      <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
+        {columns.map(col => (
+          <div key={col.title} className="flex-1 min-w-[220px] shrink-0 snap-center bg-white/[0.02] rounded-lg border border-white/[0.05] p-3 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] font-semibold text-white/80">{col.title}</span>
+              <span className="text-[10px] bg-white/[0.08] text-white/50 px-2 py-0.5 rounded-full">{col.tasks.length}</span>
+            </div>
+            {col.tasks.map(task => (
+              <div key={task.title} className="bg-[#111] border border-white/[0.08] rounded-md p-3 shadow-sm flex flex-col gap-2">
+                <div className="text-[12px] font-medium text-white/90 leading-snug">{task.title}</div>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded
+                    ${task.priority === 'high' ? 'bg-red-500/10 text-red-400' : 
+                      task.priority === 'medium' ? 'bg-amber-500/10 text-amber-400' : 
+                      'bg-blue-500/10 text-blue-400'}`}>
+                    {task.priority}
+                  </span>
+                  <span className="text-[9px] text-white/40">{task.type}</span>
+                </div>
+              </div>
+            ))}
+            <div className="border border-dashed border-white/10 rounded-md p-2 text-center text-white/30 text-[11px] hover:bg-white/[0.02] cursor-pointer mt-auto transition-colors">
+              + Add Task
             </div>
           </div>
-          <div className="text-[12px] font-medium text-white/60 line-through">Market Research</div>
-        </div>
+        ))}
       </div>
     </div>
-  )
+  );
 }

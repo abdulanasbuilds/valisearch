@@ -1,85 +1,81 @@
+import { Check, X } from "lucide-react";
+
 export function CompetitorMockup() {
   const competitors = [
     {
       name: "Acme Corp",
-      threat: "High",
-      strengths: ["Strong brand presence", "Large marketing budget", "Enterprise integrations"],
-      weaknesses: ["Outdated UI/UX", "Slow feature delivery"],
-      marketShare: 65,
+      threat: "high",
+      strengths: ["Strong enterprise sales", "Robust API", "Brand recognition"],
+      weaknesses: ["Slow iteration speed", "High pricing"],
+      share: 45
     },
     {
-      name: "Nova Tools",
-      threat: "Medium",
-      strengths: ["Modern interface", "Developer friendly", "Affordable pricing"],
-      weaknesses: ["Missing advanced features", "Small support team"],
-      marketShare: 20,
+      name: "GlobalTech",
+      threat: "medium",
+      strengths: ["Large feature set", "Global reach", "Good documentation"],
+      weaknesses: ["Poor customer support", "Outdated UI"],
+      share: 25
     },
     {
-      name: "Zenith App",
-      threat: "Low",
-      strengths: ["Niche community", "Specialized tools", "High retention"],
-      weaknesses: ["Hard to use", "Poor onboarding"],
-      marketShare: 10,
+      name: "StartupX",
+      threat: "low",
+      strengths: ["Agile team", "Modern stack", "Low pricing"],
+      weaknesses: ["No enterprise features", "Small team"],
+      share: 10
     }
   ];
 
   return (
-    <div className="flex gap-4 overflow-hidden py-4 w-full">
-      {competitors.map((comp, idx) => (
-        <div key={idx} className="flex-1 bg-[#111] border border-white/10 rounded-xl p-5 shadow-2xl relative group hover:-translate-y-1 transition-transform">
-          {/* Top section */}
-          <div className="flex justify-between items-start mb-4">
-            <h4 className="text-sm font-bold text-white/90">{comp.name}</h4>
-            <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-              comp.threat === 'High' ? 'bg-[#FF5F57]/20 text-[#FF5F57]' :
-              comp.threat === 'Medium' ? 'bg-[#FEBC2E]/20 text-[#FEBC2E]' :
-              'bg-[#28C840]/20 text-[#28C840]'
-            }`}>
-              {comp.threat} Threat
+    <div className="w-full bg-[#0A0A0A] rounded-xl border border-white/10 p-4 sm:p-5 overflow-hidden">
+      <div className="text-[12px] text-white/40 uppercase tracking-widest font-medium mb-4">
+        Competitor Analysis
+      </div>
+      <div className="flex flex-col gap-3">
+        {competitors.map((comp) => (
+          <div key={comp.name} className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[14px] font-bold text-white/90">{comp.name}</span>
+              <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border
+                ${comp.threat === 'high' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                  comp.threat === 'medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 
+                  'bg-blue-500/10 text-blue-400 border-blue-500/20'}`}>
+                {comp.threat} Threat
+              </span>
             </div>
-          </div>
-          
-          {/* Strengths */}
-          <div className="mb-3">
-            <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1.5">Strengths</div>
-            <ul className="space-y-1">
-              {comp.strengths.map((str, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[11px] text-white/70">
-                  <span className="text-[#28C840] shrink-0">✓</span>
-                  <span className="leading-tight">{str}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <div className="text-[10px] text-white/40 uppercase">Strengths</div>
+                {comp.strengths.slice(0,2).map(s => (
+                  <div key={s} className="flex items-center gap-1.5 text-[11px] text-white/70">
+                    <Check className="w-3 h-3 text-green-400 shrink-0" />
+                    <span className="truncate">{s}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-1.5">
+                <div className="text-[10px] text-white/40 uppercase">Weaknesses</div>
+                {comp.weaknesses.slice(0,2).map(w => (
+                  <div key={w} className="flex items-center gap-1.5 text-[11px] text-white/70">
+                    <X className="w-3 h-3 text-red-400 shrink-0" />
+                    <span className="truncate">{w}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          {/* Weaknesses */}
-          <div className="mb-4">
-            <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1.5">Weaknesses</div>
-            <ul className="space-y-1">
-              {comp.weaknesses.map((wk, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[11px] text-white/70">
-                  <span className="text-[#FF5F57] shrink-0">×</span>
-                  <span className="leading-tight">{wk}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Market Share */}
-          <div className="mt-auto pt-3 border-t border-white/5">
-            <div className="flex justify-between text-[10px] mb-1">
-              <span className="text-white/40">Est. Market Share</span>
-              <span className="text-white/70 font-bold">{comp.marketShare}%</span>
-            </div>
-            <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-              <div 
-                className="h-full rounded-full bg-[#6C47FF]" 
-                style={{ width: `${comp.marketShare}%` }}
-              />
+            <div className="mt-2 pt-3 border-t border-white/[0.05]">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[10px] text-white/50">Est. Market Share</span>
+                <span className="text-[10px] text-white/70 font-semibold">{comp.share}%</span>
+              </div>
+              <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                <div className="h-full bg-indigo-500/60 rounded-full" style={{ width: `${comp.share}%` }} />
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  )
+  );
 }

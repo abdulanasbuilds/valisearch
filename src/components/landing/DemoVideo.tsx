@@ -77,7 +77,7 @@ export function DemoVideo() {
               />
             </div>
           ) : (
-            /* Placeholder or Real WebP Recording */
+            /* Placeholder thumbnail */
             <div 
               className="relative aspect-video flex items-center 
                 justify-center cursor-pointer group bg-[#0A0A0A]"
@@ -85,41 +85,87 @@ export function DemoVideo() {
                 if (embedUrl) setShowVideo(true)
               }}
             >
-              {/* Real screen recording background */}
-              <div className="absolute inset-0 overflow-hidden">
-                <img 
-                  src="/videos/demo.webp" 
-                  alt="ValiSearch Demo Recording" 
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
-              </div>
-
-              {/* Play button (only if Loom exists) */}
-              {embedUrl && (
-                <div className={`relative z-10 flex flex-col 
-                  items-center gap-4 transition-transform duration-200
-                  group-hover:scale-105`}>
-                  <div className={`w-20 h-20 rounded-full 
-                    bg-[#6C47FF]/90 flex items-center justify-center
-                    shadow-xl shadow-[#6C47FF]/30
-                    group-hover:bg-[#6C47FF]`}>
-                    <Play className="w-8 h-8 text-white 
-                      fill-white ml-1" />
+              {/* Fake dashboard screenshot background */}
+              <div className="absolute inset-0 opacity-30">
+                <div className="flex h-full">
+                  {/* Fake sidebar */}
+                  <div className="w-48 border-r border-white/[0.06] 
+                    bg-[#111] p-4 space-y-2 hidden sm:block">
+                    {Array.from({ length: 9 }).map((_, i) => (
+                      <div key={i} className={`h-7 rounded-md 
+                        ${i === 0 
+                          ? 'bg-[#6C47FF]/20 w-full' 
+                          : 'bg-white/[0.04] w-3/4'
+                        }`} 
+                      />
+                    ))}
                   </div>
-                  <div className="text-center">
-                    <p className="text-white font-semibold text-lg drop-shadow-lg">
-                      Watch Loom Demo
-                    </p>
+                  {/* Fake content area */}
+                  <div className="flex-1 p-4 sm:p-8 space-y-4">
+                    <div className="flex gap-6">
+                      <div className="w-24 h-24 rounded-full 
+                        border-4 border-green-500/60 
+                        border-r-transparent shrink-0" />
+                      <div className="flex-1 space-y-3 pt-2">
+                        {[80, 65, 75, 70].map((w, i) => (
+                          <div key={i} 
+                            className="h-3 bg-white/[0.06] 
+                              rounded-full overflow-hidden">
+                            <div className="h-full bg-green-500/40 
+                              rounded-full"
+                              style={{ width: `${w}%` }} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                      {[1,2,3].map(i => (
+                        <div key={i} className="h-16 rounded-lg 
+                          bg-white/[0.03] border border-white/[0.06]" />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              )}
+              </div>
+
+              {/* Play button */}
+              <div className={`relative z-10 flex flex-col 
+                items-center gap-4 transition-transform duration-200
+                ${embedUrl 
+                  ? 'group-hover:scale-105' 
+                  : 'cursor-default'
+                }`}>
+                <button aria-label="Play demo video" className={`w-20 h-20 rounded-full 
+                  bg-[#6C47FF]/90 flex items-center justify-center
+                  shadow-xl shadow-[#6C47FF]/30
+                  ${embedUrl 
+                    ? 'group-hover:bg-[#6C47FF]' 
+                    : 'opacity-50'
+                  }`}>
+                  <Play className="w-8 h-8 text-white 
+                    fill-white ml-1" />
+                </button>
+                <div className="text-center px-4">
+                  <p className="text-white font-semibold text-lg drop-shadow-md">
+                    {embedUrl 
+                      ? 'Watch demo (90 seconds)'
+                      : 'Demo video coming soon'
+                    }
+                  </p>
+                  <p className="text-white/50 text-sm mt-1">
+                    {embedUrl
+                      ? 'See ValiSearch validate a real startup idea'
+                      : 'Add your Loom URL to public/videos/loom-url.txt'
+                    }
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>
 
         {/* Stats below video */}
-        <div className="grid grid-cols-3 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
           {[
             { value: '30 sec', label: 'Average analysis time' },
             { value: '18', label: 'Intelligence sections' },

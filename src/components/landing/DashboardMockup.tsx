@@ -2,7 +2,7 @@ export function DashboardMockup() {
   return (
     <div className="relative w-full max-w-[580px]">
       {/* Purple glow behind */}
-      <div className="absolute inset-0 bg-primary/10 
+      <div className="absolute inset-0 bg-[#6C47FF]/10 
         blur-3xl rounded-3xl -z-10 scale-110" />
       
       {/* Browser chrome */}
@@ -30,7 +30,7 @@ export function DashboardMockup() {
           {/* Sidebar */}
           <div className="w-44 border-r border-white/[0.06] 
             bg-[#0A0A0A] p-3 flex flex-col gap-0.5 
-            flex-shrink-0">
+            flex-shrink-0 hidden sm:flex">
             <div className="px-2 py-1 text-[10px] 
               text-white/30 uppercase tracking-widest 
               font-medium mb-1">
@@ -51,7 +51,7 @@ export function DashboardMockup() {
                 className={`px-2 py-1.5 rounded-md text-[11px] 
                   font-medium cursor-default transition-colors
                   ${item.active 
-                    ? 'bg-primary/15 text-primary' 
+                    ? 'bg-[#6C47FF]/15 text-[#6C47FF]' 
                     : 'text-white/40 hover:text-white/60'
                   }`}
               >
@@ -73,15 +73,15 @@ export function DashboardMockup() {
           </div>
           
           {/* Main content */}
-          <div className="flex-1 p-5 overflow-hidden">
+          <div className="flex-1 p-4 sm:p-5 overflow-hidden">
             <div className="text-[11px] text-white/40 
               uppercase tracking-widest font-medium mb-3">
               Idea Score
             </div>
             
             {/* Score display */}
-            <div className="flex items-center gap-6 mb-5">
-              <div className="relative w-20 h-20 flex-shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-5">
+              <div className="relative w-20 h-20 flex-shrink-0 mx-auto sm:mx-0">
                 <svg viewBox="0 0 80 80" className="w-20 h-20 
                   -rotate-90">
                   <circle cx="40" cy="40" r="34" fill="none"
@@ -140,7 +140,7 @@ export function DashboardMockup() {
             </div>
             
             {/* Quick stats */}
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { label: 'Market Size', value: '$2.4B' },
                 { label: 'Competitors', value: '8 found' },

@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { SmartScreenshot } from "./SmartScreenshot";
+import { DashboardMockup } from "./DashboardMockup";
 
 export function HowItWorks() {
   const steps = [
@@ -25,18 +27,18 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-40 bg-[#0A0A0A] relative overflow-hidden">
+    <section id="how-it-works" className="py-32 md:py-40 bg-[#0A0A0A] relative overflow-hidden reveal">
       <div className="section-container relative z-10">
-        <div className="text-center mb-28">
+        <div className="text-center mb-20 md:mb-28">
           <div className="flex justify-center mb-6">
-            <span className="label-allcaps">THE PROTOCOL</span>
+            <span className="label-allcaps text-[#6C47FF]">THE PROTOCOL</span>
           </div>
-          <h2 className="text-[44px] lg:text-[54px] font-bold text-white tracking-tight max-w-[600px] mx-auto leading-tight">
+          <h2 className="text-3xl md:text-[44px] lg:text-[54px] font-bold text-white tracking-tight max-w-[600px] mx-auto leading-tight">
             From idea to intelligence in 4 stages
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative mb-24">
           {/* Scientific Connecting Line */}
           <div className="hidden lg:block absolute top-[28px] left-[120px] right-[120px] h-px bg-gradient-to-r from-transparent via-[#6C47FF]/40 to-transparent" />
           
@@ -62,6 +64,20 @@ export function HowItWorks() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Dashboard Preview Centered */}
+        <div className="max-w-3xl mx-auto hidden sm:block">
+          <SmartScreenshot
+            src="/screenshots/dashboard-overview.png"
+            alt="ValiSearch Result Preview"
+            className="w-full rounded-xl border border-white/10 shadow-2xl shadow-black/80"
+            fallback={
+              <div className="scale-90 origin-top">
+                <DashboardMockup />
+              </div>
+            }
+          />
         </div>
       </div>
     </section>

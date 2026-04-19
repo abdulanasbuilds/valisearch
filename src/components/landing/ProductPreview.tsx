@@ -1,34 +1,36 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronRight, ArrowUpRight, Github, Twitter, Linkedin, ExternalLink, Play, Sparkles } from "lucide-react";
+import { SmartScreenshot } from "./SmartScreenshot";
+import { DashboardMockup } from "./DashboardMockup";
 
 export function ProductPreview() {
   return (
-    <section className="py-40 relative bg-grid-white bg-[size:60px_60px]">
+    <section className="py-24 md:py-40 relative bg-grid-white bg-[size:60px_60px]">
       <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A] via-transparent to-[#0A0A0A]" />
       
       <div className="section-container relative z-10">
-        <div className="text-center mb-24">
+        <div className="text-center mb-16 md:mb-24">
           <div className="flex justify-center mb-6">
             <span className="label-allcaps">LIVE PRODUCT DEMO</span>
           </div>
-          <h2 className="text-[44px] lg:text-[54px] font-bold text-white mb-6 tracking-tight">Built for speed & scale</h2>
-          <p className="text-[18px] text-[#888888] font-medium max-w-[500px] mx-auto">
+          <h2 className="text-3xl md:text-[44px] lg:text-[54px] font-bold text-white mb-6 tracking-tight">Built for speed & scale</h2>
+          <p className="text-[16px] md:text-[18px] text-[#888888] font-medium max-w-[500px] mx-auto">
             Experience the future of startup validation. From ideation to execution in one seamless flow.
           </p>
         </div>
 
         {/* Premium Screen Recording / Gallery Section */}
-        <div className="grid lg:grid-cols-2 gap-8 items-stretch mb-40">
+        <div className="grid lg:grid-cols-2 gap-8 items-stretch mb-24 md:mb-40">
            {/* Left: Animated Analysis Flow */}
            <motion.div 
              initial={{ opacity: 0, x: -30 }}
              whileInView={{ opacity: 1, x: 0 }}
              viewport={{ once: true }}
-             className="relative rounded-[32px] overflow-hidden border border-white/[0.08] bg-[#0F0F0F] group"
+             className="relative rounded-[32px] overflow-hidden border border-white/[0.08] bg-[#0F0F0F] group hidden lg:block"
            >
               <img 
-                src="/analysis_modules_video_style.png" 
+                src="/videos/demo.webp" 
                 alt="AI Analysis Engine" 
                 className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000"
               />
@@ -50,23 +52,23 @@ export function ProductPreview() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="p-1.5 rounded-[32px] border border-white/[0.08] bg-[#111] overflow-hidden group h-[280px]"
+                className="p-1.5 rounded-[32px] border border-white/[0.08] bg-[#111] overflow-hidden group h-[280px] relative"
               >
                   <img 
-                    src="/dashboard_premium_mockup.png" 
+                    src="/screenshots/dashboard-overview.png" 
                     alt="Dashboard Snapshot" 
-                    className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity"
+                    className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity"
                   />
-                  <div className="absolute inset-0 p-10 flex flex-col justify-end">
+                  <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end bg-gradient-to-t from-[#111] via-[#111]/80 to-transparent">
                      <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-3">SYSTEM_VIEW</span>
-                     <h3 className="text-[24px] font-black text-white tracking-tight">Full Visibility</h3>
+                     <h3 className="text-2xl md:text-[24px] font-black text-white tracking-tight">Full Visibility</h3>
                      <p className="text-[14px] text-white/40 mt-2">Every metric, every competitor, at a glance.</p>
                   </div>
               </motion.div>
               
-              <div className="grid grid-cols-2 gap-8">
-                 <div className="p-8 rounded-[32px] border border-white/[0.08] bg-[#0A0A0A] flex flex-col justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#6C47FF]/10 border border-[#6C47FF]/20 flex items-center justify-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
+                 <div className="p-6 md:p-8 rounded-[32px] border border-white/[0.08] bg-[#0A0A0A] flex flex-col justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-[#6C47FF]/10 border border-[#6C47FF]/20 flex items-center justify-center mb-6">
                        <ArrowUpRight className="w-5 h-5 text-[#6C47FF]" />
                     </div>
                     <div>
@@ -74,8 +76,8 @@ export function ProductPreview() {
                        <p className="text-[13px] text-white/30 mt-1">PDF, Excel, & JSON</p>
                     </div>
                  </div>
-                 <div className="p-8 rounded-[32px] border border-white/[0.08] bg-[#0A0A0A] flex flex-col justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                 <div className="p-6 md:p-8 rounded-[32px] border border-white/[0.08] bg-[#0A0A0A] flex flex-col justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center mb-6">
                        <Play className="w-4 h-4 text-green-500" />
                     </div>
                     <div>
@@ -87,89 +89,27 @@ export function ProductPreview() {
            </div>
         </div>
 
-        {/* Existing Browser Mockup Refinement */}
+        {/* Full Browser Mockup */}
         <motion.div 
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative max-w-[1150px] mx-auto"
+          className="relative max-w-[1150px] mx-auto hidden sm:block"
         >
           <div className="absolute -inset-10 bg-[#6C47FF]/[0.05] blur-[100px] rounded-[40px] pointer-events-none" />
 
           <div className="relative rounded-[24px] border border-white/[0.08] bg-[#0D0D0D] overflow-hidden shadow-[0_80px_160px_rgba(0,0,0,0.8)] mockup-shadow">
-            <div className="h-12 bg-[#141414] border-b border-white/[0.05] flex items-center px-6 gap-6">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-white/[0.05] border border-white/[0.05]" />
-                <div className="w-3 h-3 rounded-full bg-white/[0.05] border border-white/[0.05]" />
-                <div className="w-3 h-3 rounded-full bg-white/[0.05] border border-white/[0.05]" />
-              </div>
-              <div className="flex-1 max-w-[600px] h-7 bg-white/[0.02] border border-white/[0.04] rounded-full flex items-center px-4">
-                 <div className="text-[10px] text-white/20 font-mono flex items-center gap-2">
-                    <span className="text-[#6C47FF]">https://</span>
-                    <span>valisearch.app/dashboard/overview</span>
-                 </div>
-              </div>
-            </div>
-
-            <div className="flex h-[640px]">
-               {/* Left Navigation */}
-               <div className="w-64 bg-[#0A0A0A] border-r border-white/[0.04] p-6 space-y-8">
-                  <div className="flex items-center gap-3 px-2">
-                     <div className="w-8 h-8 rounded-lg bg-[#6C47FF]" />
-                     <div className="h-2 w-20 bg-white/10 rounded-full" />
-                  </div>
-                  <div className="space-y-4 pt-10">
-                     {[1, 1, 0.6, 0.4, 0.4, 0.6, 1].map((o, i) => (
-                       <div key={i} className="flex items-center gap-3 px-2">
-                          <div className="w-4 h-4 rounded bg-white/[0.03]" />
-                          <div className="h-1.5 bg-white/[0.08] rounded-full" style={{ width: `${60 * o}%` }} />
-                       </div>
-                     ))}
-                  </div>
-               </div>
-
-               {/* Primary Canvas */}
-               <div className="flex-1 bg-[#0D0D0D] p-12 overflow-hidden relative">
-                  <img 
-                    src="/dashboard_premium_mockup.png" 
-                    alt="Dashboard Interface" 
-                    className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none"
-                  />
-                  <div className="relative z-10 flex justify-between items-start mb-16">
-                     <div className="space-y-3">
-                        <div className="h-2 w-32 bg-[#6C47FF]/40 rounded-full" />
-                        <div className="h-8 w-64 bg-white/5 rounded-xl underline decoration-[#6C47FF]/40 underline-offset-8" />
-                     </div>
-                     <div className="flex gap-3">
-                        <Link to="/dashboard" className="px-6 py-2 rounded-xl bg-[#6C47FF] text-white text-[12px] font-black">LOGIN_TO_DASHBOARD</Link>
-                     </div>
-                  </div>
-
-                  <div className="relative z-10 grid grid-cols-12 gap-6 h-full">
-                     <div className="col-span-8 h-[380px] rounded-3xl bg-white/[0.02] border border-white/[0.05] p-8 backdrop-blur-md">
-                        <div className="flex items-center gap-2 mb-8">
-                           <div className="w-2 h-2 rounded-full bg-[#22C55E]" />
-                           <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">REALTIME_INGESTION</span>
-                        </div>
-                        <div className="space-y-6">
-                           <div className="h-4 w-full bg-white/[0.03] rounded-lg" />
-                           <div className="h-4 w-3/4 bg-white/[0.03] rounded-lg" />
-                           <div className="mt-12 h-32 w-full bg-white/[0.02] rounded-2xl border border-white/[0.05]" />
-                        </div>
-                     </div>
-                     <div className="col-span-4 space-y-6">
-                        <div className="h-[180px] rounded-3xl bg-[#1A1A1A] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.4)] p-6">
-                           <div className="text-[10px] font-black text-[#6C47FF] mb-2 uppercase tracking-widest">API_KEY_SECURED</div>
-                           <div className="text-xl font-mono text-white/20">************</div>
-                        </div>
-                        <div className="h-[174px] rounded-3xl bg-white/[0.01] border border-white/5 p-8 flex items-center justify-center">
-                           <Sparkles className="w-12 h-12 text-[#6C47FF]/20" />
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
+            <SmartScreenshot
+              src="/screenshots/dashboard-overview.png"
+              alt="ValiSearch Dashboard Interface"
+              className="w-full h-auto"
+              fallback={
+                <div className="w-full flex justify-center py-10 scale-125 translate-y-12">
+                  <DashboardMockup />
+                </div>
+              }
+            />
           </div>
         </motion.div>
       </div>

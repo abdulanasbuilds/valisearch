@@ -9,6 +9,8 @@ import { sanitizeIdea } from '@/lib/sanitize';
 import { MAX_IDEA_LENGTH } from '@/lib/constants';
 import { toast } from 'sonner';
 
+import { SmartScreenshot } from "./SmartScreenshot";
+
 export function HeroSection() {
   const [idea, setIdea] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -149,8 +151,13 @@ export function HeroSection() {
             <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-[#6C47FF]/10 blur-[120px] rounded-full opacity-50 animate-pulse pointer-events-none" />
             <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-[#6C47FF]/05 blur-[100px] rounded-full opacity-30 pointer-events-none" />
 
-            <div className="relative z-10 scale-[0.85] origin-top-left w-[115%]">
-              <DashboardMockup />
+            <div className="relative z-10 scale-[0.85] origin-top-left w-[115%] hidden md:block">
+              <SmartScreenshot
+                src="/screenshots/dashboard-overview.png"
+                alt="ValiSearch dashboard overview"
+                className="w-full rounded-xl border border-white/10 shadow-2xl shadow-black/60"
+                fallback={<DashboardMockup />}
+              />
             </div>
           </motion.div>
         </div>
