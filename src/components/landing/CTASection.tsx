@@ -40,7 +40,7 @@ export function CTASection() {
           <div className="reveal flex items-center gap-2.5 mb-9">
             <div className="h-px w-5 bg-white/12" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/20">
-              Free to start · No credit card
+              Start your analysis today
             </span>
           </div>
 

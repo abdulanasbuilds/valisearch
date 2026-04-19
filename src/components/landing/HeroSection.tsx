@@ -63,38 +63,38 @@ export function HeroSection() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="flex items-center gap-2 mb-6">
-              <span className="label-allcaps">AI STARTUP INTELLIGENCE</span>
+              <span className="label-allcaps">STRATEGIC STARTUP ANALYSIS</span>
               <div className="h-[1px] w-12 bg-white/10" />
             </div>
             
-            <h1 className="display-headline mb-6 text-[40px] leading-[1.1] sm:text-5xl lg:text-6xl tracking-tight font-black">
-              Validate your <br />
-              <span className="text-serif-italic italic font-normal text-primary">startup idea</span> <br />
-              before you build.
+            <h1 className="display-headline mb-6 text-[42px] leading-[1.05] sm:text-6xl lg:text-7xl tracking-tight font-bold text-white">
+              Validation for <br />
+              <span className="text-primary">serious builders.</span>
             </h1>
 
-            <p className="text-[17px] text-[#888888] leading-relaxed max-w-[500px] mb-8 font-medium">
-              Turn raw concepts into investor-ready intelligence reports in 30 seconds. 
-              The ultimate validation stack for serial founders, built by <span className="text-white font-bold">Abdul Anas</span>.
+            <p className="text-[18px] text-white/40 leading-relaxed max-w-[520px] mb-10 font-medium">
+              ValiSearch transforms raw concepts into technical intelligence reports. 
+              Built for founders who value data over intuition.
             </p>
 
-            <div className="w-full max-w-[500px] mb-6">
-              <div className={`relative rounded-xl border transition-colors ${isFocused ? 'border-[#6C47FF]/60 ring-2 ring-[#6C47FF]/20' : 'border-white/10'} bg-white/[0.03]`}>
+            <div className="w-full max-w-[540px] mb-8">
+              <div className={`relative rounded-xl border transition-all duration-300 ${isFocused ? 'border-primary/50 bg-primary/[0.02] shadow-[0_0_50px_-12px_rgba(108,71,255,0.2)]' : 'border-white/5 bg-white/[0.01]'}`}>
                 <textarea
+                  id="idea-input"
                   value={idea}
                   onChange={(e) => setIdea(e.target.value.slice(0, MAX_IDEA_LENGTH))}
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Describe your startup idea... e.g. An AI tool that validates startup ideas before founders invest months building them."
-                  rows={4}
-                  className="w-full bg-transparent px-4 pt-4 pb-2 text-foreground placeholder:text-muted-foreground/50 resize-none outline-none text-base leading-relaxed"
+                  placeholder="Describe the problem, your proposed solution, and target audience..."
+                  rows={5}
+                  className="w-full bg-transparent px-5 pt-5 pb-2 text-white placeholder:text-white/10 resize-none outline-none text-[15px] leading-relaxed font-medium"
                 />
-                <div className="flex items-center justify-between px-4 pb-3 pt-1">
-                  <span className="text-xs text-muted-foreground/50">
-                    ⌘ + Enter to submit
+                <div className="flex items-center justify-between px-5 pb-4 pt-1 border-t border-white/[0.03]">
+                  <span className="text-[10px] uppercase tracking-widest text-white/20 font-bold">
+                    Press ⌘+Enter to begin analysis
                   </span>
-                  <span className={`text-xs transition-colors ${idea.length > MAX_IDEA_LENGTH * 0.9 ? 'text-amber-400' : 'text-muted-foreground/50'}`}>
+                  <span className={`text-[10px] font-mono transition-colors ${idea.length > MAX_IDEA_LENGTH * 0.9 ? 'text-amber-500' : 'text-white/20'}`}>
                     {idea.length} / {MAX_IDEA_LENGTH}
                   </span>
                 </div>
@@ -103,18 +103,19 @@ export function HeroSection() {
               <button
                 onClick={handleSubmit}
                 disabled={isAnalyzing || idea.trim().length < 20}
-                className="w-full mt-3 py-3.5 px-6 bg-[#6C47FF] text-white font-semibold rounded-xl text-base hover:bg-[#7C5AFF] transition-all shadow-[0_10px_30px_rgba(108,71,255,0.25)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full mt-4 py-4 px-6 bg-white text-black font-bold rounded-xl text-[15px] hover:bg-white/90 transition-all disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.99]"
               >
                 {isAnalyzing ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Analysing your idea...
+                    <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                    Running Analysis...
                   </>
                 ) : (
-                  <>Validate my idea free <ArrowRight className="w-4 h-4" /></>
+                  'Start Validation'
                 )}
               </button>
             </div>
+
 
             <div className="flex items-center gap-5">
               <button 
@@ -126,14 +127,14 @@ export function HeroSection() {
               </button>
             </div>
 
-            <div className="mt-16 flex flex-col gap-4">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/20">
-                PROVEN_TECH_STACK
+            <div className="mt-16 flex flex-col gap-5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/20">
+                POWERED BY
               </span>
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-30 grayscale contrast-125 font-black text-[13px]">
+              <div className="flex flex-wrap items-center gap-x-10 gap-y-4 opacity-20 grayscale hover:opacity-40 transition-opacity font-bold text-[12px] tracking-tighter">
                  <span>OPENAI</span>
                  <span>SUPABASE</span>
-                 <span>REPLICATE</span>
+                 <span>STRIPE</span>
                  <span>LEMON SQUEEZY</span>
                  <span>VERCEL</span>
               </div>
@@ -152,12 +153,7 @@ export function HeroSection() {
             <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-[#6C47FF]/05 blur-[100px] rounded-full opacity-30 pointer-events-none" />
 
             <div className="relative z-10 scale-[0.85] origin-top-left w-[115%]">
-              <SmartScreenshot
-                src="/screenshots/dashboard-overview.png"
-                alt="ValiSearch dashboard overview"
-                className="w-full rounded-xl border border-white/10 shadow-2xl shadow-black/60"
-                fallback={<DashboardMockup />}
-              />
+              <DashboardMockup />
             </div>
           </motion.div>
         </div>

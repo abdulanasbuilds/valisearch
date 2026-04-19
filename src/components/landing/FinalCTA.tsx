@@ -1,32 +1,11 @@
-import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function FinalCTA() {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section ref={ref} className="py-32 bg-[#0A0A0A] relative overflow-hidden">
-      {/* Purple glow behind headline */}
+    <section className="py-32 md:py-48 bg-[#0A0A0A] relative overflow-hidden">
+      {/* Background Glow */}
       <div 
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{
@@ -36,42 +15,30 @@ export function FinalCTA() {
         }}
       />
 
-      <div className="max-w-[1200px] mx-auto px-5 relative z-10">
-        <div className="text-center">
-          <h2
-            className={`text-[64px] font-bold text-[#F0F0F0] leading-tight transition-all duration-700 ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+      <div className="section-container relative z-10 text-center">
+        <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight">
+          Ready to build with <br /> <span className="text-primary">intelligence?</span>
+        </h2>
+        <p className="text-[17px] text-white/30 mb-12 max-w-[500px] mx-auto leading-relaxed font-medium">
+          Join founders who skip the guesswork and start with data. 
+          Your first 15 validations are on us.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button 
+            onClick={() => navigate("/register")}
+            className="w-full sm:w-auto bg-white text-black font-bold px-10 py-4 rounded-xl text-[16px] hover:bg-white/90 transition-all active:scale-[0.98]"
           >
-            Ready to stop guessing?
-          </h2>
-          <p
-            className={`mt-6 text-[18px] text-[#888888] transition-all duration-700 delay-100 ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            Create Free Account
+          </button>
+          <button 
+            onClick={() => {
+               const el = document.getElementById("idea-input");
+               if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }}
+            className="w-full sm:w-auto bg-white/[0.03] border border-white/10 text-white font-bold px-10 py-4 rounded-xl text-[16px] hover:bg-white/[0.06] transition-all"
           >
-            Join thousands of founders who validated before they built.
-          </p>
-
-          {/* Buttons */}
-          <div
-            className={`flex flex-wrap justify-center gap-4 mt-10 transition-all duration-700 delay-200 ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            <button 
-              onClick={() => navigate("/analyze")}
-              className="btn-primary"
-            >
-              Validate my idea free
-            </button>
-            <button 
-              onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-              className="btn-ghost"
-            >
-              See pricing →
-            </button>
-          </div>
+            Try Analysis
+          </button>
         </div>
       </div>
     </section>

@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  LayoutDashboard, ShieldCheck, BarChart3, Swords, Layers, Palette,
+import { LogOut, LayoutDashboard, ShieldCheck, BarChart3, Swords, Layers, Palette,
   DollarSign, Rocket, GitBranch, Cpu, Map, Terminal, Lightbulb, Settings,
   TrendingUp, Activity, Code2, Pencil, Zap,
 } from "lucide-react";
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { useCreditStore } from "@/store/useCreditStore";
+import { useUserStore } from "@/store/useUserStore";
 import { Progress } from "@/components/ui/progress";
 import logoImg from "@/assets/logo.png";
 
@@ -41,8 +41,12 @@ export function DashboardSidebar() {
   const location = useLocation();
   const { idea, setActiveSection } = useAnalysisStore();
   const { credits, maxCredits, isAdmin } = useCreditStore();
-  const { user } = useUserStore();
-  const plan = user?.user_metadata?.plan || 'free';
+  const { user, signOut } = useUserStore();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
 
   const isActive = (path: string) => location.pathname.includes(path);
@@ -153,6 +157,14 @@ export function DashboardSidebar() {
             <span className="text-[13px]">API Settings</span>
           </SidebarMenuButton>
         )}
+
+        <SidebarMenuButton
+          onClick={handleSignOut}
+          className="text-muted-foreground hover:text-red-400 w-full"
+        >
+          <LogOut className="h-4 w-4" />
+          <span className="text-[13px]">Sign Out</span>
+        </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
   );

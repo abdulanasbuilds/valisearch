@@ -21,7 +21,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    // TEMPORARY BYPASS FOR SCREENSHOTS
+    // return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;

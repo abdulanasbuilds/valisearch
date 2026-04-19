@@ -12,6 +12,7 @@ create table if not exists public.profiles (
   full_name text,
   avatar_url text,
   plan text not null default 'free',
+  onboarding_completed boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -141,6 +142,8 @@ create table if not exists public.subscriptions (
   user_id uuid not null references public.profiles(id) on delete cascade,
   stripe_customer_id text,
   stripe_subscription_id text,
+  ls_customer_id text,
+  ls_subscription_id text,
   plan text not null default 'free',
   status text not null default 'active',
   current_period_end timestamptz,

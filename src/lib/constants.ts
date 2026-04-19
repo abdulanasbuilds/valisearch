@@ -47,8 +47,8 @@ export const CREDIT_PACKAGES = {
 // Lemon Squeezy Configuration
 // Get these from your Lemon Squeezy dashboard after creating products there.
 export const LS_STORE_URL = 'https://your-store.lemonsqueezy.com';
-export const LS_PRO_VARIANT_ID = 'REPLACE_WITH_YOUR_PRO_ID';
-export const LS_PREMIUM_VARIANT_ID = 'REPLACE_WITH_YOUR_PREMIUM_ID';
+export const LS_PRO_VARIANT_ID = 'REPLACE_WITH_YOUR_ID';
+export const LS_PREMIUM_VARIANT_ID = 'REPLACE_WITH_YOUR_ID';
 
 // Rate Limiting
 export const MAX_ANALYSES_PER_HOUR = 10;

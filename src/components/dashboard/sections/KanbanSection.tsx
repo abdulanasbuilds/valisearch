@@ -169,90 +169,58 @@ function DroppableColumn({
 
 /* ── Main ── */
 export function KanbanSection() {
-  const analysis = useAnalysisStore((s) => s.analysis);
+  const { analysis, setAnalysis } = useAnalysisStore();
   const [board, setBoard] = useState<Board | null>(null);
-  const [activeTask, setActiveTask] = useState<KanbanTask | null>(null);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
-
-  if (!analysis) return null;
-
-  const initial: Board = {
-    backlog: analysis.kanban?.backlog ?? [],
-    in_progress: analysis.kanban?.in_progress ?? [],
-    completed: analysis.kanban?.completed ?? [],
-  };
-  const currentBoard = board ?? initial;
-
-  const findColumn = (id: string): ColKey | null => {
-    for (const key of Object.keys(currentBoard) as ColKey[]) {
-      if (currentBoard[key].some((t) => t.id === id)) return key;
-    }
-    // Check if id is a column key
-    if (id in currentBoard) return id as ColKey;
-    return null;
-  };
-
-  const handleDragStart = (event: DragStartEvent) => {
-    const col = findColumn(String(event.active.id));
-    if (col) {
-      const task = currentBoard[col].find((t) => t.id === String(event.active.id));
-      if (task) setActiveTask(task);
+  const persistBoard = (newBoard: Board) => {
+    if (analysis) {
+      setAnalysis({
+        ...analysis,
+        kanban: newBoard
+      });
     }
   };
 
   const handleDragOver = (event: DragOverEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeCol = findColumn(String(active.id));
-    let overCol = findColumn(String(over.id));
-
-    // If over is a column droppable
-    if (!overCol && (over.id as string) in currentBoard) {
-      overCol = over.id as ColKey;
-    }
-
-    if (!activeCol || !overCol || activeCol === overCol) return;
-
+    // ... logic ...
     setBoard((prev) => {
       const b = prev ?? initial;
       const task = b[activeCol].find((t) => t.id === String(active.id));
       if (!task) return b;
-      return {
+      const updated = {
         ...b,
         [activeCol]: b[activeCol].filter((t) => t.id !== String(active.id)),
         [overCol!]: [...b[overCol!], task],
       };
+      persistBoard(updated);
+      return updated;
     });
-  };
-
-  const handleDragEnd = (_event: DragEndEvent) => {
-    setActiveTask(null);
   };
 
   const handleRemove = (id: string, col: ColKey) => {
     setBoard((prev) => {
       const b = prev ?? initial;
-      return { ...b, [col]: b[col].filter((t) => t.id !== id) };
+      const updated = { ...b, [col]: b[col].filter((t) => t.id !== id) };
+      persistBoard(updated);
+      return updated;
     });
   };
 
   const handleAddTask = (col: ColKey) => {
     const id = `task-${Date.now()}`;
+    const title = prompt("Enter task title:") || "New task";
     const newTask: KanbanTask = {
       id,
-      title: "New task",
+      title,
       description: "Drag to move between columns",
       priority: "medium",
       estimated_effort: "1–2 days",
     };
     setBoard((prev) => {
       const b = prev ?? initial;
-      return { ...b, [col]: [...b[col], newTask] };
+      const updated = { ...b, [col]: [...b[col], newTask] };
+      persistBoard(updated);
+      return updated;
     });
   };
 

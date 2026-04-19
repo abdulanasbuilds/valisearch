@@ -5,6 +5,7 @@ import { useCreditStore } from "@/store/useCreditStore";
 import { useUserStore } from "@/store/useUserStore";
 import { saveAnalysis } from "@/services/database.service";
 import { canAttemptAnalysis, recordAnalysisAttempt, getRemainingAttempts, getTimeUntilNextAttempt } from "@/lib/rate-limit";
+import { toast } from "sonner";
 
 type AnalysisState = {
   idea: string;
@@ -52,11 +53,15 @@ export const useAnalysisStore = create<AnalysisState>((set) => ({
     }
 
     // Check credits
-    const canProceed = useCreditStore.getState().deductCredit();
-    if (!canProceed) {
+    const hasCredits = useCreditStore.getState().credits > 0;
+    if (!hasCredits) {
+      useCreditStore.getState().setShowUpgradeModal(true);
       set({ error: "No credits remaining. Upgrade to continue." });
       return;
     }
+
+    toast.info("1 credit will be used for this analysis");
+    useCreditStore.getState().deductCredit();
 
     // Record attempt for rate limiting
     recordAnalysisAttempt();

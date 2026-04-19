@@ -47,16 +47,22 @@ export default function Analyze() {
   useEffect(() => {
     if (analysis || error) return;
     
+    // Phase 1 starts at 5%
+    setProgress(5);
+
     const stepInterval = setInterval(() => {
       setStep((s) => (s >= steps.length - 1 ? s : s + 1));
-    }, 2000);
+    }, 1500);
 
     const progressInterval = setInterval(() => {
       setProgress((p) => {
         if (analysis) return 100;
-        return p >= 90 ? 90 : p + 1;
+        // Slow down as we reach 90%
+        if (p >= 90) return 90;
+        const increment = p < 30 ? 2 : p < 60 ? 1 : 0.5;
+        return p + increment;
       });
-    }, 150);
+    }, 200);
 
     return () => {
       clearInterval(stepInterval);

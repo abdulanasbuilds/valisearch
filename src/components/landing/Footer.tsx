@@ -40,7 +40,7 @@ export function Footer() {
               AI-powered startup validation. From raw idea to investor-ready intelligence in 30 seconds.
             </p>
             <p className="mt-4 text-[12px] text-[#555555]">
-              Built in Ghana 🇬🇭
+              Built with purpose
             </p>
           </div>
 

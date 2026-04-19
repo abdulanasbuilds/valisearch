@@ -33,32 +33,32 @@ export function HowItWorks() {
           <div className="flex justify-center mb-6">
             <span className="label-allcaps text-[#6C47FF]">THE PROTOCOL</span>
           </div>
-          <h2 className="text-3xl md:text-[44px] lg:text-[54px] font-bold text-white tracking-tight max-w-[600px] mx-auto leading-tight">
-            From idea to intelligence in 4 stages
+          <h2 className="text-3xl md:text-[44px] lg:text-[54px] font-bold text-white tracking-tight max-w-[700px] mx-auto leading-tight">
+            A precise workflow for <br /> strategic validation.
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative mb-24">
           {/* Scientific Connecting Line */}
-          <div className="hidden lg:block absolute top-[28px] left-[120px] right-[120px] h-px bg-gradient-to-r from-transparent via-[#6C47FF]/40 to-transparent" />
+          <div className="hidden lg:block absolute top-[28px] left-[120px] right-[120px] h-px bg-white/[0.05]" />
           
           {steps.map((step, i) => (
             <motion.div 
               key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative group"
             >
               <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-                <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-[14px] font-black text-[#6C47FF] shadow-[0_10px_30px_rgba(108,71,255,0.1)] group-hover:scale-110 group-hover:bg-[#6C47FF]/10 transition-all duration-300">
+                <div className="w-14 h-14 rounded-xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-center text-[13px] font-bold text-white/40 group-hover:border-primary/50 group-hover:text-primary transition-all duration-300">
                   {step.no}
                 </div>
-                <h3 className="text-[20px] font-bold text-white mt-8 mb-4 tracking-tight group-hover:text-[#6C47FF] transition-colors">
+                <h3 className="text-[18px] font-bold text-white mt-8 mb-3 tracking-tight">
                   {step.title}
                 </h3>
-                <p className="text-[15px] text-[#888888] leading-relaxed font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                <p className="text-[14px] text-white/30 leading-relaxed font-medium">
                   {step.body}
                 </p>
               </div>
@@ -67,17 +67,10 @@ export function HowItWorks() {
         </div>
 
         {/* Dashboard Preview Centered */}
-        <div className="max-w-3xl mx-auto hidden sm:block">
-          <SmartScreenshot
-            src="/screenshots/dashboard-overview.png"
-            alt="ValiSearch Result Preview"
-            className="w-full rounded-xl border border-white/10 shadow-2xl shadow-black/80"
-            fallback={
-              <div className="scale-90 origin-top">
-                <DashboardMockup />
-              </div>
-            }
-          />
+        <div className="max-w-4xl mx-auto hidden sm:block">
+          <div className="rounded-2xl border border-white/[0.05] bg-white/[0.01] p-1 shadow-2xl overflow-hidden">
+            <DashboardMockup />
+          </div>
         </div>
       </div>
     </section>

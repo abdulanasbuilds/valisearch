@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/useUserStore";
+import { getSupabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, CheckCircle2, ArrowRight, MousePointer2 } from "lucide-react";
 
@@ -9,10 +10,17 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const { user } = useUserStore();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < 3) {
       setStep(step + 1);
     } else {
+      const supabase = getSupabase();
+      if (supabase && user) {
+        await supabase
+          .from('profiles')
+          .update({ onboarding_completed: true })
+          .eq('id', user.id);
+      }
       navigate("/");
     }
   };

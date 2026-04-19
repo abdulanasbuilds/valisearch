@@ -2,14 +2,22 @@ import { create } from "zustand";
 import { getSupabase } from "@/lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
 
+interface Profile {
+  id: string;
+  onboarding_completed: boolean;
+  plan: string;
+}
+
 interface UserState {
   user: User | null;
   session: Session | null;
+  profile: Profile | null;
   isLoading: boolean;
   isAuthenticated: boolean;
 
   setUser: (user: User | null) => void;
   setSession: (session: Session | null) => void;
+  fetchProfile: () => Promise<void>;
   signOut: () => Promise<void>;
   initialize: () => Promise<void>;
 }
@@ -17,12 +25,26 @@ interface UserState {
 export const useUserStore = create<UserState>((set, get) => ({
   user: null,
   session: null,
+  profile: null,
   isLoading: true,
   isAuthenticated: false,
 
   setUser: (user) => set({ user, isAuthenticated: !!user }),
   setSession: (session) =>
     set({ session, user: session?.user ?? null, isAuthenticated: !!session }),
+
+  fetchProfile: async () => {
+    const { user } = get();
+    const supabase = getSupabase();
+    if (supabase && user) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      if (data) set({ profile: data });
+    }
+  },
 
   signOut: async () => {
     const supabase = getSupabase();
@@ -41,13 +63,16 @@ export const useUserStore = create<UserState>((set, get) => ({
     }
 
     // Set up auth state listener BEFORE getting session
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange(async (_event, session) => {
       set({
         session,
         user: session?.user ?? null,
         isAuthenticated: !!session,
-        isLoading: false,
       });
+      if (session?.user) {
+        await get().fetchProfile();
+      }
+      set({ isLoading: false });
     });
 
     // Check existing session
@@ -59,7 +84,12 @@ export const useUserStore = create<UserState>((set, get) => ({
       session,
       user: session?.user ?? null,
       isAuthenticated: !!session,
-      isLoading: false,
     });
+
+    if (session?.user) {
+      await get().fetchProfile();
+    }
+
+    set({ isLoading: false });
   },
 }));

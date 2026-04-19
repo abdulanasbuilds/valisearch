@@ -34,7 +34,10 @@ function FeatureBlock({ label, headline, body, visual, reverse = false, icon: Ic
             {body}
           </p>
           
-          <button className="flex items-center gap-2 text-[14px] font-bold text-white/40 hover:text-[#6C47FF] transition-colors group/btn">
+          <button 
+            onClick={() => navigate("/register")}
+            className="flex items-center gap-2 text-[14px] font-bold text-white/40 hover:text-[#6C47FF] transition-colors group/btn"
+          >
              EXPLORE MODULE 
              <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
           </button>
@@ -71,53 +74,38 @@ export function Features() {
     <section id="features" className="bg-[#0A0A0A]">
       <FeatureBlock 
         icon={Brain}
-        label="CORE ENGINE"
-        headline="AI that thinks like a serial founder"
-        body="ValiSearch scores your idea across 18 specialized dimensions. Get a 0-100 confidence score backed by raw market data and specific execution logic."
+        label="ANALYSIS ENGINE"
+        headline="Deep technical validation."
+        body="Our engine evaluates your architecture, market positioning, and growth vectors through 18 specialized modules."
         visual={
-          <SmartScreenshot 
-            src="/screenshots/score-display.png" 
-            alt="AI Validation Engine showing confidence scores" 
-            className="w-full h-auto rounded-lg shadow-2xl"
-            fallback={
-              <div className="overflow-hidden w-full h-[360px] flex items-center justify-center relative rounded-xl">
-                <div className="absolute scale-[1.3] -right-[15%]">
-                  <DashboardMockup />
-                </div>
-              </div>
-            }
-          />
+          <div className="rounded-xl overflow-hidden border border-white/[0.05] bg-white/[0.01] p-2">
+            <DashboardMockup />
+          </div>
         }
       />
 
       <FeatureBlock 
         reverse
         icon={Globe}
-        label="MARKET INTELLIGENCE"
-        headline="Global datasets. Real-time relevance."
-        body="Access live TAM/SAM/SOM estimates derived from current market signals. No more guesswork or outdated whitepapers."
+        label="MARKET DATA"
+        headline="Global signal detection."
+        body="Access live TAM/SAM/SOM estimates and competitor signals derived from current market movements."
         visual={
-          <SmartScreenshot 
-            src="/screenshots/dashboard-competitors.png" 
-            alt="Market Intelligence showing TAM/SAM/SOM analyses" 
-            className="w-full h-auto rounded-lg shadow-2xl"
-            fallback={<CompetitorMockup />}
-          />
+          <div className="rounded-xl overflow-hidden border border-white/[0.05] bg-white/[0.01] p-2">
+            <CompetitorMockup />
+          </div>
         }
       />
 
       <FeatureBlock 
         icon={Layout}
-        label="EXECUTION ENGINE"
-        headline="Move from strategy to sprint in seconds"
-        body="Every analysis generates a full functional backlog. Export your product roadmap directly to Linear, Jira, or Notion with one click."
+        label="PLANNING"
+        headline="From strategy to sprint."
+        body="Convert your validation report into a functional product backlog ready for your development team."
         visual={
-          <SmartScreenshot 
-            src="/screenshots/dashboard-kanban.png" 
-            alt="Execution Engine with Linear export and roadmap" 
-            className="w-full h-auto rounded-lg shadow-2xl"
-            fallback={<KanbanMockup />}
-          />
+          <div className="rounded-xl overflow-hidden border border-white/[0.05] bg-white/[0.01] p-2">
+            <KanbanMockup />
+          </div>
         }
       />
     </section>

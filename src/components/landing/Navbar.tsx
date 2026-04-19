@@ -32,14 +32,14 @@ export function Navbar() {
 
           {/* Right: Actions */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/login" className="text-[13.5px] font-medium text-white/60 hover:text-white transition-colors">
+            <Link to="/login" className="text-[13.5px] font-medium text-white/40 hover:text-white transition-colors">
               Sign in
             </Link>
             <Link 
               to="/register" 
-              className="bg-[#6C47FF] hover:bg-[#7C5AFF] text-white text-[13.5px] font-bold px-6 py-2.5 rounded-xl transition-all shadow-[0_10px_20px_-5px_rgba(108,71,255,0.3)]"
+              className="bg-white text-black text-[13.5px] font-bold px-6 py-2.5 rounded-xl transition-all hover:bg-white/90"
             >
-              Start Free
+              Get Started
             </Link>
           </div>
 
@@ -56,7 +56,7 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[90] bg-[#0A0A0A] flex flex-col p-8 pt-24 md:hidden">
-          <div className="flex flex-col gap-6 text-xl font-medium text-white/60">
+          <div className="flex flex-col gap-6 text-xl font-medium text-white/40">
             {["How it Works", "Features", "Pricing"].map((item) => (
               <a 
                 key={item} 
@@ -72,9 +72,9 @@ export function Navbar() {
             <Link 
               to="/register" 
               onClick={() => setMobileMenuOpen(false)}
-              className="bg-[#6C47FF] text-white text-center py-4 rounded-xl font-bold"
+              className="bg-white text-black text-center py-4 rounded-xl font-bold"
             >
-              Start Free
+              Get Started
             </Link>
           </div>
         </div>
@@ -85,13 +85,5 @@ export function Navbar() {
 
 
 export function AnnouncementBar() {
-  return (
-    <div className="absolute top-24 left-1/2 -translate-x-1/2 z-[50] w-full flex justify-center px-6">
-      <div className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.06] rounded-full px-4 py-1.5 transition-all hover:bg-white/[0.06] group cursor-pointer">
-        <span className="bg-[#6C47FF] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full tracking-wider">NEW</span>
-        <span className="text-[13px] text-white/50">ValiSearch now validates 18 dimensions of your idea</span>
-        <span className="text-[13px] text-white/80 group-hover:translate-x-0.5 transition-transform">See what's new →</span>
-      </div>
-    </div>
-  );
+  return null;
 }

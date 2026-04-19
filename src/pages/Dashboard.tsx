@@ -88,8 +88,14 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { analysis, idea, setAnalysis, dataSource } = useAnalysisStore();
   const { showUpgradeModal, setShowUpgradeModal, isAdmin } = useCreditStore();
-  const { user } = useUserStore();
-  const [loading, setLoading] = useState(!analysis);
+  const { user, profile } = useUserStore();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (profile && !profile.onboarding_completed) {
+      navigate("/onboarding");
+    }
+  }, [profile, navigate]);
 
   useEffect(() => {
     async function loadAnalysis() {

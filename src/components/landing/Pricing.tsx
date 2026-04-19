@@ -1,39 +1,59 @@
 import { motion } from "framer-motion";
 import { Check, Sparkles } from "lucide-react";
+import { useUserStore } from "@/store/useUserStore";
 import { useNavigate } from "react-router-dom";
+import { LS_STORE_URL, LS_PRO_VARIANT_ID, LS_PREMIUM_VARIANT_ID } from "@/lib/constants";
 
 export function Pricing() {
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useUserStore();
+
+  const handlePlanClick = (planName: string) => {
+    if (!isAuthenticated) {
+      navigate("/register");
+      return;
+    }
+
+    if (planName === "Free") {
+      navigate("/dashboard");
+      return;
+    }
+
+    // Lemon Squeezy Checkout
+    const variantId = planName === "Pro" ? LS_PRO_VARIANT_ID : LS_PREMIUM_VARIANT_ID;
+    const checkoutUrl = `${LS_STORE_URL}/checkout/buy/${variantId}?checkout[email]=${user?.email}&checkout[custom][user_id]=${user?.id}`;
+    window.open(checkoutUrl, '_blank');
+  };
+
   const plans = [
     {
-      name: "Starter",
+      name: "Free",
       price: "0",
       sub: "FOREVER_FREE_NO_CC",
-      features: ["3 analyses per month", "15 analysis sections", "Competitor snapshot", "Market overview", "Shareable score card"],
-      button: "Begin Now",
+      features: ["15 analyses credits", "All 18 analysis sections", "Competitor snapshot", "Market overview", "Shareable score card"],
+      button: "Start free",
       featured: false
     },
     {
-      name: "Founder",
+      name: "Pro",
       price: "29",
       sub: "INDIVIDUAL_TIER_MONTHLY",
-      features: ["20 analyses per month", "All 18 analysis sections", "Full competitor intelligence", "Revenue projections", "Branding generator", "PDF & DOCX export", "Kanban sprint board", "Idea history & memory"],
-      button: "Unlock All Features",
+      features: ["200 analyses credits", "Full competitor intelligence", "Revenue projections", "Branding generator", "PDF export", "Kanban sprint board", "Idea history & memory"],
+      button: "Get started",
       featured: true
     },
     {
-      name: "Enterprise",
+      name: "Premium",
       price: "79",
-      sub: "SCALED_INTELLIGENCE_API",
-      features: ["Unlimited analyses", "Multi-agent AI mode", "Build Mode (dev blueprint)", "API access", "White-label reports", "Priority processing", "Concierge setup"],
-      button: "Contact Sales",
+      sub: "UNLIMITED_INTELLIGENCE",
+      features: ["Unlimited analyses", "Priority processing", "Concierge setup", "All Pro features included"],
+      button: "Get Premium",
       featured: false
     }
   ];
 
   return (
     <section id="pricing" className="py-40 bg-[#0A0A0A] relative">
-      {/* Background Texture */}
       <div className="absolute inset-0 bg-grid-white opacity-10 pointer-events-none" />
       
       <div className="section-container relative z-10">
@@ -68,7 +88,6 @@ export function Pricing() {
                 </div>
               )}
 
-              {/* Card Decoration */}
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#6C47FF]/[0.03] blur-[60px] rounded-full pointer-events-none group-hover:bg-[#6C47FF]/[0.08] transition-colors duration-700" />
 
               <div className="mb-12">
@@ -96,7 +115,7 @@ export function Pricing() {
               </ul>
 
               <button 
-                onClick={() => navigate("/register")}
+                onClick={() => handlePlanClick(plan.name)}
                 className={`w-full py-5 rounded-2xl text-[16px] font-black transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 group/btn shadow-xl ${
                 plan.featured 
                 ? 'bg-[#6C47FF] hover:bg-[#7C5AFF] text-white' 
