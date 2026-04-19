@@ -119,11 +119,14 @@ export function HeroSection() {
 
             <div className="flex items-center gap-5">
               <button 
-                onClick={handleScrollToHowItWorks}
-                className="w-full sm:w-auto bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] text-[#F0F0F0] text-[15px] font-semibold px-6 py-3 rounded-xl transition-all text-center flex items-center justify-center gap-2 group"
+                onClick={() => {
+                  const el = document.getElementById('how-it-works');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="w-full sm:w-auto bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] text-white text-[14px] font-semibold px-6 py-3 rounded-xl transition-all text-center flex items-center justify-center gap-2 group cursor-pointer active:scale-[0.98]"
               >
-                <PlayCircle className="w-4 h-4 text-white/40 group-hover:text-[#6C47FF] transition-colors" />
-                See how it works
+                <PlayCircle className="w-4 h-4 text-white/20 group-hover:text-primary transition-colors" />
+                See process
               </button>
             </div>
 

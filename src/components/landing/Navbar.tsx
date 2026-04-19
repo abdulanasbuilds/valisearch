@@ -12,6 +12,17 @@ export function Navbar() {
     return scrollY.onChange((latest) => setIsScrolled(latest > 20));
   }, [scrollY]);
 
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const el = document.getElementById(href.slice(1));
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        setMobileMenuOpen(false);
+      }
+    }
+  };
+
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 h-16 flex items-center ${isScrolled ? 'premium-blur border-b border-white/[0.05]' : 'bg-transparent'}`}>
@@ -22,9 +33,14 @@ export function Navbar() {
           </Link>
 
           {/* Center: Navigation (Desktop) */}
-          <div className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-white/60">
+          <div className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-white/40">
             {["How it Works", "Features", "Pricing"].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(/ /g, '-')}`} className="hover:text-white transition-colors">
+              <a 
+                key={item} 
+                href={`#${item.toLowerCase().replace(/ /g, '-')}`} 
+                onClick={(e) => handleLinkClick(e, `#${item.toLowerCase().replace(/ /g, '-')}`)}
+                className="hover:text-white transition-colors cursor-pointer"
+              >
                 {item}
               </a>
             ))}
@@ -62,7 +78,7 @@ export function Navbar() {
                 key={item} 
                 href={`#${item.toLowerCase().replace(/ /g, '-')}`} 
                 className="hover:text-white"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => handleLinkClick(e, `#${item.toLowerCase().replace(/ /g, '-')}`)}
               >
                 {item}
               </a>
