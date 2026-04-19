@@ -240,8 +240,8 @@ export function downloadReportPdf(data: ValiSearchAnalysis) {
     data.final_verdict.verdict === "Strong"
       ? "#10b981"
       : data.final_verdict.verdict === "Moderate"
-      ? "#f59e0b"
-      : "#ef4444";
+        ? "#f59e0b"
+        : "#ef4444";
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -284,7 +284,7 @@ export function downloadReportPdf(data: ValiSearchAnalysis) {
   tr:last-child td { border-bottom: none; }
   .stack-row { display: flex; gap: 10px; margin: 6px 0; flex-wrap: wrap; }
   .stack-tag { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 3px 9px; font-size: 10.5px; font-weight: 600; color: #374151; }
-  .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 10px; color: #9ca3af; }
+  . { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 10px; color: #9ca3af; }
   @media print {
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .page { padding: 0; }
@@ -400,14 +400,14 @@ export function downloadReportPdf(data: ValiSearchAnalysis) {
       <h4>MVP Stack <span class="badge">${data.tech_stack.cost_level} cost</span></h4>
       <div class="stack-row">
         ${[data.tech_stack.mvp.frontend, data.tech_stack.mvp.backend, data.tech_stack.mvp.database, data.tech_stack.mvp.apis]
-          .filter(Boolean).map((t) => `<span class="stack-tag">${t}</span>`).join("")}
+      .filter(Boolean).map((t) => `<span class="stack-tag">${t}</span>`).join("")}
       </div>
     </div>
     <div class="card">
       <h4>Scalable Stack</h4>
       <div class="stack-row">
         ${[data.tech_stack.scalable.frontend, data.tech_stack.scalable.backend, data.tech_stack.scalable.database, data.tech_stack.scalable.apis]
-          .filter(Boolean).map((t) => `<span class="stack-tag">${t}</span>`).join("")}
+      .filter(Boolean).map((t) => `<span class="stack-tag">${t}</span>`).join("")}
       </div>
     </div>
   </div>
