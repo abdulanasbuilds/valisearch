@@ -23,6 +23,13 @@ import { MarketFeasibilitySection } from "@/components/dashboard/sections/Market
 import { RevenueIntelligenceSection } from "@/components/dashboard/sections/RevenueIntelligenceSection";
 import { IdeBridgeSection } from "@/components/dashboard/sections/IdeBridgeSection";
 import { LaunchCenterSection } from "@/components/dashboard/sections/LaunchCenterSection";
+import { MarketIntelligenceSection } from "@/components/dashboard/sections/MarketIntelligenceSection";
+import { ProblemLandscapeSection } from "@/components/dashboard/sections/ProblemLandscapeSection";
+import { OfferBuilderSection } from "@/components/dashboard/sections/OfferBuilderSection";
+import { CompetitiveIntelligenceSection } from "@/components/dashboard/sections/CompetitiveIntelligenceSection";
+import { GrowthPlaybookSection } from "@/components/dashboard/sections/GrowthPlaybookSection";
+import { ContentEngineSection } from "@/components/dashboard/sections/ContentEngineSection";
+import { ScaleRoadmapSection } from "@/components/dashboard/sections/ScaleRoadmapSection";
 import { ApiSettings } from "@/components/dashboard/ApiSettings";
 import { UpgradeModal } from "@/components/dashboard/UpgradeModal";
 import { downloadReport, downloadReportJson, downloadReportMarkdown, downloadReportPdf } from "@/utils/exportPdf";
@@ -218,6 +225,14 @@ export default function Dashboard() {
               <Route path="build-mode"        element={<BuildModeSection />} />
               <Route path="ide-bridge"        element={<IdeBridgeSection />} />
               <Route path="launch-center"     element={<LaunchCenterSection />} />
+              {/* v2 framework sections */}
+              <Route path="market-intelligence" element={<MarketIntelligenceSection />} />
+              <Route path="problem-landscape"   element={<ProblemLandscapeSection />} />
+              <Route path="offer-builder"        element={<OfferBuilderSection />} />
+              <Route path="competitive-intel"    element={<CompetitiveIntelligenceSection />} />
+              <Route path="growth-playbook"      element={<GrowthPlaybookSection />} />
+              <Route path="content-engine"       element={<ContentEngineSection />} />
+              <Route path="scale-roadmap"        element={<ScaleRoadmapSection />} />
               {isAdmin && <Route path="settings" element={<ApiSettings />} />}
               <Route path="settings" element={<Navigate to="/dashboard/overview" replace />} />
             </Routes>

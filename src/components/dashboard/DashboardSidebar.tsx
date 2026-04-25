@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { LogOut, LayoutDashboard, ShieldCheck, BarChart3, Swords, Layers, Palette,
   DollarSign, Rocket, GitBranch, Cpu, Map, Terminal, Lightbulb, Settings,
-  TrendingUp, Activity, Code2, Pencil, Zap,
+  TrendingUp, Activity, Code2, Pencil, Zap, Target, Package, Megaphone,
+  LineChart, Scale,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu,
@@ -12,44 +13,91 @@ import { useCreditStore } from "@/store/useCreditStore";
 import { useUserStore } from "@/store/useUserStore";
 import { Progress } from "@/components/ui/progress";
 import logoImg from "@/assets/logo.png";
+import type { FrameworkId } from "@/types/analysis-v2";
 
-const MAIN_SECTIONS = [
-  { title: "Overview",            icon: LayoutDashboard, path: "overview" },
-  { title: "Validation",          icon: ShieldCheck,     path: "validation" },
-  { title: "Market Feasibility",  icon: Activity,        path: "market-feasibility" },
-  { title: "Market Research",     icon: BarChart3,        path: "market" },
-  { title: "Competitors",         icon: Swords,           path: "competitors" },
-  { title: "Product",             icon: Layers,           path: "product" },
-  { title: "Branding",            icon: Palette,          path: "branding" },
-  { title: "Revenue Intelligence",icon: TrendingUp,       path: "revenue" },
-  { title: "Monetization",        icon: DollarSign,       path: "monetization" },
-  { title: "Go-To-Market",        icon: Rocket,           path: "go-to-market" },
+const NEW_SECTIONS = new Set<string>([
+  "market-intelligence",
+  "problem-landscape",
+  "offer-builder",
+  "competitive-intel",
+  "growth-playbook",
+  "content-engine",
+  "scale-roadmap",
+]);
+
+const INTELLIGENCE_SECTIONS = [
+  { title: "Overview",                icon: LayoutDashboard, path: "overview" },
+  { title: "Validation Score",        icon: ShieldCheck,     path: "validation" },
+  { title: "Market Intelligence",     icon: BarChart3,       path: "market-intelligence" },
+  { title: "Problem Landscape",       icon: Target,          path: "problem-landscape" },
+  { title: "Offer Builder",           icon: Package,         path: "offer-builder" },
+  { title: "Competitive Intelligence",icon: Swords,          path: "competitive-intel" },
 ];
 
 const BUILD_SECTIONS = [
-  { title: "Idea Evolution",  icon: Lightbulb,  path: "evolution" },
-  { title: "Flow Editor",     icon: Pencil,     path: "flow-editor" },
-  { title: "User Flow",       icon: Map,        path: "flow" },
-  { title: "Sprint Planner",  icon: GitBranch,  path: "kanban" },
-  { title: "Tech Stack",      icon: Cpu,        path: "tech-stack" },
-  { title: "Build Mode",      icon: Terminal,   path: "build-mode" },
-  { title: "IDE Bridge",      icon: Code2,      path: "ide-bridge" },
+  { title: "Product Strategy",  icon: Layers,     path: "product" },
+  { title: "Tech Stack",        icon: Cpu,         path: "tech-stack" },
+  { title: "Branding",          icon: Palette,     path: "branding" },
 ];
+
+const GROWTH_SECTIONS = [
+  { title: "Growth Playbook",       icon: Rocket,      path: "growth-playbook" },
+  { title: "Content Engine",        icon: Megaphone,    path: "content-engine" },
+  { title: "Revenue Intelligence",  icon: TrendingUp,   path: "revenue" },
+  { title: "Monetization",          icon: DollarSign,   path: "monetization" },
+];
+
+const EXECUTION_SECTIONS = [
+  { title: "User Flow",        icon: Map,        path: "flow" },
+  { title: "Flow Editor",      icon: Pencil,     path: "flow-editor" },
+  { title: "Sprint Planner",   icon: GitBranch,  path: "kanban" },
+  { title: "Scale Roadmap",    icon: Scale,       path: "scale-roadmap" },
+  { title: "Build Mode",       icon: Terminal,   path: "build-mode" },
+  { title: "IDE Bridge",       icon: Code2,      path: "ide-bridge" },
+  { title: "Launch Center",    icon: Lightbulb,  path: "launch-center" },
+];
+
+type SectionGroup = {
+  label: string;
+  items: typeof INTELLIGENCE_SECTIONS;
+};
+
+const SECTION_GROUPS: SectionGroup[] = [
+  { label: "Intelligence", items: INTELLIGENCE_SECTIONS },
+  { label: "Build",        items: BUILD_SECTIONS },
+  { label: "Growth",       items: GROWTH_SECTIONS },
+  { label: "Execution",    items: EXECUTION_SECTIONS },
+];
+
+// Map sidebar paths to framework IDs for fallback badge
+const PATH_TO_FRAMEWORK: Record<string, FrameworkId> = {
+  "market-intelligence": "market_breakdown",
+  "problem-landscape": "problem_prioritization",
+  "offer-builder": "offer_creation",
+  "competitive-intel": "competitor_weakness",
+  "growth-playbook": "distribution_plan",
+  "content-engine": "viral_content",
+  "scale-roadmap": "scale_system",
+};
 
 export function DashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { idea, setActiveSection } = useAnalysisStore();
+  const { idea, setActiveSection, analysis } = useAnalysisStore();
   const { credits, maxCredits, isAdmin } = useCreditStore();
-  const { user, signOut } = useUserStore();
+  const { signOut } = useUserStore();
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
   };
 
-
   const isActive = (path: string) => location.pathname.includes(path);
+
+  // Check data sources for fallback indicator
+  const dataSources = (analysis as Record<string, unknown> | null)?.data_sources as Record<string, string> | undefined;
+
+  const plan = credits >= 40 ? "premium" : credits >= 20 ? "pro" : "free";
 
   return (
     <Sidebar>
@@ -77,59 +125,45 @@ export function DashboardSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {/* Analysis group */}
-        <SidebarGroup>
-          <div className="px-3 py-2">
-            <span className="text-[9.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/40">
-              Analysis
-            </span>
-          </div>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {MAIN_SECTIONS.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    onClick={() => {
-                      setActiveSection(item.path);
-                      navigate(`/dashboard/${item.path}`);
-                    }}
-                    className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span className="text-[13px]">{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {SECTION_GROUPS.map((group) => (
+          <SidebarGroup key={group.label}>
+            <div className="px-3 py-2 mt-1">
+              <span className="text-[9.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/40">
+                {group.label}
+              </span>
+            </div>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {group.items.map((item) => {
+                  const frameworkId = PATH_TO_FRAMEWORK[item.path];
+                  const isFallback = frameworkId && dataSources?.[frameworkId] === "fallback";
+                  const isNew = NEW_SECTIONS.has(item.path);
 
-        {/* Build group */}
-        <SidebarGroup>
-          <div className="px-3 py-2 mt-2">
-            <span className="text-[9.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/40">
-              Build
-            </span>
-          </div>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {BUILD_SECTIONS.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    onClick={() => {
-                      setActiveSection(item.path);
-                      navigate(`/dashboard/${item.path}`);
-                    }}
-                    className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span className="text-[13px]">{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                  return (
+                    <SidebarMenuItem key={item.path}>
+                      <SidebarMenuButton
+                        onClick={() => {
+                          setActiveSection(item.path);
+                          navigate(`/dashboard/${item.path}`);
+                        }}
+                        className={isActive(item.path) ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span className="text-[13px] flex-1">{item.title}</span>
+                        {isNew && (
+                          <span className="text-[8px] px-1 py-0.5 rounded bg-primary/20 text-primary font-bold uppercase tracking-wider">New</span>
+                        )}
+                        {isFallback && (
+                          <span className="text-[8px] px-1 py-0.5 rounded bg-white/[0.04] text-muted-foreground/40">· sample</span>
+                        )}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
 
       <SidebarFooter className="px-4 py-3 border-t border-border/40 space-y-3">

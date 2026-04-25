@@ -8,7 +8,9 @@
  */
 
 import type { ValiSearchAnalysis } from "@/types/analysis";
+import type { ValiSearchAnalysisV2, AnalysisType, FrameworkId } from "@/types/analysis-v2";
 import { getMockAnalysis } from "@/services/analysis.service";
+import { getFullFallbackAnalysis } from "@/data/fallback";
 import { getSupabase } from "@/lib/supabase";
 import { isSupabaseConfigured } from "@/config/env";
 import { sanitizeIdea } from "@/lib/sanitize";
@@ -128,6 +130,53 @@ export async function analyzeIdea(idea: string): Promise<{
   // Mock fallback — always works
   await new Promise((resolve) => setTimeout(resolve, 2200));
   return { result: getMockAnalysis(trimmed), source: "mock" };
+}
+
+/* ── V2 Multi-Framework Analysis ──────────────────────────── */
+export async function analyzeIdeaV2(idea: string, analysisType: AnalysisType = "full"): Promise<{
+  result: ValiSearchAnalysisV2;
+  source: "ai" | "mock";
+}> {
+  const trimmed = validateIdea(idea);
+
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.functions.invoke("analyze-v2", {
+        body: { idea: trimmed, analysis_type: analysisType },
+      });
+
+      if (error) throw new Error(error.message || "Edge function error");
+
+      if (data?.frameworks) {
+        const v2Result: ValiSearchAnalysisV2 = {
+          ...data.frameworks,
+          overall_score: data.overallScore || 65,
+          data_sources: data.dataSources || {},
+        };
+        return { result: v2Result, source: "ai" };
+      }
+    } catch (e) {
+      console.warn("[valisearch] V2 edge function failed, using fallback:", e);
+    }
+  }
+
+  // Fallback with realistic data
+  await new Promise((resolve) => setTimeout(resolve, 2500));
+  const fallback = getFullFallbackAnalysis();
+  const allFallbackSources: Record<FrameworkId, "fallback"> = {
+    market_breakdown: "fallback",
+    problem_prioritization: "fallback",
+    offer_creation: "fallback",
+    distribution_plan: "fallback",
+    viral_content: "fallback",
+    competitor_weakness: "fallback",
+    scale_system: "fallback",
+  };
+  return {
+    result: { ...fallback, overall_score: 72, data_sources: allFallbackSources },
+    source: "mock",
+  };
 }
 
 export async function fetchCompetitorData(topic: string) {
