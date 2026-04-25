@@ -1,15 +1,18 @@
 import { create } from "zustand";
 import type { ValiSearchAnalysis } from "@/types/analysis";
-import { analyzeIdea } from "@/services/api";
+import type { ValiSearchAnalysisV2, AnalysisType } from "@/types/analysis-v2";
+import { analyzeIdea, analyzeIdeaV2 } from "@/services/api";
 import { useCreditStore } from "@/store/useCreditStore";
 import { useUserStore } from "@/store/useUserStore";
 import { saveAnalysis } from "@/services/database.service";
 import { canAttemptAnalysis, recordAnalysisAttempt, getRemainingAttempts, getTimeUntilNextAttempt } from "@/lib/rate-limit";
 import { toast } from "sonner";
 
+export type AnyAnalysis = ValiSearchAnalysis | ValiSearchAnalysisV2;
+
 type AnalysisState = {
   idea: string;
-  analysis: ValiSearchAnalysis | null;
+  analysis: AnyAnalysis | null;
   isAnalyzing: boolean;
   activeSection: string;
   dataSource: "ai" | "mock" | null;
@@ -17,12 +20,12 @@ type AnalysisState = {
   credits: number;
 
   setIdea: (idea: string) => void;
-  setAnalysis: (a: ValiSearchAnalysis | null) => void;
+  setAnalysis: (a: AnyAnalysis | null) => void;
   setAnalyzing: (v: boolean) => void;
   setActiveSection: (id: string) => void;
   clearError: () => void;
   refreshCredits: () => void;
-  runAnalysis: (idea: string) => Promise<void>;
+  runAnalysis: (idea: string, type?: AnalysisType) => Promise<void>;
 };
 
 export const useAnalysisStore = create<AnalysisState>((set) => ({
@@ -41,7 +44,7 @@ export const useAnalysisStore = create<AnalysisState>((set) => ({
   clearError: () => set({ error: null }),
   refreshCredits: () => set({ credits: useCreditStore.getState().credits }),
 
-  runAnalysis: async (idea: string) => {
+  runAnalysis: async (idea: string, type: AnalysisType = "full") => {
     // Client-side rate limit check
     if (!canAttemptAnalysis()) {
       const waitMs = getTimeUntilNextAttempt();
@@ -52,23 +55,29 @@ export const useAnalysisStore = create<AnalysisState>((set) => ({
       return;
     }
 
+    const creditCost = type === "quick" ? 1 : 2;
+
     // Check credits
-    const hasCredits = useCreditStore.getState().credits > 0;
+    const hasCredits = useCreditStore.getState().credits >= creditCost;
     if (!hasCredits) {
       useCreditStore.getState().setShowUpgradeModal(true);
-      set({ error: "No credits remaining. Upgrade to continue." });
+      set({ error: `Need ${creditCost} credits remaining. Upgrade to continue.` });
       return;
     }
 
-    toast.info("1 credit will be used for this analysis");
-    useCreditStore.getState().deductCredit();
+    toast.info(`${creditCost} credit${creditCost > 1 ? "s" : ""} will be used for this analysis`);
+    
+    // deduct the correct amount
+    for(let i=0; i<creditCost; i++) {
+        useCreditStore.getState().deductCredit();
+    }
 
     // Record attempt for rate limiting
     recordAnalysisAttempt();
 
     set({ idea, isAnalyzing: true, error: null, analysis: null, dataSource: null });
     try {
-      const { result, source } = await analyzeIdea(idea);
+      const { result, source } = await analyzeIdeaV2(idea, type);
       set({
         analysis: result,
         dataSource: source,

@@ -163,10 +163,27 @@ export default function Dashboard() {
   }
 
   const handleExport = (format: string) => {
-    if (format === "json") return downloadReportJson(analysis);
-    if (format === "md")   return downloadReportMarkdown(analysis);
-    if (format === "pdf")  return downloadReportPdf(analysis);
-    return downloadReport(analysis);
+    // If this is a V2 analysis without the legacy idea_analysis field
+    if (analysis && !("idea_analysis" in analysis)) {
+        if (format === "json") {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(analysis, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href",     dataStr);
+            downloadAnchorNode.setAttribute("download", "valisearch_analysis.json");
+            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            return;
+        }
+        toast.error(`Export to ${format.toUpperCase()} is not yet fully supported for V2 analyses.`);
+        return;
+    }
+    
+    // Legacy export
+    if (format === "json") return downloadReportJson(analysis as any);
+    if (format === "md")   return downloadReportMarkdown(analysis as any);
+    if (format === "pdf")  return downloadReportPdf(analysis as any);
+    return downloadReport(analysis as any);
   };
 
   return (

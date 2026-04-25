@@ -64,7 +64,7 @@ export default function Workspace() {
     if (data) setCredits(data.balance)
   }
 
-  const handleValidate = async () => {
+  const handleValidate = async (type: 'quick' | 'full') => {
     if (idea.trim().length < 20) {
       toast.error('Please describe your idea in more detail.')
       return
@@ -74,7 +74,7 @@ export default function Workspace() {
       return
     }
     navigate('/analyze')
-    await runAnalysis(sanitizeIdea(idea))
+    await runAnalysis(sanitizeIdea(idea), type)
   }
 
   const getScoreColor = (score: number | null) => {
@@ -120,12 +120,26 @@ export default function Workspace() {
             rows={3}
             className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground/40 resize-none outline-none focus:border-primary/40 transition-colors mb-3"
           />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground/40">{idea.length} / 2000</span>
-            <button onClick={handleValidate} disabled={idea.trim().length < 20 || isAnalyzing} className="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
-              {isAnalyzing ? <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : null}
-              {isAnalyzing ? 'Analysing...' : 'Validate idea →'}
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-xs text-muted-foreground/40 self-start sm:self-center">{idea.length} / 2000</span>
+            <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-2">
+              <button 
+                onClick={() => handleValidate('quick')} 
+                disabled={idea.trim().length < 20 || isAnalyzing} 
+                className="px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] text-foreground text-sm font-semibold rounded-xl hover:bg-white/[0.08] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isAnalyzing ? <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : null}
+                Quick Analysis (1 credit)
+              </button>
+              <button 
+                onClick={() => handleValidate('full')} 
+                disabled={idea.trim().length < 20 || isAnalyzing} 
+                className="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isAnalyzing ? <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : null}
+                Full Intelligence Report (2 credits)
+              </button>
+            </div>
           </div>
         </div>
 
