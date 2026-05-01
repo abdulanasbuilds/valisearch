@@ -166,12 +166,15 @@ function FeatureBlock({
           <p className="text-[19px] text-zinc-500 leading-relaxed max-w-[540px] mb-12 font-medium">
             {body}
           </p>
-          <button className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-white hover:text-blue-400 transition-all">
+          <a 
+            href="#idea-input"
+            className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-white hover:text-blue-400 transition-all cursor-pointer"
+          >
             Experience the Engine
             <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-blue-500 group-hover:bg-blue-500 transition-all duration-500">
               <ArrowRight className="w-4 h-4 group-hover:scale-110" />
             </div>
-          </button>
+          </a>
         </motion.div>
         
         <motion.div 

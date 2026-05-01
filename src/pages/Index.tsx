@@ -2,6 +2,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { DashboardMockup } from "@/components/landing/DashboardMockup";
 import { Features } from "@/components/landing/Features";
+import { Pricing } from "@/components/landing/Pricing";
 import { BuiltBy } from "@/components/landing/BuiltBy";
 import { Footer } from "@/components/landing/Footer";
 
@@ -24,6 +25,8 @@ const Index = () => {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-12" />
 
         <Features />
+        
+        <Pricing />
         
         <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-24" />
         
