@@ -23,12 +23,31 @@
 
 @layer components {
   .section-container {
-    @apply max-w-5xl mx-auto px-4;
+    @apply max-w-6xl mx-auto px-6;
   }
 
   .premium-card {
-    @apply rounded-xl border border-zinc-800 bg-zinc-900/50;
+    @apply rounded-xl border border-white/[0.08] bg-zinc-900/40 backdrop-blur-md shadow-2xl;
   }
+
+  .glass-panel {
+    @apply bg-white/[0.02] border border-white/[0.05] backdrop-blur-xl;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  }
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at 50% -20%, rgba(120, 119, 198, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
+}
+
+.glow-mesh {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0.15) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,0.1) 0, transparent 50%);
 }
 
 /* Hide scrollbar but allow scrolling */

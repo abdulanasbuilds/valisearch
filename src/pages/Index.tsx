@@ -1,29 +1,27 @@
 import { Navbar } from "@/components/landing/Navbar";
-import { AnnouncementBar } from "@/components/landing/AnnouncementBar";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { StatsBar } from "@/components/landing/StatsBar";
-import { HowItWorks } from "@/components/landing/HowItWorks";
+import { DashboardMockup } from "@/components/landing/DashboardMockup";
 import { Features } from "@/components/landing/Features";
-import { Integrations } from "@/components/landing/Integrations";
-import { TrustPrivacy } from "@/components/landing/TrustPrivacy";
-import { Pricing } from "@/components/landing/Pricing";
-import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
 
 const Index = () => {
   return (
-    <div className="bg-[#0A0A0A] min-h-screen">
-      <AnnouncementBar />
+    <div className="bg-[#0A0A0A] min-h-screen text-white font-sans selection:bg-zinc-800 selection:text-white">
       <Navbar />
-      <main>
+      <main className="pt-16">
         <HeroSection />
-        <StatsBar />
-        <HowItWorks />
+        
+        {/* Massive Dashboard Mockup acting like the Linear/Gitness screenshot */}
+        <div className="w-full max-w-[1200px] mx-auto px-6 -mt-32 relative z-20 flex justify-center pb-32">
+          {/* We'll use the DashboardMockup here but scale it up */}
+          <div className="w-full transform scale-100 sm:scale-105 lg:scale-110 origin-top">
+            <DashboardMockup />
+          </div>
+        </div>
+
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-12" />
+
         <Features />
-        <Integrations />
-        <TrustPrivacy />
-        <Pricing />
-        <FinalCTA />
       </main>
       <Footer />
     </div>
