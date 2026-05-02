@@ -8,7 +8,7 @@ import { saveAnalysis } from "@/services/database.service";
 import { canAttemptAnalysis, recordAnalysisAttempt, getRemainingAttempts, getTimeUntilNextAttempt } from "@/lib/rate-limit";
 import { toast } from "sonner";
 
-export type AnyAnalysis = ValiSearchAnalysis | ValiSearchAnalysisV2;
+export type AnyAnalysis = ValiSearchAnalysis;
 
 type AnalysisState = {
   idea: string;
