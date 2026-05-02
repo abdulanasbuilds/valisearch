@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { ValiSearchAnalysis } from "@/types/analysis";
-import type { ValiSearchAnalysisV2, AnalysisType } from "@/types/analysis-v2";
-import { analyzeIdea, analyzeIdeaV2 } from "@/services/api";
+import type { AnalysisType } from "@/types/analysis-v2";
+import { analyzeIdea } from "@/services/api";
 import { useCreditStore } from "@/store/useCreditStore";
 import { useUserStore } from "@/store/useUserStore";
 import { saveAnalysis } from "@/services/database.service";
