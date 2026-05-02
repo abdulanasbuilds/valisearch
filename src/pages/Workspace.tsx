@@ -47,7 +47,7 @@ export default function Workspace() {
           .order('created_at', { ascending: false })
 
         if (error) throw error
-        setAnalyses(data ?? [])
+        setAnalyses((data ?? []) as unknown as AnalysisRecord[])
       } catch (err) {
         console.error('Failed to fetch analyses:', err)
       } finally {
