@@ -171,26 +171,69 @@ function DroppableColumn({
 export function KanbanSection() {
   const { analysis, setAnalysis } = useAnalysisStore();
   const [board, setBoard] = useState<Board | null>(null);
+  const [activeTask, setActiveTask] = useState<KanbanTask | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const initial: Board = useMemo(() => {
+    const k = (analysis as ValiSearchAnalysis | null)?.kanban;
+    return {
+      backlog: (k?.backlog as KanbanTask[]) ?? [],
+      in_progress: (k?.in_progress as KanbanTask[]) ?? [],
+      completed: (k?.completed as KanbanTask[]) ?? [],
+    };
+  }, [analysis]);
+
+  const currentBoard: Board = board ?? initial;
 
   const persistBoard = (newBoard: Board) => {
     if (analysis) {
-      setAnalysis({
-        ...analysis,
-        kanban: newBoard
-      });
+      setAnalysis({ ...(analysis as ValiSearchAnalysis), kanban: newBoard });
     }
   };
 
+  const findCol = (id: string, b: Board): ColKey | null => {
+    if (b.backlog.some((t) => t.id === id)) return "backlog";
+    if (b.in_progress.some((t) => t.id === id)) return "in_progress";
+    if (b.completed.some((t) => t.id === id)) return "completed";
+    return null;
+  };
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const id = String(event.active.id);
+    const col = findCol(id, currentBoard);
+    if (col) {
+      const t = currentBoard[col].find((x) => x.id === id) ?? null;
+      setActiveTask(t);
+    }
+  };
+
+  const handleDragEnd = (_event: DragEndEvent) => {
+    setActiveTask(null);
+  };
+
   const handleDragOver = (event: DragOverEvent) => {
-    // ... logic ...
+    const { active, over } = event;
+    if (!over) return;
+    const activeId = String(active.id);
+    const overId = String(over.id);
     setBoard((prev) => {
       const b = prev ?? initial;
-      const task = b[activeCol].find((t) => t.id === String(active.id));
+      const activeCol = findCol(activeId, b);
+      const overCol: ColKey | null =
+        (["backlog", "in_progress", "completed"] as ColKey[]).includes(overId as ColKey)
+          ? (overId as ColKey)
+          : findCol(overId, b);
+      if (!activeCol || !overCol || activeCol === overCol) return b;
+      const task = b[activeCol].find((t) => t.id === activeId);
       if (!task) return b;
-      const updated = {
+      const updated: Board = {
         ...b,
-        [activeCol]: b[activeCol].filter((t) => t.id !== String(active.id)),
-        [overCol!]: [...b[overCol!], task],
+        [activeCol]: b[activeCol].filter((t) => t.id !== activeId),
+        [overCol]: [...b[overCol], task],
       };
       persistBoard(updated);
       return updated;
@@ -289,3 +332,4 @@ export function KanbanSection() {
     </div>
   );
 }
+
