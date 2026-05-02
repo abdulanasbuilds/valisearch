@@ -8,9 +8,9 @@ const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#0A0A0A] border-t border-white/5 py-24 relative z-10 overflow-hidden">
+    <footer className="bg-[#0A0A0A] border-t border-white/5 py-16 sm:py-20 lg:py-24 relative z-10 overflow-hidden">
       <div className="section-container">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10 sm:gap-12 mb-14 sm:mb-20">
           <div className="max-w-xs">
             <Link to="/" className="flex items-center gap-2.5 group mb-6">
               <div className="relative w-7 h-7 flex items-center justify-center">
@@ -26,7 +26,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 md:gap-24">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 sm:gap-12 md:gap-20 lg:gap-24 w-full md:w-auto">
             <div>
               <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-6">Product</h4>
               <ul className="space-y-4">
