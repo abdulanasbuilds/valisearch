@@ -73,9 +73,9 @@ export function Pricing() {
   };
 
   return (
-    <section id="pricing" className="py-40 relative z-10">
+    <section id="pricing" className="py-20 sm:py-28 lg:py-40 relative z-10">
       <div className="section-container">
-        <div className="text-center mb-24">
+        <div className="text-center mb-14 sm:mb-20 lg:mb-24">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -89,13 +89,13 @@ export function Pricing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-[48px] md:text-[64px] font-black text-white tracking-tighter leading-none"
+            className="text-[34px] sm:text-[48px] md:text-[64px] font-black text-white tracking-tighter leading-[1.05]"
           >
             Simple, honest pricing.
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
           {PLANS.map((plan, i) => (
             <motion.div 
               key={plan.name}
@@ -113,7 +113,7 @@ export function Pricing() {
                 </div>
               )}
               <div
-                className={`h-full rounded-[32px] bg-zinc-900/40 backdrop-blur-3xl p-10 border transition-all duration-500 flex flex-col ${
+                className={`h-full rounded-2xl sm:rounded-[32px] bg-zinc-900/40 backdrop-blur-3xl p-7 sm:p-9 lg:p-10 border transition-all duration-500 flex flex-col ${
                   plan.featured
                     ? "border-blue-500/20 shadow-[0_0_80px_rgba(59,130,246,0.05)]"
                     : "border-white/5 hover:border-white/10"

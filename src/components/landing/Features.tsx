@@ -16,8 +16,8 @@ function ScoreVisual() {
   const offset = c - (72 / 100) * c;
   return (
     <div className="w-full">
-      <div className="flex items-center gap-12 mb-8">
-        <div className="relative w-[180px] h-[180px] flex-shrink-0 group">
+      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-12 mb-4 sm:mb-8">
+        <div className="relative w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] flex-shrink-0 group">
           <div className="absolute inset-0 bg-blue-500/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90 relative z-10">
             <circle cx="80" cy="80" r={r} stroke="rgba(255,255,255,0.03)" strokeWidth="8" fill="none" />
@@ -96,25 +96,25 @@ function ScoreVisual() {
     );
   }
   
-  function KanbanVisual() {
+function KanbanVisual() {
     const cols = [
       { t: "Strategy", items: ["Market Fit", "Pricing Model"] },
       { t: "Dev", items: ["API Spec", "UI/UX"] },
       { t: "Growth", items: ["Early Access", "LTV Opt"] },
     ];
     return (
-      <div className="w-full grid grid-cols-3 gap-5">
+      <div className="w-full grid grid-cols-3 gap-2 sm:gap-5">
         {cols.map((col) => (
-          <div key={col.t} className="rounded-3xl bg-white/[0.01] border border-white/[0.04] p-5 shadow-inner">
-            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-700 mb-6 flex justify-between items-center">
-              <span>{col.t}</span>
-              <span className="w-5 h-5 rounded-lg bg-zinc-900 border border-white/5 flex items-center justify-center text-[9px] font-black text-zinc-500">{col.items.length}</span>
+          <div key={col.t} className="rounded-xl sm:rounded-3xl bg-white/[0.01] border border-white/[0.04] p-2.5 sm:p-5 shadow-inner">
+            <div className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-zinc-700 mb-3 sm:mb-6 flex justify-between items-center">
+              <span className="truncate">{col.t}</span>
+              <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-md sm:rounded-lg bg-zinc-900 border border-white/5 flex items-center justify-center text-[8px] sm:text-[9px] font-black text-zinc-500 flex-shrink-0">{col.items.length}</span>
             </div>
-            <div className="space-y-3.5">
+            <div className="space-y-2 sm:space-y-3.5">
               {col.items.map((it) => (
                 <div
                   key={it}
-                  className="rounded-2xl bg-[#121214] border border-white/[0.06] p-4 text-[13px] font-bold text-zinc-400 shadow-xl hover:text-white hover:border-white/10 transition-all cursor-pointer group"
+                  className="rounded-lg sm:rounded-2xl bg-[#121214] border border-white/[0.06] p-2 sm:p-4 text-[10px] sm:text-[13px] font-bold text-zinc-400 shadow-xl hover:text-white hover:border-white/10 transition-all cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
                     {it}
@@ -143,8 +143,8 @@ function FeatureBlock({
   reverse?: boolean;
 }) {
   return (
-    <div className="relative py-40 overflow-hidden group">
-      <div className="section-container grid lg:grid-cols-2 gap-24 lg:gap-40 items-center">
+    <div className="relative py-20 sm:py-28 lg:py-40 overflow-hidden group">
+      <div className="section-container grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-40 items-center">
         <motion.div 
           initial={{ opacity: 0, x: reverse ? 40 : -40 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -152,18 +152,16 @@ function FeatureBlock({
           transition={{ duration: 0.8, ease: "easeOut" }}
           className={`${reverse ? "lg:order-2" : ""} relative z-10`}
         >
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-white/5 bg-white/[0.02] mb-10 shadow-sm">
+          <div className="inline-flex items-center gap-3 px-3 sm:px-4 py-1.5 rounded-full border border-white/5 bg-white/[0.02] mb-6 sm:mb-10 shadow-sm">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,1)] animate-pulse" />
-            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-600">
+            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] text-zinc-600">
               {label}
             </span>
           </div>
-          <h2
-            className="text-[48px] md:text-[64px] font-black text-white leading-[1] mb-10 tracking-tighter"
-          >
+          <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-black text-white leading-[1.05] mb-6 sm:mb-10 tracking-tighter">
             {headline}
           </h2>
-          <p className="text-[19px] text-zinc-500 leading-relaxed max-w-[540px] mb-12 font-medium">
+          <p className="text-base sm:text-lg lg:text-[19px] text-zinc-500 leading-relaxed max-w-[540px] mb-8 sm:mb-12 font-medium">
             {body}
           </p>
           <a 
@@ -185,8 +183,8 @@ function FeatureBlock({
           className={`${reverse ? "lg:order-1" : ""} relative`}
         >
           <div className="absolute inset-0 bg-blue-600/5 blur-[120px] rounded-full -z-10 group-hover:bg-blue-600/10 transition-colors duration-1000" />
-          <div className="rounded-[40px] border border-white/[0.06] bg-[#0C0C0E]/60 p-1.5 shadow-[0_40px_100px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
-            <div className="rounded-[36px] border border-white/[0.03] bg-[#0A0A0A] p-12 overflow-hidden shadow-inner">
+          <div className="rounded-2xl sm:rounded-[40px] border border-white/[0.06] bg-[#0C0C0E]/60 p-1.5 shadow-[0_40px_100px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
+            <div className="rounded-xl sm:rounded-[36px] border border-white/[0.03] bg-[#0A0A0A] p-5 sm:p-8 lg:p-12 overflow-hidden shadow-inner">
               {visual}
             </div>
           </div>
