@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import type { ValiSearchAnalysis } from "@/types/analysis";
-import type { ValiSearchAnalysisV2, AnalysisType } from "@/types/analysis-v2";
-import { analyzeIdea, analyzeIdeaV2 } from "@/services/api";
+import type { AnalysisType } from "@/types/analysis-v2";
+import { analyzeIdea } from "@/services/api";
 import { useCreditStore } from "@/store/useCreditStore";
 import { useUserStore } from "@/store/useUserStore";
 import { saveAnalysis } from "@/services/database.service";
 import { canAttemptAnalysis, recordAnalysisAttempt, getRemainingAttempts, getTimeUntilNextAttempt } from "@/lib/rate-limit";
 import { toast } from "sonner";
 
-export type AnyAnalysis = ValiSearchAnalysis | ValiSearchAnalysisV2;
+export type AnyAnalysis = ValiSearchAnalysis;
 
 type AnalysisState = {
   idea: string;
@@ -75,7 +75,7 @@ export const useAnalysisStore = create<AnalysisState>((set) => ({
 
     set({ idea, isAnalyzing: true, error: null, analysis: null, dataSource: null });
     try {
-      const { result, source } = await analyzeIdeaV2(idea, type);
+      const { result, source } = await analyzeIdea(idea);
       set({
         analysis: result,
         dataSource: source,
