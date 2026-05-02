@@ -42,51 +42,51 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative pt-32 pb-40 lg:pt-48 lg:pb-64 overflow-hidden bg-[#0A0A0A] flex flex-col items-center">
-      {/* Background Lighting - Subtle and layered */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-[800px] bg-blue-600/10 blur-[160px] rounded-full pointer-events-none opacity-40" />
-      <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[600px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none opacity-30" />
-      
+    <section className="relative pt-24 pb-24 sm:pt-32 sm:pb-40 lg:pt-48 lg:pb-56 overflow-hidden bg-[#0A0A0A] flex flex-col items-center">
+      {/* Background Lighting */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-[600px] sm:h-[800px] bg-blue-600/10 blur-[120px] sm:blur-[160px] rounded-full pointer-events-none opacity-40" />
+      <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[400px] sm:h-[600px] bg-purple-600/5 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none opacity-30" />
+
       <div className="section-container relative z-10 w-full flex flex-col items-center">
-        
-        {/* Human Touch - Built By Badge */}
+
+        {/* Built-by badge */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8"
+          className="mb-6 sm:mb-8"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-            <span className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase">
+            <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-zinc-400 uppercase">
               Built by Abdul Anas
             </span>
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center w-full max-w-4xl mb-16"
+          className="text-center w-full max-w-4xl mb-10 sm:mb-14"
         >
-          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight mb-8">
+          <h1 className="text-[40px] xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[1] sm:leading-[0.95] tracking-tight mb-5 sm:mb-8">
             Build with <span className="text-zinc-500">certainty.</span>
           </h1>
-          <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
+          <p className="text-base sm:text-lg lg:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium px-2">
             The validation engine for serious founders. Analyze markets, map personas, and plan your MVP in seconds, not months.
           </p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-3xl mx-auto px-4"
+          className="w-full max-w-3xl mx-auto"
         >
-          {/* Prompt Box - Highly refined */}
-          <div className={`relative rounded-[24px] border transition-all duration-700 bg-zinc-900/40 backdrop-blur-3xl shadow-2xl ${isFocused ? 'border-white/20 ring-1 ring-white/10' : 'border-white/10'}`}>
-            <div className="px-8 py-8 pb-24">
+          {/* Prompt Box — bolt.new / lovable.dev inspired */}
+          <div className={`group relative rounded-2xl sm:rounded-[24px] border transition-all duration-500 bg-zinc-900/60 backdrop-blur-2xl shadow-[0_20px_80px_-20px_rgba(0,0,0,0.8)] ${isFocused ? 'border-white/20 ring-1 ring-white/10 shadow-[0_30px_120px_-20px_rgba(59,130,246,0.25)]' : 'border-white/10'}`}>
+            <div className="px-4 pt-4 sm:px-6 sm:pt-6">
               <textarea
                 id="idea-input"
                 value={idea}
@@ -94,51 +94,65 @@ export function HeroSection() {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 onKeyDown={handleKeyDown}
-                placeholder="Describe your startup idea..."
+                placeholder="Describe your startup idea in a sentence or two..."
                 rows={3}
-                className="w-full bg-transparent text-white placeholder:text-zinc-700 resize-none outline-none text-2xl leading-tight font-semibold tracking-tight"
+                className="w-full bg-transparent text-white placeholder:text-zinc-600 resize-none outline-none text-base sm:text-lg lg:text-xl leading-snug font-medium tracking-tight min-h-[88px] sm:min-h-[100px]"
               />
             </div>
-            
-            <div className="absolute bottom-6 left-8 right-8 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button className="p-3 hover:bg-white/5 rounded-2xl transition-all text-zinc-600 hover:text-zinc-300 group" title="Attach context">
-                  <Paperclip className="w-5 h-5" />
-                </button>
-                <button className="p-3 hover:bg-white/5 rounded-2xl transition-all text-zinc-600 hover:text-zinc-300 group" title="Refine description">
-                  <Sparkles className="w-5 h-5 group-hover:text-blue-400 transition-colors" />
-                </button>
-              </div>
-              
-              <div className="flex items-center gap-8">
-                <span className={`text-[10px] font-black tracking-[0.2em] uppercase ${idea.length > MAX_IDEA_LENGTH * 0.9 ? 'text-amber-500' : 'text-zinc-700'}`}>
-                  {idea.length} / {MAX_IDEA_LENGTH}
-                </span>
+
+            {/* Action Bar */}
+            <div className="flex items-center justify-between gap-2 px-3 py-3 sm:px-4 sm:py-4 border-t border-white/[0.04]">
+              <div className="flex items-center gap-1">
                 <button
-                  onClick={handleSubmit}
-                  disabled={isAnalyzing || idea.trim().length < 15}
-                  className="group py-3 px-8 bg-white text-black font-black rounded-2xl text-[13px] uppercase tracking-widest hover:bg-zinc-200 transition-all disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center gap-3 active:scale-95 shadow-xl shadow-white/5"
+                  type="button"
+                  className="p-2 sm:p-2.5 hover:bg-white/5 rounded-xl transition-all text-zinc-500 hover:text-zinc-200"
+                  title="Attach context"
                 >
-                  {isAnalyzing ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      Validate
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
+                  <Paperclip className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </button>
+                <button
+                  type="button"
+                  className="p-2 sm:p-2.5 hover:bg-white/5 rounded-xl transition-all text-zinc-500 hover:text-blue-400"
+                  title="Refine with AI"
+                >
+                  <Sparkles className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+                </button>
+                <span className={`hidden sm:inline ml-2 text-[10px] font-bold tracking-[0.18em] uppercase tabular-nums ${idea.length > MAX_IDEA_LENGTH * 0.9 ? 'text-amber-500' : 'text-zinc-600'}`}>
+                  {idea.length}/{MAX_IDEA_LENGTH}
+                </span>
               </div>
+
+              <button
+                onClick={handleSubmit}
+                disabled={isAnalyzing || idea.trim().length < 15}
+                className="group/btn h-10 sm:h-11 px-4 sm:px-6 bg-white text-black font-bold rounded-xl text-[12px] sm:text-[13px] uppercase tracking-[0.14em] hover:bg-zinc-100 transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.97] shadow-lg shadow-white/5"
+              >
+                {isAnalyzing ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <span>Validate</span>
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                  </>
+                )}
+              </button>
             </div>
           </div>
-          
-          {/* Refined suggestions */}
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+
+          {/* Mobile counter */}
+          <div className="sm:hidden mt-2 px-1 text-right">
+            <span className={`text-[10px] font-bold tracking-[0.18em] uppercase tabular-nums ${idea.length > MAX_IDEA_LENGTH * 0.9 ? 'text-amber-500' : 'text-zinc-600'}`}>
+              {idea.length}/{MAX_IDEA_LENGTH}
+            </span>
+          </div>
+
+          {/* Suggestions */}
+          <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-2 sm:gap-3">
             {['SaaS for creators', 'Local marketplace', 'Dev tool', 'AI vertical'].map(tag => (
-              <button 
+              <button
                 key={tag}
-                onClick={() => setIdea(`I want to build a ${tag} that...`)}
-                className="px-4 py-2 rounded-xl border border-white/5 bg-white/[0.02] text-[11px] font-bold text-zinc-500 uppercase tracking-widest hover:text-white hover:border-white/20 transition-all duration-300"
+                onClick={() => setIdea(`I want to build a ${tag} that `)}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-white/[0.06] bg-white/[0.02] text-[10px] sm:text-[11px] font-bold text-zinc-500 uppercase tracking-[0.14em] sm:tracking-widest hover:text-white hover:border-white/20 transition-all duration-300"
               >
                 {tag}
               </button>
@@ -146,18 +160,18 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Logo Strip - More professional */}
-        <motion.div 
+        {/* Logo Strip */}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="mt-40 w-full max-w-5xl mx-auto"
+          className="mt-20 sm:mt-32 lg:mt-40 w-full max-w-5xl mx-auto"
         >
           <div className="flex flex-col items-center">
-            <p className="text-[10px] font-black text-zinc-700 tracking-[0.3em] uppercase mb-12">
+            <p className="text-[10px] font-black text-zinc-700 tracking-[0.25em] sm:tracking-[0.3em] uppercase mb-8 sm:mb-12 text-center px-4">
               Empowering the next generation of builders
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-x-20 gap-y-12 opacity-20 grayscale hover:opacity-50 transition-all duration-1000">
+            <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 sm:gap-x-16 sm:gap-y-10 lg:gap-x-20 lg:gap-y-12 opacity-30 grayscale hover:opacity-60 transition-all duration-1000">
               <CompanyLogo name="VELOCITY" />
               <CompanyLogo name="QUANTUM" />
               <CompanyLogo name="NEXUS" />

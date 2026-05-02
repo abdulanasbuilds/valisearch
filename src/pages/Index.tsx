@@ -14,21 +14,20 @@ const Index = () => {
       <main className="pt-16">
         <HeroSection />
         
-        {/* Massive Dashboard Mockup acting like the Linear/Gitness screenshot */}
-        <div className="w-full max-w-[1200px] mx-auto px-6 -mt-32 relative z-20 flex justify-center pb-32">
-          {/* We'll use the DashboardMockup here but scale it up */}
+        {/* Dashboard mockup */}
+        <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 -mt-12 sm:-mt-20 lg:-mt-32 relative z-20 flex justify-center pb-16 sm:pb-24 lg:pb-32">
           <div className="w-full transform scale-100 sm:scale-105 lg:scale-110 origin-top animate-float">
             <DashboardMockup />
           </div>
         </div>
 
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-12" />
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-8 sm:my-12" />
 
         <Features />
         
         <Pricing />
         
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-24" />
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-12 sm:my-20 lg:my-24" />
         
         <BuiltBy />
       </main>
