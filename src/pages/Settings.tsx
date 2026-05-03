@@ -50,7 +50,8 @@ export default function Settings() {
     setSavingProfile(true);
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: user.id, display_name: displayName }, { onConflict: "id" });
+      .update({ display_name: displayName })
+      .eq("id", user.id);
     setSavingProfile(false);
     if (error) toast.error(error.message);
     else toast.success("Profile updated");

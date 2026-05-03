@@ -113,6 +113,7 @@ create table if not exists public.analysis (
   idea_id uuid not null references public.ideas(id) on delete cascade,
   user_id uuid not null references public.profiles(id) on delete cascade,
   result_json jsonb not null,
+  overall_score integer default 0,
   data_source text not null default 'mock',
   tokens_used integer default 0,
   created_at timestamptz not null default now()

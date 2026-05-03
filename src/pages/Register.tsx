@@ -106,6 +106,9 @@ export default function Register() {
               We've sent a confirmation link to <span className="text-white font-medium">{registeredEmail}</span>.
               Please click the link to activate your account.
             </p>
+            <div className="mb-6 rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-4 py-3 text-xs text-yellow-200/80 text-left">
+              <strong>Note:</strong> If you don't receive the email within a few minutes, it might be due to Supabase's default email rate limits (2 per hour). You can try resending or check back later.
+            </div>
             <p className="text-xs text-white/40 mb-8">
               Don't see it? Check your spam folder or click below to resend.
             </p>
