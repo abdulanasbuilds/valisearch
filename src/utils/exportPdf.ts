@@ -439,6 +439,9 @@ export function downloadReportPdf(data: ValiSearchAnalysis) {
   };
 }
 
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from "docx";
+import { saveAs } from "file-saver";
+
 function _download(content: string, filename: string, type: string) {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -449,4 +452,52 @@ function _download(content: string, filename: string, type: string) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+export async function downloadReportDocx(data: ValiSearchAnalysis) {
+  const doc = new Document({
+    sections: [
+      {
+        properties: {},
+        children: [
+          new Paragraph({
+            text: `ValiSearch Report — ${data.branding.name_suggestions[0]}`,
+            heading: HeadingLevel.HEADING_1,
+            alignment: AlignmentType.CENTER,
+          }),
+          new Paragraph({
+            text: `Score: ${data.final_verdict.score}/100 — Verdict: ${data.final_verdict.verdict}`,
+            heading: HeadingLevel.HEADING_2,
+            alignment: AlignmentType.CENTER,
+          }),
+          new Paragraph({ text: data.idea_analysis.one_liner, italics: true }),
+          new Paragraph({ text: data.idea_analysis.summary }),
+          
+          new Paragraph({ text: "Market Research", heading: HeadingLevel.HEADING_2 }),
+          new Paragraph({ text: `TAM: ${data.market_research.tam_sam_som.tam}` }),
+          new Paragraph({ text: `SAM: ${data.market_research.tam_sam_som.sam}` }),
+          new Paragraph({ text: `SOM: ${data.market_research.tam_sam_som.som}` }),
+          new Paragraph({ text: data.market_research.growth_outlook }),
+
+          new Paragraph({ text: "Competitors", heading: HeadingLevel.HEADING_2 }),
+          new Paragraph({ text: data.competitor_analysis.summary }),
+          ...data.competitor_analysis.competitors.flatMap(c => [
+            new Paragraph({ text: c.name, heading: HeadingLevel.HEADING_3 }),
+            new Paragraph({ text: `Strengths: ${c.strengths.join(', ')}` }),
+            new Paragraph({ text: `Weaknesses: ${c.weaknesses.join(', ')}` })
+          ]),
+
+          new Paragraph({ text: "Monetization", heading: HeadingLevel.HEADING_2 }),
+          new Paragraph({ text: data.monetization.strategy }),
+          ...data.monetization.pricing_tiers.map(t => new Paragraph({ text: `${t.name} (${t.price_hint}) — ${t.reasoning}` })),
+
+          new Paragraph({ text: "Sprint Backlog", heading: HeadingLevel.HEADING_2 }),
+          ...data.kanban.backlog.map(t => new Paragraph({ text: `[Backlog] ${t.title} (${t.priority}) — ${t.description}` })),
+        ],
+      },
+    ],
+  });
+
+  const blob = await Packer.toBlob(doc);
+  saveAs(blob, "ValiSearch-Report.docx");
 }

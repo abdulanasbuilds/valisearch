@@ -31,7 +31,7 @@ import { GrowthPlaybookSection } from "@/components/dashboard/sections/GrowthPla
 import { ContentEngineSection } from "@/components/dashboard/sections/ContentEngineSection";
 import { ScaleRoadmapSection } from "@/components/dashboard/sections/ScaleRoadmapSection";
 import { UpgradeModal } from "@/components/dashboard/UpgradeModal";
-import { downloadReport, downloadReportJson, downloadReportMarkdown, downloadReportPdf } from "@/utils/exportPdf";
+import { downloadReport, downloadReportJson, downloadReportMarkdown, downloadReportPdf, downloadReportDocx } from "@/utils/exportPdf";
 import { useAnalysisStore } from "@/store/useAnalysisStore";
 import { useCreditStore } from "@/store/useCreditStore";
 import { getMockAnalysis } from "@/services/analysis.service";
@@ -66,13 +66,14 @@ function ExportMenu({ onExport }: { onExport: (format: string) => void }) {
       </div>
       {open && (
         <div
-          className="absolute right-0 top-8 z-50 w-44 rounded-xl border border-white/[0.09] bg-[#111] shadow-xl overflow-hidden"
+          className="absolute right-0 top-8 z-50 w-48 rounded-xl border border-white/[0.09] bg-[#111] shadow-xl overflow-hidden"
           onMouseLeave={() => setOpen(false)}
         >
           {[
             { label: "Text report (.txt)", icon: FileText,   format: "txt" },
             { label: "JSON data (.json)",  icon: Braces,     format: "json" },
             { label: "Markdown (.md)",     icon: FileCode,   format: "md" },
+            { label: "Word Doc (.docx)",   icon: FileText,   format: "docx" },
             { label: "PDF report",         icon: FileImage,  format: "pdf" },
           ].map(({ label, icon: Icon, format }) => (
             <button
@@ -185,6 +186,7 @@ export default function Dashboard() {
     if (format === "json") return downloadReportJson(analysis as import("@/types/analysis").ValiSearchAnalysis);
     if (format === "md")   return downloadReportMarkdown(analysis as import("@/types/analysis").ValiSearchAnalysis);
     if (format === "pdf")  return downloadReportPdf(analysis as import("@/types/analysis").ValiSearchAnalysis);
+    if (format === "docx") return downloadReportDocx(analysis as import("@/types/analysis").ValiSearchAnalysis);
     return downloadReport(analysis as import("@/types/analysis").ValiSearchAnalysis);
   };
 

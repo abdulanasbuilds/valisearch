@@ -215,6 +215,17 @@ export default function Settings() {
 
             <section className="bg-rose-500/5 border border-rose-500/10 rounded-3xl p-6">
               <h3 className="text-xs font-bold text-rose-400 uppercase tracking-widest mb-4">Danger Zone</h3>
+              
+              <button
+                onClick={async () => {
+                  await signOut();
+                  navigate("/");
+                }}
+                className="w-full mb-4 py-3 bg-white/5 text-zinc-300 text-xs font-bold rounded-xl hover:bg-white/10 transition-all border border-white/10 flex items-center justify-center gap-2"
+              >
+                <LogOut className="w-4 h-4" /> Sign Out
+              </button>
+
               <p className="text-[11px] text-rose-500/70 font-medium leading-relaxed mb-6">
                 Once deleted, your account and all validated intelligence data will be permanently removed.
               </p>

@@ -11,7 +11,18 @@ import {
   CreditCard,
   Plus,
   MessageSquare,
-  FileText
+  FileText,
+  CheckCircle,
+  BarChart,
+  LineChart,
+  Users,
+  Box,
+  Palette,
+  DollarSign,
+  Briefcase,
+  GitPullRequest,
+  Workflow,
+  Code
 } from "lucide-react";
 import { useUserStore } from "@/store/useUserStore";
 
@@ -25,19 +36,31 @@ export function DashboardSidebar() {
     navigate("/");
   };
 
-  const menuItems = [
-    { name: "Workspace", icon: LayoutDashboard, href: "/workspace" },
-    { name: "My Ideas", icon: FileText, href: "/workspace#ideas" },
-    { name: "Library", icon: Library, href: "/workspace#library" },
-    { name: "Community", icon: MessageSquare, href: "/blog" },
+  const analysisItems = [
+    { name: "Overview", icon: LayoutDashboard, href: "/dashboard/overview" },
+    { name: "Validation", icon: CheckCircle, href: "/dashboard/validation" },
+    { name: "Market Feasibility", icon: BarChart, href: "/dashboard/market-feasibility" },
+    { name: "Market Research", icon: LineChart, href: "/dashboard/market" },
+    { name: "Competitors", icon: Users, href: "/dashboard/competitors" },
+    { name: "Product", icon: Box, href: "/dashboard/product" },
+    { name: "Branding", icon: Palette, href: "/dashboard/branding" },
+    { name: "Revenue Intelligence", icon: DollarSign, href: "/dashboard/revenue" },
+    { name: "$ Monetization", icon: CreditCard, href: "/dashboard/monetization" },
+    { name: "Go-To-Market", icon: Briefcase, href: "/dashboard/go-to-market" },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const buildItems = [
+    { name: "Idea Evolution", icon: GitPullRequest, href: "/dashboard/evolution" },
+    { name: "Flow Editor", icon: Workflow, href: "/dashboard/flow-editor" },
+    { name: "API Settings", icon: Settings, href: "/dashboard/settings" },
+  ];
+
+  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
     <div className="w-64 h-screen bg-[#0A0A0A] border-r border-white/[0.05] flex flex-col fixed left-0 top-0 z-[50]">
       {/* Logo */}
-      <div className="p-6">
+      <div className="p-6 pb-2">
         <Link to="/" className="flex items-center gap-3 group">
           <div className="relative w-8 h-8 flex items-center justify-center">
             <div className="absolute inset-0 bg-white rounded-lg rotate-45 group-hover:rotate-90 transition-transform duration-500 shadow-[0_0_20px_rgba(255,255,255,0.2)]" />
@@ -50,40 +73,49 @@ export function DashboardSidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-4 space-y-1">
-        <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] px-3 mb-4 mt-2">
-          Platform
-        </div>
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.href}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-              isActive(item.href)
-                ? "bg-white/10 text-white shadow-[0_4px_20px_rgba(255,255,255,0.05)]"
-                : "text-zinc-500 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            <item.icon className={`w-4 h-4 ${isActive(item.href) ? "text-white" : "text-zinc-500"}`} />
-            {item.name}
-          </Link>
-        ))}
-
-        <div className="pt-8">
-          <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] px-3 mb-4">
-            Preferences
+      <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+        <div>
+          <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] px-3 mb-3">
+            Analysis
           </div>
-          <Link
-            to="/settings"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-              isActive("/settings")
-                ? "bg-white/10 text-white shadow-[0_4px_20px_rgba(255,255,255,0.05)]"
-                : "text-zinc-500 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            <Settings className={`w-4 h-4 ${isActive("/settings") ? "text-white" : "text-zinc-500"}`} />
-            Account Settings
-          </Link>
+          <div className="space-y-0.5">
+            {analysisItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                  isActive(item.href)
+                    ? "bg-white/10 text-white shadow-[0_4px_20px_rgba(255,255,255,0.05)]"
+                    : "text-zinc-500 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <item.icon className={`w-4 h-4 ${isActive(item.href) ? "text-white" : "text-zinc-500"}`} />
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] px-3 mb-3">
+            Build
+          </div>
+          <div className="space-y-0.5">
+            {buildItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                  isActive(item.href)
+                    ? "bg-white/10 text-white shadow-[0_4px_20px_rgba(255,255,255,0.05)]"
+                    : "text-zinc-500 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <item.icon className={`w-4 h-4 ${isActive(item.href) ? "text-white" : "text-zinc-500"}`} />
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -95,8 +127,8 @@ export function DashboardSidebar() {
               {user?.email?.[0].toUpperCase() ?? "U"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white truncate">{user?.email?.split('@')[0]}</p>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest truncate">Free Plan</p>
+              <p className="text-sm font-bold text-white truncate">{user?.email?.split('@')[0] || "User"}</p>
+              <Link to="/workspace" className="text-[10px] font-bold text-blue-400 hover:text-blue-300 uppercase tracking-widest truncate">View Workspace</Link>
             </div>
           </div>
           <button 
