@@ -215,7 +215,7 @@ export function Features() {
       <FeatureBlock
         label="Validation Intelligence"
         headline="AI that thinks like a serial founder"
-        body="ValiSearch scores your idea across 6 critical dimensions. Get a 0-100 confidence score with deep technical and market reasoning for every pillar of your startup."
+        body="VALISEARCH scores your idea across 6 critical dimensions. Get a 0-100 confidence score with deep technical and market reasoning for every pillar of your startup."
         visual={<ScoreVisual />}
       />
       <GlowDivider />

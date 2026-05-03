@@ -17,8 +17,8 @@ export function Footer() {
                 <div className="absolute inset-0 bg-white/10 rounded-lg rotate-45 group-hover:bg-white transition-all duration-500" />
                 <div className="relative w-3 h-3 bg-white group-hover:bg-black rounded-sm rotate-45 transition-colors" />
               </div>
-              <span className="text-lg font-black tracking-tighter text-white">
-                ValiSearch
+              <span className="text-lg font-black tracking-tighter text-white uppercase">
+                VALISEARCH
               </span>
             </Link>
             <p className="text-[14px] text-zinc-600 leading-relaxed font-medium">
@@ -65,7 +65,7 @@ export function Footer() {
 
         <div className="pt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
           <p className="text-[11px] font-bold text-zinc-700 uppercase tracking-[0.2em]">
-            © {new Date().getFullYear()} ValiSearch. All rights reserved.
+            © {new Date().getFullYear()} VALISEARCH. Built by <a href="https://www.linkedin.com/in/abdul-anas-0161b3370" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-white underline">Abdul Anas</a>.
           </p>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />

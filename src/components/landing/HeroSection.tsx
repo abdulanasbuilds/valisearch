@@ -59,7 +59,7 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
             <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-zinc-400 uppercase">
-              Built by Abdul Anas
+              Built by <a href="https://www.linkedin.com/in/abdul-anas-0161b3370" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Abdul Anas</a>
             </span>
           </div>
         </motion.div>

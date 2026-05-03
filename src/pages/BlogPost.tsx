@@ -1,12 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Navbar } from "@/components/landing/Navbar";
-import { Footer } from "@/components/landing/Footer";
+import { JournalNavbar } from "@/components/landing/JournalNavbar";
+import { JournalFooter } from "@/components/landing/JournalFooter";
 import { getPostContent } from "@/lib/blog";
 import { BLOG_POSTS } from "@/content/blog";
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight, Clock, Sparkles, Share2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowUpRight, Clock, Sparkles, Share2, Linkedin, ChevronRight } from "lucide-react";
 
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
@@ -29,7 +29,7 @@ const BlogPost = () => {
       const data = await getPostContent(slug);
       if (cancelled) return;
       setPost(data);
-      if (data) document.title = `${data.metadata.title} | ValiSearch`;
+      if (data) document.title = `${data.metadata.title} | VALISEARCH Journal`;
       setIsLoading(false);
     }
     loadPost();
@@ -47,11 +47,10 @@ const BlogPost = () => {
     return items;
   }, [post]);
 
-  // Sticky title bar + active TOC tracking
   useEffect(() => {
     if (!post) return;
     const onScroll = () => {
-      setShowStickyBar(window.scrollY > 480);
+      setShowStickyBar(window.scrollY > 400);
       const headings = articleRef.current?.querySelectorAll<HTMLElement>("h2, h3");
       if (!headings) return;
       let current = "";
@@ -78,17 +77,17 @@ const BlogPost = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-[#0A0A0A] min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-white/10 border-t-white rounded-full animate-spin" />
+      <div className="bg-white min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-zinc-100 border-t-zinc-900 rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!post) {
     return (
-      <div className="bg-[#0A0A0A] min-h-screen text-white flex flex-col items-center justify-center p-6">
+      <div className="bg-white min-h-screen text-zinc-900 flex flex-col items-center justify-center p-6 font-['Plus_Jakarta_Sans']">
         <h1 className="text-3xl font-bold mb-3">Article not found</h1>
-        <Link to="/blog" className="text-zinc-400 hover:text-white underline">Back to all articles</Link>
+        <Link to="/blog" className="text-zinc-500 hover:text-zinc-900 underline font-medium">Back to journal</Link>
       </div>
     );
   }
@@ -97,140 +96,172 @@ const BlogPost = () => {
   const related = BLOG_POSTS.filter((p) => p.slug !== slug).slice(0, 3);
   const readMins = parseInt(String(metadata.readTime || "5")) || 5;
 
-  // Inline CTA inserted ~ middle
   const paragraphs = content.split(/\n\n+/);
   const midIdx = Math.floor(paragraphs.length / 2);
   const partA = paragraphs.slice(0, midIdx).join("\n\n");
   const partB = paragraphs.slice(midIdx).join("\n\n");
 
   return (
-    <div className="bg-[#0A0A0A] min-h-screen text-white selection:bg-zinc-800">
-      <Navbar />
+    <div className="bg-white min-h-screen text-[#1a1a1a] selection:bg-zinc-100">
+      <JournalNavbar />
 
-      {/* Sticky reading bar */}
-      <div
-        className={`fixed top-16 left-0 right-0 z-40 border-b border-white/[0.06] bg-[#0A0A0A]/85 backdrop-blur-xl transition-all duration-300 ${
-          showStickyBar ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="max-w-[1240px] mx-auto px-6 lg:px-10 h-12 flex items-center justify-between gap-6">
-          <p className="text-sm font-medium text-zinc-300 truncate">{metadata.title}</p>
-          <div className="flex items-center gap-2 shrink-0">
-            <button onClick={handleShare} className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors">
-              <Share2 className="w-3.5 h-3.5" /> Share
-            </button>
-            <Link to="/register" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white text-black text-xs font-semibold rounded-md hover:bg-zinc-200 transition-colors">
-              Try ValiSearch <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <main className="pt-28 pb-24">
-        <div className="max-w-[1240px] mx-auto px-6 lg:px-10">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-10 text-sm font-medium"
+      {/* Sticky Secondary Nav */}
+      <AnimatePresence>
+        {showStickyBar && (
+          <motion.div
+            initial={{ y: -64, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -64, opacity: 0 }}
+            className="fixed top-16 left-0 right-0 z-40 border-b border-zinc-100 bg-white/90 backdrop-blur-md h-14"
           >
-            <ArrowLeft className="w-4 h-4" /> All articles
-          </Link>
+            <div className="max-w-[1240px] mx-auto px-6 lg:px-10 h-full flex items-center justify-between gap-8">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 shrink-0 font-['Plus_Jakarta_Sans']">Reading:</span>
+                <p className="text-sm font-bold truncate font-['Plus_Jakarta_Sans']">{metadata.title}</p>
+              </div>
+              <div className="flex items-center gap-4 shrink-0">
+                <button onClick={handleShare} className="p-2 hover:bg-zinc-50 rounded-full transition-colors text-zinc-400 hover:text-zinc-900">
+                  <Share2 className="w-4 h-4" />
+                </button>
+                <Link to="/register">
+                  <button className="px-4 py-1.5 bg-zinc-900 text-white text-[11px] font-bold rounded-full hover:bg-zinc-800 transition-all font-['Plus_Jakarta_Sans']">
+                    Try Demo
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <div className="grid lg:grid-cols-12 gap-10">
-            {/* Floating TOC */}
+      <main className="pt-32 pb-32">
+        <div className="max-w-[1240px] mx-auto px-6 lg:px-10">
+          {/* Breadcrumbs */}
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-12 font-['Plus_Jakarta_Sans']">
+            <Link to="/blog" className="hover:text-zinc-900">Journal</Link>
+            <ChevronRight className="w-3 h-3" />
+            <span className="text-zinc-900 truncate max-w-[200px]">{metadata.title}</span>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-16 relative">
+            {/* Sidebar TOC */}
             <aside className="hidden lg:block lg:col-span-3">
-              <div className="sticky top-32">
-                <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500 mb-4">On this page</p>
-                <nav className="space-y-2 border-l border-white/10">
-                  {toc.map((item) => (
-                    <a
-                      key={item.id}
-                      href={`#${item.id}`}
-                      className={`block text-[13px] leading-snug pl-4 -ml-px py-1 border-l-2 transition-colors ${
-                        item.level === 3 ? "pl-7" : ""
-                      } ${
-                        activeId === item.id
-                          ? "border-white text-white font-medium"
-                          : "border-transparent text-zinc-500 hover:text-zinc-300"
-                      }`}
-                    >
-                      {item.text}
-                    </a>
-                  ))}
-                </nav>
+              <div className="sticky top-40 space-y-8">
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-400 mb-6 font-['Plus_Jakarta_Sans']">Table of Contents</p>
+                  <nav className="space-y-4 border-l border-zinc-100">
+                    {toc.map((item) => (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        className={`block text-[13px] leading-snug pl-5 -ml-px transition-all duration-300 border-l-2 font-['Plus_Jakarta_Sans'] ${
+                          item.level === 3 ? "pl-9" : ""
+                        } ${
+                          activeId === item.id
+                            ? "border-zinc-900 text-zinc-900 font-bold"
+                            : "border-transparent text-zinc-400 hover:text-zinc-600 font-medium"
+                        }`}
+                      >
+                        {item.text}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+                
+                <div className="pt-8 border-t border-zinc-100">
+                  <Link to="/register" className="group block p-5 rounded-xl bg-zinc-50 border border-zinc-100 transition-all hover:bg-white hover:shadow-xl hover:shadow-zinc-200/50">
+                    <p className="text-[9px] font-bold tracking-widest uppercase text-zinc-400 mb-2 font-['Plus_Jakarta_Sans']">Quick Validation</p>
+                    <p className="text-[13px] font-bold leading-tight text-zinc-900 mb-4 font-['Plus_Jakarta_Sans']">Analyze your startup idea in 30 seconds.</p>
+                    <span className="text-[11px] font-bold text-zinc-900 flex items-center gap-1 font-['Plus_Jakarta_Sans']">
+                      Get Started <ArrowUpRight className="w-3 h-3" />
+                    </span>
+                  </Link>
+                </div>
               </div>
             </aside>
 
-            {/* Article body */}
-            <article className="lg:col-span-9 xl:col-span-7 xl:col-start-4 mx-auto" style={{ maxWidth: "700px" }}>
-              <header className="mb-12">
-                <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                  <div className="flex items-center gap-3 text-[11px] font-semibold text-zinc-500 mb-5 uppercase tracking-[0.2em]">
-                    <span className="text-white bg-white/10 px-2.5 py-1 rounded-md">{metadata.category}</span>
-                    <span>{new Date(metadata.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
-                    <span className="w-1 h-1 rounded-full bg-zinc-700" />
-                    <span className="inline-flex items-center gap-1.5"><Clock className="w-3 h-3" />{readMins} min read</span>
-                  </div>
-                  <h1 className="text-4xl md:text-[52px] font-bold leading-[1.08] tracking-tight mb-8">
-                    {metadata.title}
-                  </h1>
-                  <div className="flex items-center justify-between gap-4 py-5 border-y border-white/10">
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 border border-white/10 flex items-center justify-center text-sm font-bold">AA</div>
-                      <div>
-                        <div className="text-sm font-semibold text-white">{metadata.author}</div>
-                        <div className="text-xs text-zinc-500">Founder, ValiSearch</div>
-                      </div>
+            {/* Article */}
+            <article className="lg:col-span-9 xl:col-span-8 xl:col-start-4">
+              <header className="mb-16">
+                <div className="flex items-center gap-3 text-[11px] font-bold text-zinc-400 mb-8 uppercase tracking-[0.2em] font-['Plus_Jakarta_Sans']">
+                  <span className="text-zinc-900 bg-zinc-100 px-2.5 py-1 rounded-sm">{metadata.category}</span>
+                  <span>{new Date(metadata.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
+                  <span className="w-1 h-1 rounded-full bg-zinc-200" />
+                  <span className="inline-flex items-center gap-1.5 font-bold"><Clock className="w-3 h-3" />{readMins} MIN READ</span>
+                </div>
+                <h1 className="text-4xl md:text-[56px] font-extrabold leading-[1.05] tracking-tight mb-10 font-['Plus_Jakarta_Sans']">
+                  {metadata.title}
+                </h1>
+                
+                <div className="flex items-center justify-between gap-6 py-8 border-y border-zinc-100">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center text-sm font-bold text-zinc-900 font-['Plus_Jakarta_Sans']">AA</div>
+                    <div>
+                      <a href="https://www.linkedin.com/in/abdul-anas-0161b3370" target="_blank" rel="noopener noreferrer" className="text-[15px] font-bold text-zinc-900 hover:underline flex items-center gap-1.5 font-['Plus_Jakarta_Sans']">
+                        {metadata.author} <Linkedin className="w-3 h-3 text-[#0077b5]" />
+                      </a>
+                      <div className="text-[12px] font-medium text-zinc-500 font-['Plus_Jakarta_Sans']">Founder, VALISEARCH</div>
                     </div>
-                    <button onClick={handleShare} className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors">
-                      <Share2 className="w-3.5 h-3.5" /> Share
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button onClick={handleShare} className="flex items-center gap-2 text-[11px] font-bold text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-widest font-['Plus_Jakarta_Sans']">
+                      <Share2 className="w-4 h-4" /> Share
                     </button>
                   </div>
-                </motion.div>
+                </div>
 
-                {/* Hero image */}
-                <div className="mt-10 aspect-[16/9] rounded-[10px] overflow-hidden bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] relative">
-                  <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
-                    style={{ backgroundImage: "radial-gradient(circle at 25% 30%, white 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+                {/* Hero HD Image Style */}
+                <div className="mt-12 aspect-[21/9] rounded-xl overflow-hidden bg-zinc-50 border border-zinc-100 relative group shadow-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-100 to-white flex items-center justify-center">
+                    <span className="text-6xl md:text-8xl font-black text-zinc-900/5 select-none font-['Plus_Jakarta_Sans'] uppercase">VALISEARCH</span>
+                  </div>
                 </div>
               </header>
 
-              <div ref={articleRef} className="article-prose">
+              <div ref={articleRef} className="journal-prose max-w-[700px]">
                 <ReactMarkdown
                   components={{
                     h2: ({ children }) => {
                       const text = String(children);
-                      return <h2 id={slugify(text)}>{children}</h2>;
+                      return <h2 id={slugify(text)} className="font-['Plus_Jakarta_Sans'] font-extrabold">{children}</h2>;
                     },
                     h3: ({ children }) => {
                       const text = String(children);
-                      return <h3 id={slugify(text)}>{children}</h3>;
+                      return <h3 id={slugify(text)} className="font-['Plus_Jakarta_Sans'] font-bold">{children}</h3>;
                     },
+                    p: ({ children }) => (
+                      <p className="font-['Source_Serif_4'] text-[#1a1a1a] text-[19px] leading-[1.7] mb-8">{children}</p>
+                    ),
                     blockquote: ({ children }) => (
-                      <blockquote className="key-takeaway">{children}</blockquote>
+                      <blockquote className="key-takeaway bg-zinc-50 border-l-4 border-zinc-900 p-8 my-12 rounded-r-xl">
+                        <div className="font-['Plus_Jakarta_Sans'] font-bold text-[11px] uppercase tracking-widest text-zinc-400 mb-3">Key Takeaway</div>
+                        <div className="font-['Plus_Jakarta_Sans'] font-bold text-lg leading-relaxed text-zinc-900">{children}</div>
+                      </blockquote>
                     ),
                   }}
                 >
                   {partA}
                 </ReactMarkdown>
 
-                {/* Inline bento CTA */}
-                <aside className="not-prose my-12 rounded-xl border border-white/10 bg-gradient-to-br from-zinc-900/80 to-zinc-950 p-6 md:p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                      <Sparkles className="w-4 h-4 text-white" />
+                {/* Bento Style CTA */}
+                <aside className="not-prose my-16 rounded-2xl border border-zinc-100 bg-white p-8 md:p-10 shadow-xl shadow-zinc-200/50 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-zinc-50 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center mb-6 shadow-lg shadow-zinc-900/20">
+                      <Sparkles className="w-6 h-6 text-white" />
                     </div>
-                    <div className="flex-1">
-                      <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500 mb-2">From the makers</p>
-                      <h4 className="text-lg font-semibold tracking-tight text-white mb-2">
-                        Validate your idea in 30 seconds
-                      </h4>
-                      <p className="text-sm text-zinc-400 leading-relaxed mb-4">
-                        ValiSearch turns this entire framework into a one-click report — market sizing, competitors, GTM and risk, scored.
-                      </p>
-                      <Link to="/register" className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-zinc-300 transition-colors">
-                        Try it free <ArrowUpRight className="w-4 h-4" />
-                      </Link>
-                    </div>
+                    <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-400 mb-3 font-['Plus_Jakarta_Sans']">Product Insight</p>
+                    <h4 className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-900 mb-4 font-['Plus_Jakarta_Sans']">
+                      Stop guessing. Start validating.
+                    </h4>
+                    <p className="text-lg text-zinc-500 leading-relaxed mb-8 font-['Plus_Jakarta_Sans'] max-w-xl">
+                      VALISEARCH uses this exact framework to analyze market signals, competitors, and revenue models for your idea in under 60 seconds.
+                    </p>
+                    <Link to="/register">
+                      <button className="px-8 py-4 bg-zinc-900 text-white font-bold rounded-full hover:bg-zinc-800 transition-all font-['Plus_Jakarta_Sans'] active:scale-95 shadow-lg shadow-zinc-900/20 flex items-center gap-2">
+                        Get Your Free Report <ArrowUpRight className="w-5 h-5" />
+                      </button>
+                    </Link>
                   </div>
                 </aside>
 
@@ -238,14 +269,20 @@ const BlogPost = () => {
                   components={{
                     h2: ({ children }) => {
                       const text = String(children);
-                      return <h2 id={slugify(text)}>{children}</h2>;
+                      return <h2 id={slugify(text)} className="font-['Plus_Jakarta_Sans'] font-extrabold">{children}</h2>;
                     },
                     h3: ({ children }) => {
                       const text = String(children);
-                      return <h3 id={slugify(text)}>{children}</h3>;
+                      return <h3 id={slugify(text)} className="font-['Plus_Jakarta_Sans'] font-bold">{children}</h3>;
                     },
+                    p: ({ children }) => (
+                      <p className="font-['Source_Serif_4'] text-[#1a1a1a] text-[19px] leading-[1.7] mb-8">{children}</p>
+                    ),
                     blockquote: ({ children }) => (
-                      <blockquote className="key-takeaway">{children}</blockquote>
+                      <blockquote className="key-takeaway bg-zinc-50 border-l-4 border-zinc-900 p-8 my-12 rounded-r-xl">
+                         <div className="font-['Plus_Jakarta_Sans'] font-bold text-[11px] uppercase tracking-widest text-zinc-400 mb-3">Key Takeaway</div>
+                        <div className="font-['Plus_Jakarta_Sans'] font-bold text-lg leading-relaxed text-zinc-900">{children}</div>
+                      </blockquote>
                     ),
                   }}
                 >
@@ -253,31 +290,35 @@ const BlogPost = () => {
                 </ReactMarkdown>
               </div>
 
-              {/* Footer CTA */}
-              <footer className="mt-20 pt-12 border-t border-white/10">
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-zinc-900/70 to-zinc-950 p-10 md:p-12">
-                  <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-500 mb-3">Stop guessing</p>
-                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">
-                    Run your idea through the same framework — instantly.
-                  </h3>
-                  <p className="text-zinc-400 mb-7 max-w-lg leading-relaxed">
-                    ValiSearch gives you a structured validation report in under a minute, with citations, scores and a Go-To-Market plan.
-                  </p>
-                  <Link to="/register" className="inline-flex items-center gap-2 bg-white text-black font-semibold px-6 py-3 rounded-lg hover:bg-zinc-200 transition-colors text-sm">
-                    Start a free analysis <ArrowUpRight className="w-4 h-4" />
-                  </Link>
+              {/* Author Footer */}
+              <footer className="mt-24 pt-16 border-t border-zinc-100">
+                <div className="flex flex-col md:flex-row items-start gap-8 bg-zinc-50/50 p-10 rounded-2xl border border-zinc-100">
+                  <div className="w-20 h-20 rounded-2xl bg-zinc-900 flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg">AA</div>
+                  <div>
+                    <h3 className="text-xl font-bold text-zinc-900 mb-3 font-['Plus_Jakarta_Sans']">Written by {metadata.author}</h3>
+                    <p className="text-zinc-600 leading-relaxed mb-6 font-['Plus_Jakarta_Sans']">
+                      Founder of VALISEARCH. Builder of AI tools for startup validation and market intelligence. Passionate about helping operators ship products that actually matter.
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <a href="https://www.linkedin.com/in/abdul-anas-0161b3370" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-bold text-zinc-900 hover:border-zinc-900 transition-all font-['Plus_Jakarta_Sans'] shadow-sm">
+                        <Linkedin className="w-4 h-4 text-[#0077b5]" /> Follow on LinkedIn
+                      </a>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Related */}
+                {/* Related Posts */}
                 {related.length > 0 && (
-                  <div className="mt-16">
-                    <h3 className="text-sm font-semibold tracking-tight text-zinc-300 mb-6 uppercase tracking-[0.2em]">Continue reading</h3>
-                    <div className="grid sm:grid-cols-3 gap-6">
+                  <div className="mt-24">
+                    <h3 className="text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-400 mb-10 font-['Plus_Jakarta_Sans']">More Intelligence</h3>
+                    <div className="grid sm:grid-cols-3 gap-8">
                       {related.map((p) => (
                         <Link key={p.slug} to={`/blog/${p.slug}`} className="group block">
-                          <div className="aspect-[16/10] rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-950 border border-white/5 mb-3" />
-                          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-500">{p.category}</span>
-                          <h4 className="text-sm font-semibold mt-1.5 text-white group-hover:text-zinc-300 line-clamp-2">{p.title}</h4>
+                          <div className="aspect-[16/10] rounded-lg bg-zinc-50 border border-zinc-100 mb-4 transition-all group-hover:shadow-lg group-hover:shadow-zinc-200/50 overflow-hidden relative">
+                            <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] text-xl font-black uppercase font-['Plus_Jakarta_Sans']">VALISEARCH</div>
+                          </div>
+                          <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-zinc-400 font-['Plus_Jakarta_Sans']">{p.category}</span>
+                          <h4 className="text-sm font-bold mt-2 text-zinc-900 group-hover:text-zinc-600 leading-snug line-clamp-2 font-['Plus_Jakarta_Sans']">{p.title}</h4>
                         </Link>
                       ))}
                     </div>
@@ -289,7 +330,7 @@ const BlogPost = () => {
         </div>
       </main>
 
-      <Footer />
+      <JournalFooter />
     </div>
   );
 };

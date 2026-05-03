@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { getSupabase } from '@/lib/supabase'
 import { useUserStore } from '@/store/useUserStore'
 import { useAnalysisStore } from '@/store/useAnalysisStore'
-import { AuthGateModal } from '@/components/auth/AuthGateModal'
-import { WorkspaceNavbar } from '@/components/workspace/WorkspaceNavbar'
+import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
 import { sanitizeIdea } from '@/lib/sanitize'
 import { formatDistanceToNow } from 'date-fns'
-import { Zap, ChevronRight, Clock, Loader2 } from 'lucide-react'
+import { Zap, ChevronRight, Clock, Loader2, Sparkles, Plus, History, Lightbulb } from 'lucide-react'
 import { toast } from 'sonner'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface AnalysisRecord {
   id: string
@@ -25,7 +25,6 @@ export default function Workspace() {
   const [analyses, setAnalyses] = useState<AnalysisRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [idea, setIdea] = useState('')
-  const [showAuthGate, setShowAuthGate] = useState(false)
   const [credits, setCredits] = useState(15)
 
   useEffect(() => {
@@ -67,11 +66,7 @@ export default function Workspace() {
 
   const handleValidate = async (type: 'quick' | 'full') => {
     if (idea.trim().length < 15) {
-      toast.error('Please describe your idea in more detail.')
-      return
-    }
-    if (!isAuthenticated) {
-      setShowAuthGate(true)
+      toast.error('Help us out! Describe your idea in at least 15 characters.')
       return
     }
     const sanitized = sanitizeIdea(idea)
@@ -80,108 +75,160 @@ export default function Workspace() {
     await runAnalysis(sanitized, type)
   }
 
-  const getScoreColor = (score: number | null) => {
-    if (!score) return 'text-zinc-500'
-    if (score >= 70) return 'text-green-400'
-    if (score >= 50) return 'text-amber-400'
-    return 'text-red-400'
-  }
-
   const getScoreBg = (score: number | null) => {
     if (!score) return 'bg-zinc-800'
-    if (score >= 70) return 'bg-green-500/10 text-green-400'
-    if (score >= 50) return 'bg-amber-500/10 text-amber-400'
-    return 'bg-red-500/10 text-red-400'
+    if (score >= 70) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+    if (score >= 50) return 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+    return 'bg-rose-500/10 text-rose-400 border-rose-500/20'
   }
 
-  const firstName = user?.email?.split('@')[0] ?? 'there'
+  const firstName = user?.email?.split('@')[0] ?? 'builder'
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      <WorkspaceNavbar credits={credits} />
+    <DashboardLayout credits={credits}>
+      <div className="max-w-5xl mx-auto">
+        {/* Welcome Section */}
+        <section className="mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <h1 className="text-3xl font-bold tracking-tight mb-2">
+              {greeting}, {firstName}.
+            </h1>
+            <p className="text-zinc-500 font-medium">
+              What are we validating today? You have {credits} credits ready for deep analysis.
+            </p>
+          </motion.div>
+        </section>
 
-      <div className="max-w-2xl mx-auto px-4 pt-8 pb-24">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-1">{greeting}, {firstName}.</h1>
-          <p className="text-zinc-500 text-sm">
-            {credits > 0 ? `You have ${credits} credit${credits !== 1 ? 's' : ''} remaining.` : 'No credits left. '}
-            {credits === 0 && <button onClick={() => navigate('/workspace?upgrade=true')} className="text-zinc-400 hover:underline ml-1">Upgrade</button>}
-          </p>
-        </div>
-
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-8">
-          <div className="flex items-center gap-2 mb-3">
-            <Zap className="w-4 h-4 text-zinc-400" />
-            <span className="text-sm font-semibold text-white">Validate a new idea</span>
-          </div>
-          <textarea
-            value={idea}
-            onChange={e => setIdea(e.target.value.slice(0, 2000))}
-            placeholder="Describe your startup idea..."
-            rows={3}
-            className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-3 py-2.5 text-white text-sm placeholder:text-zinc-500 resize-none outline-none focus:border-zinc-600 transition-colors mb-3"
-          />
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <span className="text-xs text-zinc-500">{idea.length} / 2000</span>
-            <div className="flex w-full sm:w-auto gap-2">
-              <button 
-                onClick={() => handleValidate('quick')} 
-                disabled={idea.trim().length < 15 || isAnalyzing} 
-                className="flex-1 sm:flex-none px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white text-sm font-medium rounded-lg hover:bg-zinc-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isAnalyzing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
-                Quick (1 credit)
-              </button>
-              <button 
-                onClick={() => handleValidate('full')} 
-                disabled={idea.trim().length < 15 || isAnalyzing} 
-                className="flex-1 sm:flex-none px-4 py-2.5 bg-zinc-100 text-zinc-900 text-sm font-semibold rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isAnalyzing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
-                Full (2 credits)
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-zinc-400 flex items-center gap-2">
-              <Clock className="w-4 h-4" /> Your analyses <span className="font-normal text-zinc-500">({analyses.length})</span>
-            </h2>
-          </div>
-
-          {isLoading ? (
-            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-zinc-900/50 rounded-xl animate-pulse" />)}</div>
-          ) : analyses.length === 0 ? (
-            <div className="text-center py-12 border border-dashed border-zinc-800 rounded-xl">
-              <h3 className="text-base font-semibold text-zinc-300 mb-1">No analyses yet</h3>
-              <p className="text-sm text-zinc-500 mb-2">Validate your first startup idea above</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {analyses.map(analysis => (
-                <button key={analysis.id} onClick={() => navigate(`/workspace/${analysis.id}`)} className="w-full flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all text-left group">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-sm ${getScoreBg(analysis.overall_score)}`}>
-                    {analysis.overall_score ?? '-'}
+        <div className="grid lg:grid-cols-12 gap-10">
+          {/* Left Column: Idea Input */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-8 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none group-focus-within:opacity-40 transition-opacity">
+                <Sparkles className="w-20 h-20 text-white" />
+              </div>
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                    <Lightbulb className="w-5 h-5 text-zinc-400" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{analysis.ideas?.title || analysis.ideas?.idea_text?.slice(0, 50) || 'Untitled idea'}</p>
-                    <p className="text-xs text-zinc-500 mt-0.5">{formatDistanceToNow(new Date(analysis.created_at), { addSuffix: true })}{analysis.data_source === 'mock' && ' (sample)'}</p>
+                  <div>
+                    <h2 className="text-lg font-bold text-white">The Intelligence Box</h2>
+                    <p className="text-xs text-zinc-500 font-medium uppercase tracking-wider">Start a new validation</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-colors flex-shrink-0" />
-                </button>
-              ))}
+                </div>
+
+                <textarea
+                  value={idea}
+                  onChange={e => setIdea(e.target.value.slice(0, 2000))}
+                  placeholder="Paste your raw idea here... Be as detailed as you want."
+                  rows={6}
+                  className="w-full bg-white/[0.02] border border-white/[0.08] rounded-2xl px-6 py-5 text-white text-[15px] placeholder:text-zinc-600 resize-none outline-none focus:border-white/20 focus:bg-white/[0.04] transition-all mb-4"
+                />
+
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{idea.length} / 2000 characters</span>
+                  
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={() => handleValidate('quick')} 
+                      disabled={idea.trim().length < 15 || isAnalyzing || credits < 1} 
+                      className="px-6 py-3 bg-zinc-900 border border-white/10 text-white text-sm font-bold rounded-xl hover:bg-zinc-800 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                      {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+                      Quick Scan
+                    </button>
+                    <button 
+                      onClick={() => handleValidate('full')} 
+                      disabled={idea.trim().length < 15 || isAnalyzing || credits < 2} 
+                      className="px-8 py-3 bg-white text-black text-sm font-black rounded-xl hover:bg-zinc-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 shadow-[0_10px_30px_rgba(255,255,255,0.1)] active:scale-95"
+                    >
+                      {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                      Deep Intelligence
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* Empty State / Tips */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+                <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3">Expert Tip</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Mention your target audience and revenue model for 2x more accurate market sizing.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+                <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3">Latest Update</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  VALISEARCH now supports multi-engine GTM analysis for every report.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: History */}
+          <div className="lg:col-span-5">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-sm font-bold text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                <History className="w-4 h-4" /> Past Intelligence
+              </h2>
+              <span className="text-[10px] font-bold text-zinc-600 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">{analyses.length} Total</span>
+            </div>
+
+            <div className="space-y-3">
+              {isLoading ? (
+                <div className="space-y-3">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="h-20 bg-white/5 rounded-2xl animate-pulse border border-white/5" />
+                  ))}
+                </div>
+              ) : analyses.length === 0 ? (
+                <div className="text-center py-20 bg-white/[0.01] border border-dashed border-white/10 rounded-3xl">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+                    <History className="w-6 h-6 text-zinc-700" />
+                  </div>
+                  <h3 className="text-base font-bold text-zinc-400 mb-1">Clean slate</h3>
+                  <p className="text-sm text-zinc-600 px-10">Your validation history will appear here once you start your first project.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {analyses.map(analysis => (
+                    <motion.button 
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      key={analysis.id} 
+                      onClick={() => navigate(`/workspace/${analysis.id}`)} 
+                      className="w-full flex items-center gap-4 p-4 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:border-white/20 hover:bg-white/[0.04] transition-all text-left group relative overflow-hidden"
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center flex-shrink-0 border ${getScoreBg(analysis.overall_score)}`}>
+                        <span className="text-[9px] font-bold uppercase opacity-60">Score</span>
+                        <span className="text-base font-black tracking-tighter leading-none">{analysis.overall_score ?? '-'}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[15px] font-bold text-white truncate group-hover:text-white transition-colors">
+                          {analysis.ideas?.title || analysis.ideas?.idea_text?.slice(0, 50) || 'Untitled Analysis'}
+                        </p>
+                        <p className="text-[11px] font-medium text-zinc-500 mt-1 flex items-center gap-2">
+                          <Clock className="w-3 h-3" />
+                          {formatDistanceToNow(new Date(analysis.created_at), { addSuffix: true })}
+                        </p>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-zinc-700 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0" />
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-
-      {showAuthGate && (
-        <AuthGateModal idea={idea} onClose={() => setShowAuthGate(false)} onAuthSuccess={() => setShowAuthGate(false)} />
-      )}
-    </div>
+    </DashboardLayout>
   )
 }

@@ -4,7 +4,7 @@
  */
 
 // App Info
-export const APP_NAME = 'ValiSearch';
+export const APP_NAME = 'VALISEARCH';
 export const APP_URL = import.meta.env.VITE_APP_URL || 'https://valisearch.app';
 
 // Analysis Configuration

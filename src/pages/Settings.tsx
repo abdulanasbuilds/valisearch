@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSupabase } from "@/lib/supabase";
 import { useUserStore } from "@/store/useUserStore";
-import { WorkspaceNavbar } from "@/components/workspace/WorkspaceNavbar";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { toast } from "sonner";
-import { Loader2, User, Lock, CreditCard, LogOut, Trash2, ArrowLeft } from "lucide-react";
+import { Loader2, User, Lock, CreditCard, LogOut, Trash2, ArrowLeft, ChevronRight, UserCircle, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ export default function Settings() {
       .eq("id", user.id);
     setSavingProfile(false);
     if (error) toast.error(error.message);
-    else toast.success("Profile updated");
+    else toast.success("Profile updated successfully!");
   };
 
   const updatePassword = async () => {
@@ -67,150 +68,166 @@ export default function Settings() {
     setSavingPassword(false);
     if (error) toast.error(error.message);
     else {
-      toast.success("Password updated");
+      toast.success("Security settings updated");
       setNewPassword("");
       setConfirmPassword("");
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  };
-
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
-      <WorkspaceNavbar credits={credits} />
-
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 pb-24">
-        <button
-          onClick={() => navigate("/workspace")}
-          className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to workspace
-        </button>
-
+    <DashboardLayout credits={credits}>
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
         <header className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Settings</h1>
-          <p className="text-sm text-zinc-500">Manage your account, plan and security.</p>
+          <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-widest mb-4">
+            <UserCircle className="w-4 h-4" /> Account Center
+          </div>
+          <h1 className="text-3xl font-black tracking-tight text-white mb-2">Workspace Settings</h1>
+          <p className="text-zinc-500 font-medium">Manage your personal preferences and security configurations.</p>
         </header>
 
-        {/* Profile */}
-        <section className="mb-8 rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-8">
-          <div className="flex items-center gap-2 mb-5">
-            <User className="w-4 h-4 text-zinc-400" />
-            <h2 className="text-base font-semibold">Profile</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4 mb-5">
-            <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1.5">Email</label>
-              <input
-                value={user?.email ?? ""}
-                disabled
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1.5">Display name</label>
-              <input
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value.slice(0, 60))}
-                placeholder="Your name"
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-zinc-600 transition-colors"
-              />
-            </div>
-          </div>
-          <button
-            onClick={saveProfile}
-            disabled={savingProfile}
-            className="px-4 py-2 bg-zinc-100 text-zinc-900 text-sm font-semibold rounded-lg hover:bg-white transition-colors disabled:opacity-50 inline-flex items-center gap-2"
-          >
-            {savingProfile && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-            Save changes
-          </button>
-        </section>
+        <div className="grid lg:grid-cols-12 gap-10">
+          {/* Main Column */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Profile Section */}
+            <motion.section 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-8"
+            >
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <User className="w-5 h-5 text-zinc-400" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-white">Public Profile</h2>
+                  <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Personal Identification</p>
+                </div>
+              </div>
 
-        {/* Plan */}
-        <section className="mb-8 rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-8">
-          <div className="flex items-center gap-2 mb-5">
-            <CreditCard className="w-4 h-4 text-zinc-400" />
-            <h2 className="text-base font-semibold">Plan & Credits</h2>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Email Address</label>
+                  <input
+                    value={user?.email ?? ""}
+                    disabled
+                    className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl px-4 py-3 text-sm text-zinc-500 cursor-not-allowed"
+                  />
+                  <p className="text-[10px] text-zinc-600 mt-2 font-medium">Your email is managed by your identity provider.</p>
+                </div>
+                
+                <div>
+                  <label className="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Display Name</label>
+                  <input
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value.slice(0, 60))}
+                    placeholder="E.g. Abdul Anas"
+                    className="w-full bg-white/[0.02] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-white/30 focus:bg-white/[0.05] transition-all"
+                  />
+                </div>
+
+                <button
+                  onClick={saveProfile}
+                  disabled={savingProfile}
+                  className="px-6 py-3 bg-white text-black text-sm font-black rounded-xl hover:bg-zinc-200 transition-all disabled:opacity-50 flex items-center gap-2"
+                >
+                  {savingProfile && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Save Profile Changes
+                </button>
+              </div>
+            </motion.section>
+
+            {/* Security Section */}
+            <motion.section 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-8"
+            >
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5 text-zinc-400" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-white">Security & Access</h2>
+                  <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Authentication controls</p>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-6 mb-8">
+                <div>
+                  <label className="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-2">New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Min. 8 characters"
+                    className="w-full bg-white/[0.02] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-white/30 focus:bg-white/[0.05] transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Confirm Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Repeat password"
+                    className="w-full bg-white/[0.02] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-white/30 focus:bg-white/[0.05] transition-all"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={updatePassword}
+                disabled={savingPassword || !newPassword}
+                className="px-6 py-3 bg-zinc-800 text-white text-sm font-bold rounded-xl hover:bg-zinc-700 transition-all disabled:opacity-50 flex items-center gap-2 border border-white/10"
+              >
+                {savingPassword && <Loader2 className="w-4 h-4 animate-spin" />}
+                Update Password
+              </button>
+            </motion.section>
           </div>
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div>
-              <p className="text-sm text-zinc-400 mb-1">
-                Current plan: <span className="text-white font-semibold capitalize">{plan}</span>
+
+          {/* Right Column: Billing & Danger */}
+          <div className="lg:col-span-4 space-y-6">
+            <section className="bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-6">
+              <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-6">Subscription</h3>
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-bold uppercase text-zinc-400 tracking-widest">Active Plan</span>
+                  <span className="text-[10px] font-black uppercase text-black bg-white px-2 py-0.5 rounded">Free Tier</span>
+                </div>
+                <div className="flex items-end gap-1 mb-2">
+                  <span className="text-3xl font-black tracking-tighter text-white">{credits}</span>
+                  <span className="text-sm font-bold text-zinc-500 mb-1.5 uppercase">Credits</span>
+                </div>
+                <p className="text-[10px] font-medium text-zinc-500 leading-relaxed">
+                  Resetting monthly. 15 analyses included for free.
+                </p>
+              </div>
+              <button 
+                onClick={() => navigate("/workspace?upgrade=true")}
+                className="w-full py-3 bg-white text-black text-xs font-black rounded-xl hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 shadow-lg"
+              >
+                <CreditCard className="w-4 h-4" /> Upgrade to Pro
+              </button>
+            </section>
+
+            <section className="bg-rose-500/5 border border-rose-500/10 rounded-3xl p-6">
+              <h3 className="text-xs font-bold text-rose-400 uppercase tracking-widest mb-4">Danger Zone</h3>
+              <p className="text-[11px] text-rose-500/70 font-medium leading-relaxed mb-6">
+                Once deleted, your account and all validated intelligence data will be permanently removed.
               </p>
-              <p className="text-sm text-zinc-500">
-                <span className="text-white font-semibold">{credits}</span> credits remaining
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/workspace?upgrade=true")}
-              className="px-4 py-2 bg-white text-zinc-900 text-sm font-semibold rounded-lg hover:bg-zinc-200 transition-colors"
-            >
-              Upgrade plan
-            </button>
+              <button
+                onClick={() => toast.message("Request account deletion at support@valisearch.app")}
+                className="w-full py-3 bg-rose-500/10 text-rose-400 text-xs font-bold rounded-xl hover:bg-rose-500/20 transition-all border border-rose-500/10 flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" /> Delete Account
+              </button>
+            </section>
           </div>
-        </section>
-
-        {/* Security */}
-        <section className="mb-8 rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-8">
-          <div className="flex items-center gap-2 mb-5">
-            <Lock className="w-4 h-4 text-zinc-400" />
-            <h2 className="text-base font-semibold">Security</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4 mb-5">
-            <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1.5">New password</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="At least 8 characters"
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-zinc-600 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1.5">Confirm password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repeat new password"
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-zinc-600 transition-colors"
-              />
-            </div>
-          </div>
-          <button
-            onClick={updatePassword}
-            disabled={savingPassword || !newPassword}
-            className="px-4 py-2 bg-zinc-100 text-zinc-900 text-sm font-semibold rounded-lg hover:bg-white transition-colors disabled:opacity-50 inline-flex items-center gap-2"
-          >
-            {savingPassword && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-            Update password
-          </button>
-        </section>
-
-        {/* Danger / session */}
-        <section className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-8">
-          <h2 className="text-base font-semibold mb-5">Session</h2>
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={handleSignOut}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              <LogOut className="w-4 h-4" /> Sign out
-            </button>
-            <button
-              onClick={() => toast.message("Email support@valisearch.app to delete your account.")}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-sm font-medium rounded-lg transition-colors"
-            >
-              <Trash2 className="w-4 h-4" /> Delete account
-            </button>
-          </div>
-        </section>
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

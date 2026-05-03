@@ -35,8 +35,8 @@ export function Navbar() {
                 <div className="absolute inset-0 bg-white rounded-lg rotate-45 group-hover:rotate-90 transition-transform duration-500" />
                 <div className="relative w-3.5 h-3.5 bg-black rounded-sm rotate-45" />
               </div>
-              <span className="text-lg font-black tracking-tighter text-white">
-                ValiSearch
+              <span className="text-lg font-black tracking-tighter text-white uppercase">
+                VALISEARCH
               </span>
             </Link>
             
