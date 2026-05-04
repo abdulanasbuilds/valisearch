@@ -127,6 +127,12 @@ export default function Workspace() {
           </motion.div>
         </section>
 
+        {/* Getting Started Checklist */}
+        <GettingStartedChecklist
+          hasAnalyzed={analyses.length > 0}
+          onFocusInput={() => ideaRef.current?.focus()}
+        />
+
         <div className="grid lg:grid-cols-12 gap-12">
           {/* Left Column: Idea Input */}
           <div className="lg:col-span-8 space-y-10">
@@ -148,6 +154,7 @@ export default function Workspace() {
 
                 <div className="relative">
                   <textarea
+                    ref={ideaRef}
                     value={idea}
                     onChange={e => setIdea(e.target.value.slice(0, 2000))}
                     placeholder="Paste your raw startup idea here... Be as detailed as possible. Mention your target audience, revenue model, and core feature set for deeper analysis."
@@ -196,19 +203,23 @@ export default function Workspace() {
               </div>
             </div>
 
-            {/* Empty State / Tips */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/[0.05] grain-bg">
-                <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] mb-4">Market Signal</h3>
-                <p className="text-zinc-400 leading-relaxed font-medium">
-                  Adding specific data points like "Targeting Gen Z designers in NY" increases engine precision by 42%.
-                </p>
+            {/* Starter Templates */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em]">Starter Templates</h3>
+                <span className="text-[10px] font-bold text-zinc-600">Click to fill</span>
               </div>
-              <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/[0.05] grain-bg">
-                <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] mb-4">Framework Update</h3>
-                <p className="text-zinc-400 leading-relaxed font-medium">
-                  v2.4 engine now supports viral coefficient analysis for B2C consumer products.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {STARTER_TEMPLATES.map((tpl) => (
+                  <button
+                    key={tpl.title}
+                    onClick={() => { setIdea(tpl.text); ideaRef.current?.focus(); }}
+                    className="text-left p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-white/20 hover:bg-white/[0.05] transition-all group"
+                  >
+                    <h4 className="text-sm font-black text-white mb-2 tracking-tight">{tpl.title}</h4>
+                    <p className="text-xs text-zinc-500 leading-relaxed line-clamp-3 group-hover:text-zinc-400 transition-colors">{tpl.text}</p>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
