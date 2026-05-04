@@ -21,12 +21,26 @@ interface AnalysisRecord {
 
 export default function Workspace() {
   const navigate = useNavigate()
-  const { user, isAuthenticated } = useUserStore()
+  const { user, isAuthenticated, profile } = useUserStore()
   const { runAnalysis, isAnalyzing, setIdea: setStoreIdea } = useAnalysisStore()
   const [analyses, setAnalyses] = useState<AnalysisRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [idea, setIdea] = useState('')
   const [credits, setCredits] = useState(15)
+  const ideaRef = useRef<HTMLTextAreaElement>(null)
+
+  const STARTER_TEMPLATES = [
+    { title: "AI tool for solo founders", text: "An AI assistant that helps solo SaaS founders write marketing copy, run customer interviews, and prioritize their roadmap." },
+    { title: "Niche marketplace", text: "A marketplace connecting independent ceramic artists with interior designers looking for one-of-a-kind pieces for client projects." },
+    { title: "B2B vertical SaaS", text: "An all-in-one operations platform for independent dental practices: scheduling, billing, patient records, and insurance claims." },
+  ]
+
+  // Redirect to onboarding if user hasn't completed it
+  useEffect(() => {
+    if (profile && !profile.onboarding_completed) {
+      navigate('/onboarding', { replace: true })
+    }
+  }, [profile, navigate])
 
   useEffect(() => {
     if (!isAuthenticated) {
