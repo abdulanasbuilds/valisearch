@@ -32,17 +32,7 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
   const initialize = useUserStore((s) => s.initialize);
 
   useEffect(() => {
-    let cleanup: (() => void) | undefined;
-    
-    const setup = async () => {
-      cleanup = await initialize();
-    };
-
-    setup();
-
-    return () => {
-      if (cleanup) cleanup();
-    };
+    initialize();
   }, [initialize]);
 
   return <>{children}</>;
