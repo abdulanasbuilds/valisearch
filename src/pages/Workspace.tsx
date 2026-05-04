@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSupabase } from '@/lib/supabase'
 import { useUserStore } from '@/store/useUserStore'
 import { useAnalysisStore } from '@/store/useAnalysisStore'
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
+import { GettingStartedChecklist } from '@/components/dashboard/GettingStartedChecklist'
 import { sanitizeIdea } from '@/lib/sanitize'
 import { formatDistanceToNow } from 'date-fns'
-import { Zap, ChevronRight, Clock, Loader2, Sparkles, Plus, History, Lightbulb, Wallet, Search } from 'lucide-react'
+import { Zap, ChevronRight, Clock, Loader2, Sparkles, Plus, History, Wallet, Search } from 'lucide-react'
 import { toast } from 'sonner'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface AnalysisRecord {
   id: string
