@@ -307,3 +307,14 @@ export default function Workspace() {
     </DashboardLayout>
   )
 }
+function BentoStat({ label, value, icon: Icon, accent }: { label: string; value: any; icon: any; accent: string }) {
+  return (
+    <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4 hover:bg-white/[0.05] hover:border-white/10 transition-colors">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">{label}</span>
+        <Icon className={`w-3.5 h-3.5 ${accent}`} />
+      </div>
+      <div className="text-2xl font-black tracking-tighter text-white">{value}</div>
+    </div>
+  )
+}
