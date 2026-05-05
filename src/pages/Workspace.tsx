@@ -7,7 +7,7 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
 import { GettingStartedChecklist } from '@/components/dashboard/GettingStartedChecklist'
 import { sanitizeIdea } from '@/lib/sanitize'
 import { formatDistanceToNow } from 'date-fns'
-import { Zap, ChevronRight, Clock, Loader2, Sparkles, Plus, History, Wallet, Search } from 'lucide-react'
+import { Zap, ChevronRight, Clock, Loader2, Sparkles, Plus, History, Wallet, Search, TrendingUp, Target, BookOpen } from 'lucide-react'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 
@@ -125,6 +125,30 @@ export default function Workspace() {
               <button className="ml-2 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition-colors bg-white/5 px-2 py-1 rounded-md border border-white/10">Top up</button>
             </div>
           </motion.div>
+        </section>
+
+        {/* Bento stats grid */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
+          <BentoStat label="Reports" value={analyses.length} icon={History} accent="text-white" />
+          <BentoStat
+            label="Avg Score"
+            value={
+              analyses.length
+                ? Math.round(
+                    analyses.reduce((s, a) => s + (a.overall_score || 0), 0) / analyses.length
+                  )
+                : '—'
+            }
+            icon={Target}
+            accent="text-emerald-400"
+          />
+          <BentoStat label="Credits" value={credits} icon={Zap} accent="text-amber-400" />
+          <BentoStat
+            label="Plan"
+            value={profile?.plan?.toUpperCase() || 'FREE'}
+            icon={TrendingUp}
+            accent="text-cyan-400"
+          />
         </section>
 
         {/* Getting Started Checklist */}
@@ -281,5 +305,16 @@ export default function Workspace() {
         </div>
       </div>
     </DashboardLayout>
+  )
+}
+function BentoStat({ label, value, icon: Icon, accent }: { label: string; value: any; icon: any; accent: string }) {
+  return (
+    <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4 hover:bg-white/[0.05] hover:border-white/10 transition-colors">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">{label}</span>
+        <Icon className={`w-3.5 h-3.5 ${accent}`} />
+      </div>
+      <div className="text-2xl font-black tracking-tighter text-white">{value}</div>
+    </div>
   )
 }

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Download, ChevronDown, FileText, Braces, FileCode, FileImage } from "lucide-react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { OverviewSection } from "@/components/dashboard/sections/OverviewSection";
@@ -148,20 +147,9 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <SidebarProvider>
-        <div className="min-h-screen flex w-full">
-          <DashboardSidebar />
-          <div className="flex-1 flex flex-col min-w-0">
-            <header className="h-12 flex items-center border-b border-border/40 px-4 shrink-0">
-              <SidebarTrigger className="text-muted-foreground" />
-              <span className="ml-3 text-[13px] font-medium text-muted-foreground">Loading…</span>
-            </header>
-            <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-              <DashboardSkeleton />
-            </main>
-          </div>
-        </div>
-      </SidebarProvider>
+      <DashboardLayout>
+        <DashboardSkeleton />
+      </DashboardLayout>
     );
   }
 
@@ -191,75 +179,62 @@ export default function Dashboard() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-12 flex items-center justify-between gap-2 border-b border-border/40 px-3 sm:px-4 shrink-0 overflow-x-auto">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <SidebarTrigger className="text-muted-foreground shrink-0" />
-              <span className="text-[13px] font-medium text-muted-foreground truncate hidden sm:inline">
-                Startup Analysis
-              </span>
-              {dataSource && (
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-medium shrink-0 ${
-                  dataSource === "ai"
-                    ? "bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]"
-                    : "bg-accent text-muted-foreground"
-                }`}>
-                  {dataSource === "ai" ? "✦ AI" : "Demo"}
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 min-w-[44px] text-[12px] text-muted-foreground hover:text-foreground px-2 sm:px-3"
-                onClick={() => navigate("/")}
-              >
-                <span className="hidden sm:inline">+ New analysis</span>
-                <span className="sm:hidden">+ New</span>
-              </Button>
-              <ExportMenu onExport={handleExport} />
-            </div>
-          </header>
-
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <Routes>
-              <Route index                    element={<Navigate to="overview" replace />} />
-              <Route path="overview"          element={<OverviewSection />} />
-              <Route path="validation"        element={<ValidationSection />} />
-              <Route path="market-feasibility" element={<MarketFeasibilitySection />} />
-              <Route path="market"            element={<MarketSection />} />
-              <Route path="competitors"       element={<CompetitorsSection />} />
-              <Route path="product"           element={<ProductSection />} />
-              <Route path="branding"          element={<BrandingSection />} />
-              <Route path="revenue"           element={<RevenueIntelligenceSection />} />
-              <Route path="monetization"      element={<MonetizationSection />} />
-              <Route path="go-to-market"      element={<GoToMarketSection />} />
-              <Route path="evolution"         element={<IdeaEvolutionSection />} />
-              <Route path="flow-editor"       element={<FlowEditorSection />} />
-              <Route path="flow"              element={<UserFlowSection />} />
-              <Route path="kanban"            element={<KanbanSection />} />
-              <Route path="tech-stack"        element={<TechStackSection />} />
-              <Route path="build-mode"        element={<BuildModeSection />} />
-              <Route path="ide-bridge"        element={<IdeBridgeSection />} />
-              <Route path="launch-center"     element={<LaunchCenterSection />} />
-              {/* v2 framework sections */}
-              <Route path="market-intelligence" element={<MarketIntelligenceSection />} />
-              <Route path="problem-landscape"   element={<ProblemLandscapeSection />} />
-              <Route path="offer-builder"        element={<OfferBuilderSection />} />
-              <Route path="competitive-intel"    element={<CompetitiveIntelligenceSection />} />
-              <Route path="growth-playbook"      element={<GrowthPlaybookSection />} />
-              <Route path="content-engine"       element={<ContentEngineSection />} />
-              <Route path="scale-roadmap"        element={<ScaleRoadmapSection />} />
-              <Route path="settings" element={<Navigate to="/dashboard/overview" replace />} />
-            </Routes>
-          </main>
-          <UpgradeModal open={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} />
+    <DashboardLayout>
+      <div className="flex items-center justify-between gap-2 mb-6 flex-wrap">
+        <div className="flex items-center gap-2 min-w-0">
+          {dataSource && (
+            <span className={`text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider shrink-0 ${
+              dataSource === "ai"
+                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                : "bg-white/5 text-zinc-400 border border-white/10"
+            }`}>
+              {dataSource === "ai" ? "✦ AI" : "Demo"}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 text-[12px] text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/workspace")}
+          >
+            + New analysis
+          </Button>
+          <ExportMenu onExport={handleExport} />
         </div>
       </div>
-    </SidebarProvider>
+
+      <Routes>
+        <Route index                    element={<Navigate to="overview" replace />} />
+        <Route path="overview"          element={<OverviewSection />} />
+        <Route path="validation"        element={<ValidationSection />} />
+        <Route path="market-feasibility" element={<MarketFeasibilitySection />} />
+        <Route path="market"            element={<MarketSection />} />
+        <Route path="competitors"       element={<CompetitorsSection />} />
+        <Route path="product"           element={<ProductSection />} />
+        <Route path="branding"          element={<BrandingSection />} />
+        <Route path="revenue"           element={<RevenueIntelligenceSection />} />
+        <Route path="monetization"      element={<MonetizationSection />} />
+        <Route path="go-to-market"      element={<GoToMarketSection />} />
+        <Route path="evolution"         element={<IdeaEvolutionSection />} />
+        <Route path="flow-editor"       element={<FlowEditorSection />} />
+        <Route path="flow"              element={<UserFlowSection />} />
+        <Route path="kanban"            element={<KanbanSection />} />
+        <Route path="tech-stack"        element={<TechStackSection />} />
+        <Route path="build-mode"        element={<BuildModeSection />} />
+        <Route path="ide-bridge"        element={<IdeBridgeSection />} />
+        <Route path="launch-center"     element={<LaunchCenterSection />} />
+        <Route path="market-intelligence" element={<MarketIntelligenceSection />} />
+        <Route path="problem-landscape"   element={<ProblemLandscapeSection />} />
+        <Route path="offer-builder"        element={<OfferBuilderSection />} />
+        <Route path="competitive-intel"    element={<CompetitiveIntelligenceSection />} />
+        <Route path="growth-playbook"      element={<GrowthPlaybookSection />} />
+        <Route path="content-engine"       element={<ContentEngineSection />} />
+        <Route path="scale-roadmap"        element={<ScaleRoadmapSection />} />
+        <Route path="settings" element={<Navigate to="/dashboard/overview" replace />} />
+      </Routes>
+      <UpgradeModal open={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} />
+    </DashboardLayout>
   );
 }
