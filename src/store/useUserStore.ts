@@ -94,7 +94,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
 
   initialize: async () => {
-    if (get().initialized || authListenerRegistered) return;
+    if (get().initialized) return;
     set({ isLoading: true });
 
     try {
