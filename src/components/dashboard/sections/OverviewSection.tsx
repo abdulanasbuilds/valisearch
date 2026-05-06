@@ -47,7 +47,7 @@ export function OverviewSection() {
   if (!analysis) return null;
 
   // Render V1 overview if this is a legacy analysis
-  if ("scoring" in analysis) {
+  if ("scoring" in analysis && !("market_breakdown" in analysis)) {
     return <LegacyOverviewSection />;
   }
 
