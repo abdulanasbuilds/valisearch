@@ -28,7 +28,7 @@ export default function Onboarding() {
   const [idea, setIdea] = useState("");
   const navigate = useNavigate();
   const { user, refreshProfile } = useUserStore();
-  const { runAnalysis } = useAnalysisStore();
+  const { runAnalysis, setIdea } = useAnalysisStore();
 
   const totalSteps = 3;
   const progress = ((step - 1) / totalSteps) * 100 + 33;
@@ -61,8 +61,11 @@ export default function Onboarding() {
   const handleValidate = async () => {
     if (idea.trim().length < 20) return;
     await persistOnboarding();
-    navigate("/analyze");
-    await runAnalysis(sanitizeIdea(idea), "full");
+    const sanitized = sanitizeIdea(idea);
+    setIdea(sanitized);
+    await runAnalysis(sanitized, "full");
+    const id = useAnalysisStore.getState().lastAnalysisId;
+    navigate(id ? `/workspace/${id}` : "/dashboard/overview", { replace: true });
   };
 
   const firstName = user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Founder";
