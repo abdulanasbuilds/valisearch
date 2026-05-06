@@ -212,7 +212,7 @@ export default function Workspace() {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 xs:grid-cols-2 sm:flex gap-3 sm:gap-4 w-full sm:w-auto">
+                  <div className="grid grid-cols-1 sm:flex gap-3 sm:gap-4 w-full sm:w-auto">
                     <button 
                       onClick={() => handleValidate('quick')} 
                       disabled={idea.trim().length < 15 || isAnalyzing || credits < 1} 
